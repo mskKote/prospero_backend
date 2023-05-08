@@ -2,8 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mskKote/prospero_backend/internal/config"
-	"github.com/mskKote/prospero_backend/internal/searcher"
+	"github.com/mskKote/prospero_backend/internal/controller/http/v1/routes"
+	"github.com/mskKote/prospero_backend/internal/domain/usecase/search"
+	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 )
 
@@ -14,13 +15,14 @@ var (
 func main() {
 	router := gin.Default()
 	cfg := config.GetConfig()
-	logger.Info("Запустили сервер")
 	startup(router, cfg)
 }
 
 func startup(router *gin.Engine, cfg *config.Config) {
 	apiV1 := router.Group("/api/v1")
-	searcher.New(logger).Register(apiV1)
+	routes.
+		NewSearchRoute(&search.Usecase{}).
+		Register(apiV1)
 
 	if err := router.Run(":" + cfg.Listen.Port); err != nil {
 		logger.Fatalln("ошибка, завершаем программу", err)

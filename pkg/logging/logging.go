@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"sync"
 )
 
 func init() {
@@ -22,9 +23,10 @@ func init() {
 		FullTimestamp: true,
 	}
 
-	err := os.Mkdir("logs", 0644)
-	if err != nil {
-		panic(err)
+	if _, err := os.Stat("logs"); os.IsNotExist(err) {
+		if err := os.Mkdir("logs", 0644); err != nil {
+			panic(err)
+		}
 	}
 
 	file, err := os.OpenFile("logs/all.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
@@ -74,10 +76,17 @@ type Logger struct {
 	*logrus.Entry
 }
 
-var e *logrus.Entry
+var (
+	e    *logrus.Entry
+	l    *Logger
+	once sync.Once
+)
 
 func GetLogger() *Logger {
-	return &Logger{e}
+	once.Do(func() {
+		l = &Logger{e}
+	})
+	return l
 }
 
 // EXAMPLE
