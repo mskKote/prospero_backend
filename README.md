@@ -1,10 +1,20 @@
 # prospero_back-end
 
-Следовал "чистой архитектуре" [по примеру](https://github.com/theartofdevel/golang-clean-architecture)
 
 ---
 
-## internal
+## Запуск
+```shell
+# graylog
+docker-compose up
+```
+
+---
+## Архитектура
+
+Следовал "чистой архитектуре" [по примеру](https://github.com/theartofdevel/golang-clean-architecture)
+
+### internal
 
 * controller
   * http/v1 - протокол/версионирование
@@ -16,9 +26,7 @@
   * service - бизнес-логика для 1 сущности
   * entity - бизнес-сущность
 
----
-
-## pkg
+### pkg
 
 Общее между микросервисами. Клиенты баз, логгер, графана
 
