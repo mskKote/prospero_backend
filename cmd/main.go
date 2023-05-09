@@ -13,7 +13,10 @@ var (
 )
 
 func main() {
-	router := gin.Default()
+	router := gin.New()                           // empty engine
+	router.Use(logging.GraylogMiddlewareLogger()) // adds our new middleware
+	router.Use(gin.Logger(), gin.Recovery())      // adds the default recovery middleware
+
 	cfg := config.GetConfig()
 	logger.Info("Прочитали config, запускаемся")
 	startup(router, cfg)

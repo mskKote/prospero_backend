@@ -105,11 +105,11 @@ func GetLogger() *Logger {
 	return l
 }
 
-//func GetLoggerWithFields(fields logrus.Fields) *Logger {
-//	once.Do(func() {
-//		l = &Logger{e.
-//			WithField("_service", cfg.Service).
-//			WithFields(fields)}
-//	})
-//	return l
-//}
+func GetLoggerWithFields(fields logrus.Fields) *Logger {
+	once.Do(func() {
+		l = &Logger{e.
+			WithField("_service", cfg.Service).
+			WithFields(fields)}
+	})
+	return l
+}
