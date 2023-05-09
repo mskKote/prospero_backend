@@ -15,10 +15,15 @@ var (
 func main() {
 	router := gin.Default()
 	cfg := config.GetConfig()
+	logger.Info("Прочитали config, запускаемся")
 	startup(router, cfg)
 }
 
 func startup(router *gin.Engine, cfg *config.Config) {
+
+	if *cfg.IsDebug == false {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	apiV1 := router.Group("/api/v1")
 	routes.
 		NewSearchRoute(&search.Usecase{}).
