@@ -1,13 +1,23 @@
 # prospero_back-end
 
-
 ---
 
 ## Запуск
 ```shell
-# graylog
+# graylog & grafana
 docker-compose up
+
+# перезапуск prospero
+docker-compose up -d --no-deps --build prospero
 ```
+
+## Инфраструктура
+
+При локальном запуске
+
+[Graylog](http://127.0.0.1:9000/) | 
+[Prometheus](http://localhost:9090/) | 
+[Grafana](http://localhost:3000/)
 
 ---
 ## Архитектура
@@ -21,6 +31,7 @@ docker-compose up
 * adapters
   * работа с базами (/bd)
   * кафкой (/kafka)
+  * регистрация метрики (/metrics)
 * domain
   * usecase - сборка нескольких сервисов
   * service - бизнес-логика для 1 сущности
@@ -32,3 +43,4 @@ docker-compose up
 
 * config - конфигурация сервиса
 * logging - логгер
+* metrics - middleware для gin

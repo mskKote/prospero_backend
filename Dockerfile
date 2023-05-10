@@ -8,6 +8,7 @@ RUN go build -o main ./cmd/main.go
 FROM alpine:3.17
 WORKDIR /app
 COPY --from=builder /app/main .
+COPY --from=builder /app/app.yml .
 
 EXPOSE 5000
 CMD ["/app/main"]

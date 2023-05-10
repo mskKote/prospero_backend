@@ -1,6 +1,0 @@
-runtime: go120
-is_debug: true
-service: go-searcher
-graylog_addr: localhost:12201
-listen:
-    port: 5000

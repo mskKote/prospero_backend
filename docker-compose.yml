@@ -1,11 +1,42 @@
-version: '3.1'
+version: '3.9'
 services:
+  # Prospero
+  prospero:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - graylog
+    networks:
+      - prospero
+  # Prometheus
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./pkg/metrics/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - prospero
+  # Grafana
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - prospero
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=mskKote
+    volumes:
+      - ./pkg/metrics/grafana.yml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - grafana:/var/lib/grafana
   # MongoDB: https://hub.docker.com/_/mongo/
   mongo:
     image: mongo:5.0.13
     networks:
-      - graylog
-  # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/7.10/docker.html
+      - prospero
+  # ElasticSearch: https://www.elastic.co/guide/en/elasticsearch/reference/7.10/docker.html
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
     environment:
@@ -23,7 +54,7 @@ services:
         limits:
           memory: 1g
     networks:
-      - graylog
+      - prospero
   # Graylog: https://hub.docker.com/r/graylog/graylog/
   graylog:
     image: graylog/graylog:5.0
@@ -35,24 +66,29 @@ services:
       - GRAYLOG_HTTP_EXTERNAL_URI=http://127.0.0.1:9000/
     entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
     networks:
-      - graylog
+      - prospero
     restart: always
     depends_on:
       - mongo
       - elasticsearch
     ports:
       # Graylog web interface and REST API
-      - 9000:9000
+      - "9000:9000"
       # Syslog TCP
-      - 1514:1514
+      - "1514:1514"
       # Syslog UDP
-      - 1514:1514/udp
+      - "1514:1514/udp"
       # GELF TCP
-      - 12201:12201
+#      - "12201:12201"
       # GELF UDP
-      - 12201:12201/udp
+      - "12201:12201/udp"
       # Log Input TCP
-      - 5555:5555
+      - "5555:5555"
 networks:
-  graylog:
+  prospero:
     driver: bridge
+# Persistent data stores https://docs.docker.com/engine/admin/volumes/volumes/
+volumes:
+  grafana:
+  mongo:
+  elasticsearch:
