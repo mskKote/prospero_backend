@@ -2,17 +2,13 @@ runtime: go120
 service: prospero_searcher
 is_debug: true
 port: 5000
-#logger:
-#    is_Json: false
-#    to_file: true
-#    to_console: true
-#    to_graylog: false
-#    use_default_gin: true
-#    graylog_addr: localhost:12201
 logger:
-    is_Json: true
     to_file: true
     to_console: true
-    to_graylog: true
-    use_default_gin: false
-    graylog_addr: localhost:12201
+    to_elk: false
+    use_zap: true
+    use_default_gin: true
+#    use_logrus: false
+#    to_graylog: false
+#    is_Json: true
+#    graylog_addr: localhost:12201

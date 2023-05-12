@@ -12,22 +12,29 @@ type Config struct {
 	Port    string `yaml:"port" env-default:"5000"`
 	IsDebug bool   `yaml:"is_debug"`
 	Logger  struct {
-		ToGraylog     bool   `yaml:"to_graylog"`
-		GraylogAddr   string `yaml:"graylog_addr"`
-		ToFile        bool   `yaml:"to_file"`
-		ToConsole     bool   `yaml:"to_console"`
-		IsJSON        bool   `yaml:"is_Json"`
-		UseDefaultGin bool   `yaml:"use_default_gin"`
+		ToFile        bool `yaml:"to_file"`
+		ToConsole     bool `yaml:"to_console"`
+		ToELK         bool `yaml:"to_elk"`
+		UseZap        bool `yaml:"use_zap"`
+		UseDefaultGin bool `yaml:"use_default_gin"`
+		//IsJSON        bool `yaml:"is_Json"`
+		//ToGraylog     bool   `yaml:"to_graylog"`
+		//GraylogAddr   string `yaml:"graylog_addr"`
+		//UseLogrus     bool   `yaml:"use_logrus"`
 	} `yaml:"logger"`
 }
 
-var instance *Config
-var once sync.Once
+const configPath = "app.yml"
+
+var (
+	instance *Config
+	once     sync.Once
+)
 
 func GetConfig() *Config {
 	once.Do(func() {
 		instance = &Config{}
-		if err := cleanenv.ReadConfig("app.yml", instance); err != nil {
+		if err := cleanenv.ReadConfig(configPath, instance); err != nil {
 			help, _ := cleanenv.GetDescription(instance, nil)
 			log.Fatalf("gelf.NewWriter: %s, %s", err, help)
 		}

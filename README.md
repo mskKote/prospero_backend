@@ -19,6 +19,12 @@ docker-compose up -d --no-deps --build prospero
 [Prometheus](http://localhost:9090/) | 
 [Grafana](http://localhost:3000/)
 
+```shell
+# example Graylog
+echo -n '{ "version": "1.1", "host": "example.org", "short_message": "TEST #2", "level": 5, "_some_info": "foo
+" }' | nc -w0 -u localhost 12201
+```
+
 ---
 ## Архитектура
 

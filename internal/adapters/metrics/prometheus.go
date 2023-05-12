@@ -1,7 +1,6 @@
 package metrics
 
 import (
-	"github.com/mskKote/prospero_backend/pkg/logging"
 	"github.com/mskKote/prospero_backend/pkg/metrics"
 	ginPrometheus "github.com/zsais/go-gin-prometheus"
 )
@@ -10,8 +9,6 @@ const (
 	MetricCounterTestID = "1234"
 	MetricSummaryTestID = "1235"
 )
-
-var logger = logging.GetLogger()
 
 func RegisterMetrics(p *ginPrometheus.Prometheus) {
 	metricCounter := &ginPrometheus.Metric{

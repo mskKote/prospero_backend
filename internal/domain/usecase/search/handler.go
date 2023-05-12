@@ -6,9 +6,8 @@ import (
 	"net/http"
 )
 
-var (
-	logger = logging.GetLogger()
-)
+// var logger = logging.GetLogrus()
+var logger = logging.GetLogger()
 
 // TODO: сервисы к ElasticSearch
 type Service interface {

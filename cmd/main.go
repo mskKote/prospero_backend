@@ -8,49 +8,54 @@ import (
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	pkgMetrics "github.com/mskKote/prospero_backend/pkg/metrics"
+	"go.uber.org/zap"
 )
 
 var (
-	logger = logging.GetLogger()
 	cfg    = config.GetConfig()
+	logger = logging.GetLogger()
 )
 
 func main() {
-	logger.Info("logger is OK")
 	startup(cfg)
 }
 
 func startup(cfg *config.Config) {
-	router := gin.New() // empty engine
+
+	r := gin.New() // empty engine
 	if cfg.IsDebug == false {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
 	// --------------------------------------- MIDDLEWARE
 	// Recovery
-	router.Use(gin.Recovery())
+	r.Use(gin.Recovery())
 
 	// Logging
 	if cfg.Logger.UseDefaultGin {
 		logger.Info("Используем DefaultGin")
-		router.Use(gin.Logger())
+		r.Use(gin.Logger())
 	}
-	if cfg.Logger.ToGraylog {
-		logger.Info("Используем Graylog")
-		router.Use(logging.GraylogMiddlewareLogger())
+	//if cfg.Logger.ToGraylog { // logrus & graylog
+	//	logger.Info("Используем Graylog")
+	//	r.Use(logging.GraylogMiddlewareLogger())
+	//}
+	if cfg.Logger.UseZap {
+		logger.Info("Используем Zap")
+		logging.ZapMiddlewareLogger(r)
 	}
 	// Metrics
-	p := pkgMetrics.Startup(router)
+	p := pkgMetrics.Startup(r)
 	internalMetrics.RegisterMetrics(p)
 
 	// --------------------------------------- ROUTES
-	apiV1 := router.Group("/api/v1")
+	apiV1 := r.Group("/api/v1")
 	routes.
 		NewSearchRoute(&search.Usecase{}).
 		Register(apiV1)
 
 	// --------------------------------------- IGNITE
-	if err := router.Run(":" + cfg.Port); err != nil {
-		logger.Fatalln("ошибка, завершаем программу", err)
+	if err := r.Run(":" + cfg.Port); err != nil {
+		logger.Fatal("ошибка, завершаем программу", zap.Error(err))
 	}
 }

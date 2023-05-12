@@ -1,14 +1,17 @@
 package metrics
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	"github.com/prometheus/client_golang/prometheus"
 	ginPrometheus "github.com/zsais/go-gin-prometheus"
+	"go.uber.org/zap"
 )
 
 var (
+	//logger = logging.GetLogrus()
 	logger = logging.GetLogger()
 	cfg    = config.GetConfig()
 )
@@ -30,7 +33,8 @@ func RegisterCustomMetric(
 	metricCollector := ginPrometheus.NewMetric(m, cfg.Service)
 
 	if err := prometheus.Register(metricCollector); err != nil {
-		logger.WithError(err).Errorf("%s could not be registered in Prometheus", m.Name)
+		logger.Error(fmt.Sprintf("could not be registered in Prometheus %s", m.Name), zap.Error(err))
+		//logger.WithError(err).Errorf("%s could not be registered in Prometheus", m.Name)
 	}
 
 	m.MetricCollector = metricCollector

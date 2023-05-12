@@ -1,0 +1,9 @@
+filebeat.inputs:
+  - type: filestream
+    id: prospero-searcher-log
+    scan_frequency: 5s
+    enabled: true
+    paths:
+      - /app/logs/*.log
+output.logstash:
+  hosts: ["logstash:5044"]
