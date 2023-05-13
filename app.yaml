@@ -1,4 +1,0 @@
-runtime: go120
-is_debug: true
-listen:
-    port: 5000

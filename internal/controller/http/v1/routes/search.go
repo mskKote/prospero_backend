@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	searchURL = "/grandFilter"
+	searchURL = "/grandFilter/:search"
 )
 
 type ISearchUsecase interface {
