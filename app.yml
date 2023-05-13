@@ -5,9 +5,9 @@ port: 5000
 logger:
     to_file: true
     to_console: true
-    to_elk: false
+    to_elk: true
     use_zap: true
-    use_default_gin: true
+    use_default_gin: false
 #    use_logrus: false
 #    to_graylog: false
 #    is_Json: true

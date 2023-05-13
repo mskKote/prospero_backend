@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-28] grafana settings">
-      <change afterPath="$PROJECT_DIR$/pkg/logging/zap.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/elasticsearch.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/filebeat.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/logstash.conf" afterDir="false" />
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-28] ELK">
+      <change afterPath="$PROJECT_DIR$/pkg/tracing/tracing.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yml" afterDir="false" />
@@ -16,14 +13,11 @@
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/metrics/prometheus.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/metrics/prometheus.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/metrics/prometheus_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/metrics/prometheus_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/search.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/config/config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/logging/ginMiddleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/logging/ginMiddleware.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/logging/logging.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/logging/logrus.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/metrics/grafana.yml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/grafana.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/metrics/prometheus.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/metrics/prometheus.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/metrics/prometheus.yml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/prometheus.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/logging/zap.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/logging/zap.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +43,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="2PXE3BmkMa4qzunONlDUbbiI504" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -58,25 +55,26 @@
     <option name="showLibraryContents" value="true" />
     <option name="sortByType" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;release/PROS-28&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/mskKote/HSE/prospero/golang-elk-example&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultGoTemplateProperty": "Go File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "release/PROS-28",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/mskKote/HSE/prospero/golang-elk-example",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\mskKote\HSE\prospero\backend\resources" />
@@ -85,7 +83,7 @@
       <recent name="C:\mskKote\HSE\prospero\backend\internal\adapters\metrics" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build github.com/mskKote/prospero_backend/cmd">
+  <component name="RunManager" selected="Docker.docker-compose.yml: Compose Deployment">
     <configuration name="go build github.com/mskKote/prospero_backend/cmd" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="backend" />
       <working_directory value="$PROJECT_DIR$" />
@@ -115,12 +113,12 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.filebeat: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+    <configuration name="docker-compose.yml.jaeger: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="services">
             <list>
-              <option value="filebeat" />
+              <option value="jaeger" />
             </list>
           </option>
           <option name="sourceFilePath" value="docker-compose.yml" />
@@ -156,11 +154,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
+        <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
         <item itemvalue="Docker.docker-compose.yml.prospero: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.logstash: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml.filebeat: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -188,7 +186,8 @@
     <MESSAGE value="[PROS-28] gin logging middleware" />
     <MESSAGE value="[PROS-28] prometheus &amp; grafana" />
     <MESSAGE value="[PROS-28] grafana settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="[PROS-28] grafana settings" />
+    <MESSAGE value="[PROS-28] ELK" />
+    <option name="LAST_COMMIT_MESSAGE" value="[PROS-28] ELK" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

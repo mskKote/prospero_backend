@@ -2,6 +2,7 @@ package logging
 
 import (
 	"github.com/mskKote/prospero_backend/pkg/config"
+	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.uber.org/zap"
 	"log"
 	"os"
@@ -48,18 +49,27 @@ func startupZap() {
 		"_service": cfg.Service,
 	}
 	c.OutputPaths = output
-	logger, _ := c.Build()
-	zapLogger = logger
+	loggerZap, _ := c.Build()
+
+	zapLogger = otelzap.New(
+		loggerZap,
+		otelzap.WithTraceIDField(true))
+	defer func(loggerZap *zap.Logger) {
+		err := loggerZap.Sync()
+		if err != nil {
+			loggerZap.Error("Не получилось синхронизироваться", zap.Error(err))
+		}
+	}(loggerZap)
 }
 
 // ----------------------------- Fields
 
 type Logger struct {
-	*zap.Logger
+	*otelzap.Logger
 }
 
 var (
-	zapLogger       *zap.Logger
+	zapLogger       *otelzap.Logger
 	zapLoggerEnrich *Logger
 	zapOnce         sync.Once
 )

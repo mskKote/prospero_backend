@@ -50,7 +50,6 @@ services:
     networks:
       - prospero
     environment:
-#      - bootstrap.memory_lock=true
       - network.host=0.0.0.0
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -78,7 +77,6 @@ services:
     volumes:
       - ./resources/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./logs/:/logs/
-#      - grafana:/var/lib/grafana
       - prospero:/app/logs
     networks:
       - prospero
@@ -99,14 +97,14 @@ services:
       - prospero
   # ----------------------------------- TRACING
   # Jaeger
-#  jaeger:
-#    container_name: jaeger
-#    image: jaegertracing/all-in-one:latest
-#    networks:
-#      - tracing
-#    ports:
-#      - "16686:16686"
-#      - "14269:14269"
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    networks:
+      - prospero
+    ports:
+      - "16686:16686"
+      - "14269:14269"
+      - "14268:14268"
 
 # ----------------------------------- OTHER
 networks:
@@ -115,7 +113,6 @@ networks:
 # Persistent data stores https://docs.docker.com/engine/admin/volumes/volumes/
 volumes:
   grafana:
-#  mongo:
   elasticsearch:
   kibana:
   prospero:

@@ -59,7 +59,7 @@ import (
 
 func ZapMiddlewareLogger(router *gin.Engine) {
 	l := GetLogger()
-	router.Use(ginZap.GinzapWithConfig(l.Logger, &ginZap.Config{
+	router.Use(ginZap.GinzapWithConfig(l.Logger.Logger, &ginZap.Config{
 		TimeFormat: time.RFC3339,
 		UTC:        true,
 		SkipPaths:  nil,
@@ -67,5 +67,5 @@ func ZapMiddlewareLogger(router *gin.Engine) {
 		// extra
 		Context: nil,
 	}))
-	router.Use(ginZap.RecoveryWithZap(l.Logger, true))
+	router.Use(ginZap.RecoveryWithZap(l.Logger.Logger, true))
 }

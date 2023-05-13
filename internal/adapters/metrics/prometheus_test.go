@@ -2,6 +2,7 @@ package metrics
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/mskKote/prospero_backend/pkg/logging"
 	"github.com/mskKote/prospero_backend/pkg/metrics"
 	"github.com/prometheus/client_golang/prometheus"
 	ginPrometheus "github.com/zsais/go-gin-prometheus"
@@ -26,7 +27,7 @@ func TestMetric(t *testing.T) {
 	// inc
 	m, ok := metrics.GetMetricByID(p, MetricCounterTestID)
 	if ok {
-		logger.Info("ПОЛУЧИЛОСЬ!", m)
+		logging.GetLogger().Info("ПОЛУЧИЛОСЬ! " + m.Name)
 		m.MetricCollector.(prometheus.Counter).Inc()
 	}
 }

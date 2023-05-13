@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/gin-gonic/gin"
 	internalMetrics "github.com/mskKote/prospero_backend/internal/adapters/metrics"
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/routes"
@@ -8,7 +9,10 @@ import (
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	pkgMetrics "github.com/mskKote/prospero_backend/pkg/metrics"
+	"github.com/mskKote/prospero_backend/pkg/tracing"
+	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.uber.org/zap"
+	"time"
 )
 
 var (
@@ -43,7 +47,24 @@ func startup(cfg *config.Config) {
 	if cfg.Logger.UseZap {
 		logger.Info("Используем Zap")
 		logging.ZapMiddlewareLogger(r)
+		undo := otelzap.ReplaceGlobals(logger.Logger)
+		defer undo()
 	}
+
+	// Tracing
+	tp := tracing.Startup(r)
+	ctx, cancel := context.WithCancel(context.Background())
+
+	// Cleanly shutdown and flush telemetry when the application exits.
+	defer func(ctx context.Context) {
+		// Do not make the application hang when it is shutdown.
+		ctx, cancel = context.WithTimeout(ctx, time.Second*5)
+		defer cancel()
+		if err := tp.Shutdown(ctx); err != nil {
+			logger.Fatal("Ошибка при выключении", zap.Error(err))
+		}
+	}(ctx)
+
 	// Metrics
 	p := pkgMetrics.Startup(r)
 	internalMetrics.RegisterMetrics(p)

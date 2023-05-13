@@ -15,9 +15,10 @@ docker-compose up -d --no-deps --build prospero
 
 При локальном запуске
 
-[Graylog](http://127.0.0.1:9000/) | 
+[Kibana](http://127.0.0.1:5601/) | 
 [Prometheus](http://localhost:9090/) | 
-[Grafana](http://localhost:3000/)
+[Grafana](http://localhost:3000/) | 
+[Jaeger](http://localhost:16686/)
 
 ```shell
 # example Graylog
