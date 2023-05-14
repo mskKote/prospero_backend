@@ -49,6 +49,12 @@ func startup(cfg *config.Config) {
 		logging.ZapMiddlewareLogger(r)
 		undo := otelzap.ReplaceGlobals(logger.Logger)
 		defer undo()
+		defer func(loggerZap *zap.Logger) {
+			err := loggerZap.Sync()
+			if err != nil {
+				loggerZap.Error("Не получилось синхронизироваться", zap.Error(err))
+			}
+		}(logger.Logger.Logger)
 	}
 
 	// Tracing
