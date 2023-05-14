@@ -22,7 +22,7 @@ var (
 func Startup(router *gin.Engine) *traceSDK.TracerProvider {
 	tp, err := tracerProvider("http://jaeger:14268/api/traces")
 	if err != nil {
-		logger.Fatal("Ошибка со стартом", zap.Error(err))
+		logger.Fatal("Ошибка на старте", zap.Error(err))
 	}
 
 	// Register our TracerProvider as the global so any imported

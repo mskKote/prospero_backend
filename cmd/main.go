@@ -58,22 +58,26 @@ func startup(cfg *config.Config) {
 	}
 
 	// Tracing
-	tp := tracing.Startup(r)
-	ctx, cancel := context.WithCancel(context.Background())
+	if cfg.Tracing {
+		tp := tracing.Startup(r)
+		ctx, cancel := context.WithCancel(context.Background())
 
-	// Cleanly shutdown and flush telemetry when the application exits.
-	defer func(ctx context.Context) {
-		// Do not make the application hang when it is shutdown.
-		ctx, cancel = context.WithTimeout(ctx, time.Second*5)
-		defer cancel()
-		if err := tp.Shutdown(ctx); err != nil {
-			logger.Fatal("Ошибка при выключении", zap.Error(err))
-		}
-	}(ctx)
+		// Cleanly shutdown and flush telemetry when the application exits.
+		defer func(ctx context.Context) {
+			// Do not make the application hang when it is shutdown.
+			ctx, cancel = context.WithTimeout(ctx, time.Second*5)
+			defer cancel()
+			if err := tp.Shutdown(ctx); err != nil {
+				logger.Fatal("Ошибка при выключении", zap.Error(err))
+			}
+		}(ctx)
+	}
 
 	// Metrics
-	p := pkgMetrics.Startup(r)
-	internalMetrics.RegisterMetrics(p)
+	if cfg.Metrics {
+		p := pkgMetrics.Startup(r)
+		internalMetrics.RegisterMetrics(p)
+	}
 
 	// --------------------------------------- ROUTES
 	apiV1 := r.Group("/api/v1")

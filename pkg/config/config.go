@@ -11,6 +11,8 @@ type Config struct {
 	Service string `yaml:"service" env-required:"true"`
 	Port    string `yaml:"port" env-default:"5000"`
 	IsDebug bool   `yaml:"is_debug"`
+	Tracing bool   `yaml:"tracing"`
+	Metrics bool   `yaml:"metrics"`
 	Logger  struct {
 		ToFile        bool `yaml:"to_file"`
 		ToConsole     bool `yaml:"to_console"`
