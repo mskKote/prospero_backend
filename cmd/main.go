@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	internalMetrics "github.com/mskKote/prospero_backend/internal/adapters/metrics"
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/routes"
+	"github.com/mskKote/prospero_backend/internal/domain/usecase/RSS"
 	"github.com/mskKote/prospero_backend/internal/domain/usecase/search"
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
@@ -26,10 +27,16 @@ func main() {
 
 func startup(cfg *config.Config) {
 
+	// --------------------------------------- GIN SETUP
 	r := gin.New() // empty engine
 	if cfg.IsDebug == false {
 		gin.SetMode(gin.ReleaseMode)
 	}
+	// TODO: достать массив из cfg
+	//err := r.SetTrustedProxies([]string{"127.0.0.1"})
+	//if err != nil {
+	//	logger.Fatal("Не получилось установить proxy", zap.Error(err))
+	//}
 
 	// --------------------------------------- MIDDLEWARE
 	// Recovery
@@ -85,7 +92,9 @@ func startup(cfg *config.Config) {
 		NewSearchRoute(&search.Usecase{}).
 		Register(apiV1)
 
-	// --------------------------------------- IGNITE
+	go (&RSS.Usecase{}).Startup()
+
+	// --------------------------------------- IGNITION
 	if err := r.Run(":" + cfg.Port); err != nil {
 		logger.Fatal("ошибка, завершаем программу", zap.Error(err))
 	}

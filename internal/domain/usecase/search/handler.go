@@ -2,6 +2,7 @@ package search
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/mskKote/prospero_backend/internal/controller/http/v1/routes"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
@@ -10,14 +11,14 @@ import (
 
 var logger = logging.GetLogger()
 
-// TODO: сервисы к ElasticSearch
-
-type Service interface {
-	GrandFilter(g *gin.Context)
+// Service - зависимые сервисы
+type services interface {
+	routes.ISearchUsecase
 }
 
+// Usecase использование сервисов
 type Usecase struct {
-	Service
+	services
 }
 
 func (h *Usecase) GrandFilter(c *gin.Context) {
