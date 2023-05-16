@@ -16,10 +16,10 @@ type SearchHandlers struct {
 	search ISearchUsecase
 }
 
-func NewSearchRoute(search ISearchUsecase) *SearchHandlers {
+func NewSearchRoutes(search ISearchUsecase) *SearchHandlers {
 	return &SearchHandlers{search}
 }
 
-func (h *SearchHandlers) Register(g *gin.RouterGroup) {
+func (h *SearchHandlers) RegisterSearch(g *gin.RouterGroup) {
 	g.POST(searchURL, h.search.GrandFilter)
 }

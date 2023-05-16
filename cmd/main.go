@@ -7,6 +7,7 @@ import (
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/routes"
 	"github.com/mskKote/prospero_backend/internal/domain/usecase/RSS"
 	"github.com/mskKote/prospero_backend/internal/domain/usecase/search"
+	"github.com/mskKote/prospero_backend/internal/domain/usecase/sources"
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	pkgMetrics "github.com/mskKote/prospero_backend/pkg/metrics"
@@ -88,13 +89,24 @@ func startup(cfg *config.Config) {
 
 	// --------------------------------------- ROUTES
 	apiV1 := r.Group("/api/v1")
-	routes.
-		NewSearchRoute(&search.Usecase{}).
-		Register(apiV1)
+	{
+		routes.
+			NewSearchRoutes(&search.Usecase{}).
+			RegisterSearch(apiV1)
+		routes.
+			NewSourcesRoutes(&sources.Usecase{}).
+			RegisterSources(apiV1)
+	}
 
-	go (&RSS.Usecase{}).Startup()
+	// TODO: аутентификация, список админов
+	//admin := r.Group("/admin/api/v1")
+	//{
+	//
+	//}
 
 	// --------------------------------------- IGNITION
+	go (&RSS.Usecase{}).Startup()
+
 	if err := r.Run(":" + cfg.Port); err != nil {
 		logger.Fatal("ошибка, завершаем программу", zap.Error(err))
 	}

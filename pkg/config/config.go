@@ -7,13 +7,14 @@ import (
 )
 
 type Config struct {
-	Runtime string `yaml:"runtime"`
-	Service string `yaml:"service" env-required:"true"`
-	Port    string `yaml:"port" env-default:"5000"`
-	IsDebug bool   `yaml:"is_debug"`
-	Tracing bool   `yaml:"tracing"`
-	Metrics bool   `yaml:"metrics"`
-	Logger  struct {
+	Runtime        string `yaml:"runtime"`
+	Service        string `yaml:"service" env-required:"true"`
+	Port           string `yaml:"port" env-default:"5000"`
+	CronSourcesRSS string `yaml:"cron_sources_rss"`
+	IsDebug        bool   `yaml:"is_debug"`
+	Tracing        bool   `yaml:"tracing"`
+	Metrics        bool   `yaml:"metrics"`
+	Logger         struct {
 		ToFile        bool `yaml:"to_file"`
 		ToConsole     bool `yaml:"to_console"`
 		ToELK         bool `yaml:"to_elk"`

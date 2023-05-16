@@ -20,11 +20,15 @@ docker-compose up -d --no-deps --build prospero
 [Grafana](http://localhost:3000/) | 
 [Jaeger](http://localhost:16686/)
 
-```shell
-# example Graylog
-echo -n '{ "version": "1.1", "host": "example.org", "short_message": "TEST #2", "level": 5, "_some_info": "foo
-" }' | nc -w0 -u localhost 12201
-```
+[//]: # (```shell)
+
+[//]: # (# example Graylog)
+
+[//]: # (echo -n '{ "version": "1.1", "host": "example.org", "short_message": "TEST #2", "level": 5, "_some_info": "foo)
+
+[//]: # (" }' | nc -w0 -u localhost 12201)
+
+[//]: # (```)
 
 ---
 ## Архитектура
@@ -51,3 +55,11 @@ echo -n '{ "version": "1.1", "host": "example.org", "short_message": "TEST #2", 
 * config - конфигурация сервиса
 * logging - логгер
 * metrics - middleware для gin
+
+## Инструменты
+
+* zap - логгер
+* gin - роутинг
+* [gofeed](https://github.com/mmcdole/gofeed) - парсер RSS
+* [gocron](https://github.com/go-co-op/gocron) - запуск раз в N времени 
+* [Планирование cron job](https://crontab.guru/#0_*_*_*_*) - правильно указать "N" для gocron
