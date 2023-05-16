@@ -3,11 +3,10 @@ package sources
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/routes"
-	"github.com/mskKote/prospero_backend/pkg/logging"
 	"net/http"
 )
 
-var logger = logging.GetLogger()
+//var logger = logging.GetLogger()
 
 // Service - зависимые сервисы
 type services interface {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	internalMetrics "github.com/mskKote/prospero_backend/internal/adapters/metrics"
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/routes"
@@ -11,9 +12,11 @@ import (
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	pkgMetrics "github.com/mskKote/prospero_backend/pkg/metrics"
+	"github.com/mskKote/prospero_backend/pkg/security"
 	"github.com/mskKote/prospero_backend/pkg/tracing"
 	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.uber.org/zap"
+	"net/http"
 	"time"
 )
 
@@ -88,24 +91,44 @@ func startup(cfg *config.Config) {
 	}
 
 	// --------------------------------------- ROUTES
+	// Prospero
 	apiV1 := r.Group("/api/v1")
 	{
 		routes.
 			NewSearchRoutes(&search.Usecase{}).
 			RegisterSearch(apiV1)
-		routes.
-			NewSourcesRoutes(&sources.Usecase{}).
-			RegisterSources(apiV1)
 	}
 
-	// TODO: аутентификация, список админов
-	//admin := r.Group("/admin/api/v1")
-	//{
-	//
-	//}
+	// Adminka
+	auth := security.Startup()
+
+	adminka := r.Group("/adminka")
+	adminka.POST("/login", auth.LoginHandler)
+	adminka.Use(auth.MiddlewareFunc())
+	{
+		adminka.GET("/refresh_token", auth.RefreshHandler)
+		// TEST
+		adminka.GET("/hello", func(c *gin.Context) {
+			claims := jwt.ExtractClaims(c)
+			user, _ := c.Get("id")
+			c.JSON(http.StatusOK, gin.H{
+				"userID":   claims["id"],
+				"userName": user.(*security.AdminUser).UserID,
+				"text":     "Hello World.",
+			})
+		})
+		adminkaApiV1 := adminka.Group("api/v1")
+		routes.
+			NewSourcesRoutes(&sources.Usecase{}).
+			RegisterSources(adminkaApiV1)
+	}
+
+	r.NoRoute(auth.MiddlewareFunc(), security.NoRoute)
 
 	// --------------------------------------- IGNITION
-	go (&RSS.Usecase{}).Startup()
+	if cfg.UseCronSourcesRSS {
+		go (&RSS.Usecase{}).Startup()
+	}
 
 	if err := r.Run(":" + cfg.Port); err != nil {
 		logger.Fatal("ошибка, завершаем программу", zap.Error(err))

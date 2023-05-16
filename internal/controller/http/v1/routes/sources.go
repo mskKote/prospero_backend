@@ -3,9 +3,9 @@ package routes
 import "github.com/gin-gonic/gin"
 
 const (
-	addSourceURL     = "/addSourceRSS"
-	getSourcesURL    = "/getSourcesURL"
-	deleteSourcesURL = "/deleteSourcesURL"
+	addSourceURL    = "/RSS/addSource"
+	getSourcesURL   = "/RSS/getSources"
+	deleteSourceURL = "/RSS/deleteSource"
 )
 
 type ISourcesUsecase interface {
@@ -25,5 +25,5 @@ func NewSourcesRoutes(sources ISourcesUsecase) *SourcesHandlers {
 func (h *SourcesHandlers) RegisterSources(g *gin.RouterGroup) {
 	g.POST(addSourceURL, h.sources.AddSourceRSS)
 	g.GET(getSourcesURL, h.sources.GetSourcesRSS)
-	g.DELETE(deleteSourcesURL, h.sources.DeleteSourcesRSS)
+	g.DELETE(deleteSourceURL, h.sources.DeleteSourcesRSS)
 }
