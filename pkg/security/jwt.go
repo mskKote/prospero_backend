@@ -4,6 +4,7 @@ import (
 	"fmt"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	"go.uber.org/zap"
 	"net/http"
@@ -17,6 +18,7 @@ type login struct {
 
 var (
 	logger      = logging.GetLogger()
+	cfg         = config.GetConfig()
 	identityKey = "id"
 )
 
@@ -33,7 +35,7 @@ func Startup() *jwt.GinJWTMiddleware {
 	// the jwt middleware
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "Prospero test zone",
-		Key:         []byte("secret key"), // TODO: вынести в .env
+		Key:         []byte(cfg.SecretKeyJWT),
 		Timeout:     time.Hour,
 		MaxRefresh:  time.Hour,
 		IdentityKey: identityKey,

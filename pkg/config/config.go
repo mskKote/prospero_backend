@@ -2,11 +2,14 @@ package config
 
 import (
 	"github.com/ilyakaznacheev/cleanenv"
+	"github.com/joho/godotenv"
 	"log"
+	"os"
 	"sync"
 )
 
-type Config struct {
+// AppConfig - app.yml
+type appConfig struct {
 	Runtime           string `yaml:"runtime"`
 	Service           string `yaml:"service" env-required:"true"`
 	Port              string `yaml:"port" env-default:"5000"`
@@ -28,6 +31,12 @@ type Config struct {
 	} `yaml:"logger"`
 }
 
+// Config - app.yml + .env
+type Config struct {
+	*appConfig
+	SecretKeyJWT string
+}
+
 const configPath = "app.yml"
 
 var (
@@ -38,9 +47,24 @@ var (
 func GetConfig() *Config {
 	once.Do(func() {
 		instance = &Config{}
-		if err := cleanenv.ReadConfig(configPath, instance); err != nil {
-			help, _ := cleanenv.GetDescription(instance, nil)
-			log.Fatalf("gelf.NewWriter: %s, %s", err, help)
+		// app.yml
+		instanceApp := &appConfig{}
+		if err := cleanenv.ReadConfig(configPath, instanceApp); err != nil {
+			help, _ := cleanenv.GetDescription(instanceApp, nil)
+			log.Fatalf("cleanenv: {%s}, {%s}", err, help)
+		}
+		instance.appConfig = instanceApp
+
+		// .env
+		if err := godotenv.Load(); err != nil {
+			log.Fatal("Error loading .env file")
+		}
+
+		if jwtKey, exists := os.LookupEnv("JWT_SECRET_KEY"); exists {
+			instance.SecretKeyJWT = jwtKey
+			log.Println(instance.SecretKeyJWT)
+		} else {
+			log.Fatalf("Нет ключа аутентификации JWT_SECRET_KEY")
 		}
 	})
 	return instance
