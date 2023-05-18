@@ -7,8 +7,9 @@ import (
 
 type ISourceService interface {
 	AddSource(ctx context.Context, dto source.AddSourceDTO) (*source.DTO, error)
-	FindAll(ctx context.Context) ([]*source.DTO, error)
-	FindByPublisherName(ctx context.Context, name string) ([]*source.DTO, error)
+	FindAll(ctx context.Context, page, pageSize int) ([]*source.DTO, error)
+	FindByPublisherName(ctx context.Context, name string, page, pageSize int) ([]*source.DTO, error)
 	Update(ctx context.Context, source *source.DTO) (*source.DTO, error)
 	Delete(ctx context.Context, dto source.DeleteSourceDTO) error
+	Count(ctx context.Context) (int64, error)
 }

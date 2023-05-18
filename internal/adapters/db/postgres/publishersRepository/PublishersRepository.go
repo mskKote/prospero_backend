@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/publisher"
 	"github.com/mskKote/prospero_backend/pkg/client/postgres"
 	"github.com/mskKote/prospero_backend/pkg/lib"
@@ -67,6 +68,36 @@ func (r *repository) FindPublishersByName(ctx context.Context, name string) (p [
 	`)
 
 	rows, err := r.client.Query(ctx, q, name)
+	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			pgErr = err.(*pgconn.PgError)
+			logger.Error(pgErr.Message, zap.Error(pgErr))
+			return nil, pgErr
+		}
+		return nil, err
+	}
+
+	logger.Info(q)
+
+	for rows.Next() {
+		src := &publisher.Publisher{}
+		if err = rows.Scan(&src.Name, &src.PublisherID, &src.AddDate, &src.Country, &src.City, &src.Point); err != nil {
+			return nil, err
+		}
+		p = append(p, src)
+	}
+	return p, nil
+}
+
+func (r *repository) FindPublishersByIDs(ctx context.Context, ids []pgtype.UUID) (p []*publisher.Publisher, err error) {
+	q := lib.FormatQuery(`
+		SELECT 	p.name, p.publisher_id, p.add_date, p.country, p.city, p.point
+		FROM publishers p
+		WHERE p.publisher_id = any($1)
+	`)
+
+	rows, err := r.client.Query(ctx, q, ids)
 	if err != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) {

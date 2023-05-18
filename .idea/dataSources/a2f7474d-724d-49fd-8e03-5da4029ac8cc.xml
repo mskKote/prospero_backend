@@ -3,7 +3,7 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.48">
     <root id="1">
       <DateStyle>mdy</DateStyle>
-      <IntrospectionStateNumber>1116</IntrospectionStateNumber>
+      <IntrospectionStateNumber>1198</IntrospectionStateNumber>
       <ServerVersion>15.3</ServerVersion>
       <StartupTime>1684323303</StartupTime>
       <TimeZones>true ACDT
@@ -803,7 +803,7 @@ true posixrules
 13206||10|C|G
 13206||-9223372036854775808|U|G
 13206||10|U|G</Grants>
-      <IntrospectionStateNumber>1116</IntrospectionStateNumber>
+      <IntrospectionStateNumber>1198</IntrospectionStateNumber>
       <ObjectId>5</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -4216,27 +4216,26 @@ true posixrules
     <schema id="261" parent="2" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>1116</IntrospectionStateNumber>
+      <IntrospectionStateNumber>1198</IntrospectionStateNumber>
       <ObjectId>2200</ObjectId>
       <StateNumber>518</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
     </schema>
     <table id="262" parent="261" name="admins">
-      <ObjectId>26447</ObjectId>
-      <StateNumber>1113</StateNumber>
+      <ObjectId>27035</ObjectId>
+      <StateNumber>1194</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="263" parent="261" name="publishers">
-      <ObjectId>26455</ObjectId>
-      <Outdated>1</Outdated>
-      <StateNumber>1113</StateNumber>
+      <ObjectId>27043</ObjectId>
+      <StateNumber>1194</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="264" parent="261" name="sources_rss">
-      <ObjectId>26464</ObjectId>
-      <StateNumber>1113</StateNumber>
+      <ObjectId>27052</ObjectId>
+      <StateNumber>1194</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
@@ -4245,37 +4244,37 @@ true posixrules
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>2950</TypeId>
     </column>
     <column id="266" parent="262" name="name">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="267" parent="262" name="password">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <index id="268" parent="262" name="admins_pkey">
       <ColNames>user_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26451</ObjectId>
+      <ObjectId>27039</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
     <index id="269" parent="262" name="admins_name_key">
       <ColNames>name</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26453</ObjectId>
-      <StateNumber>1113</StateNumber>
+      <ObjectId>27041</ObjectId>
+      <StateNumber>1194</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
       <CollationNames>default</CollationNames>
@@ -4284,23 +4283,23 @@ true posixrules
     </index>
     <key id="270" parent="262" name="admins_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26452</ObjectId>
+      <ObjectId>27040</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1113</StateNumber>
-      <UnderlyingIndexId>26451</UnderlyingIndexId>
+      <StateNumber>1194</StateNumber>
+      <UnderlyingIndexId>27039</UnderlyingIndexId>
     </key>
     <key id="271" parent="262" name="admins_name_key">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26454</ObjectId>
-      <StateNumber>1113</StateNumber>
-      <UnderlyingIndexId>26453</UnderlyingIndexId>
+      <ObjectId>27042</ObjectId>
+      <StateNumber>1194</StateNumber>
+      <UnderlyingIndexId>27041</UnderlyingIndexId>
     </key>
     <column id="272" parent="263" name="publisher_id">
       <DasType>uuid|0s</DasType>
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>2950</TypeId>
     </column>
     <column id="273" parent="263" name="add_date">
@@ -4308,51 +4307,51 @@ true posixrules
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>1184</TypeId>
     </column>
     <column id="274" parent="263" name="name">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="275" parent="263" name="country">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="276" parent="263" name="city">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="277" parent="263" name="point">
       <DasType>point|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>600</TypeId>
     </column>
     <index id="278" parent="263" name="publishers_pkey">
       <ColNames>publisher_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26460</ObjectId>
+      <ObjectId>27048</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
     <index id="279" parent="263" name="publishers_name_key">
       <ColNames>name</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26462</ObjectId>
-      <StateNumber>1113</StateNumber>
+      <ObjectId>27050</ObjectId>
+      <StateNumber>1194</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
       <CollationNames>default</CollationNames>
@@ -4361,81 +4360,89 @@ true posixrules
     </index>
     <key id="280" parent="263" name="publishers_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26461</ObjectId>
+      <ObjectId>27049</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1113</StateNumber>
-      <UnderlyingIndexId>26460</UnderlyingIndexId>
+      <StateNumber>1194</StateNumber>
+      <UnderlyingIndexId>27048</UnderlyingIndexId>
     </key>
     <key id="281" parent="263" name="publishers_name_key">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26463</ObjectId>
-      <StateNumber>1113</StateNumber>
-      <UnderlyingIndexId>26462</UnderlyingIndexId>
+      <ObjectId>27051</ObjectId>
+      <StateNumber>1194</StateNumber>
+      <UnderlyingIndexId>27050</UnderlyingIndexId>
     </key>
     <column id="282" parent="264" name="rss_id">
       <DasType>uuid|0s</DasType>
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>2950</TypeId>
     </column>
     <column id="283" parent="264" name="rss_url">
       <DasType>varchar(2048)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="284" parent="264" name="publisher_id">
       <DasType>uuid|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <TypeId>2950</TypeId>
     </column>
-    <foreign-key id="285" parent="264" name="fk_publisher">
+    <column id="285" parent="264" name="add_date">
+      <DasType>timestamp with time zone|0s</DasType>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StateNumber>1194</StateNumber>
+      <TypeId>1184</TypeId>
+    </column>
+    <foreign-key id="286" parent="264" name="fk_publisher">
       <ColNames>publisher_id</ColNames>
-      <ObjectId>26474</ObjectId>
+      <ObjectId>27063</ObjectId>
       <RefColNames>publisher_id</RefColNames>
       <RefColPositions>1</RefColPositions>
-      <StateNumber>1113</StateNumber>
-      <RefTableId>26455</RefTableId>
+      <StateNumber>1194</StateNumber>
+      <RefTableId>27043</RefTableId>
       <RefTableName>publishers</RefTableName>
       <RefTableKind>table</RefTableKind>
     </foreign-key>
-    <index id="286" parent="264" name="sources_rss_pkey">
+    <index id="287" parent="264" name="sources_rss_pkey">
       <ColNames>rss_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26470</ObjectId>
+      <ObjectId>27059</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1113</StateNumber>
+      <StateNumber>1194</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="287" parent="264" name="sources_rss_rss_url_key">
+    <index id="288" parent="264" name="sources_rss_rss_url_key">
       <ColNames>rss_url</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26472</ObjectId>
-      <StateNumber>1113</StateNumber>
+      <ObjectId>27061</ObjectId>
+      <StateNumber>1194</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
       <CollationNames>default</CollationNames>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="288" parent="264" name="sources_rss_pkey">
+    <key id="289" parent="264" name="sources_rss_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26471</ObjectId>
+      <ObjectId>27060</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>1113</StateNumber>
-      <UnderlyingIndexId>26470</UnderlyingIndexId>
+      <StateNumber>1194</StateNumber>
+      <UnderlyingIndexId>27059</UnderlyingIndexId>
     </key>
-    <key id="289" parent="264" name="sources_rss_rss_url_key">
+    <key id="290" parent="264" name="sources_rss_rss_url_key">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>26473</ObjectId>
-      <StateNumber>1113</StateNumber>
-      <UnderlyingIndexId>26472</UnderlyingIndexId>
+      <ObjectId>27062</ObjectId>
+      <StateNumber>1194</StateNumber>
+      <UnderlyingIndexId>27061</UnderlyingIndexId>
     </key>
   </database-model>
 </dataSource>

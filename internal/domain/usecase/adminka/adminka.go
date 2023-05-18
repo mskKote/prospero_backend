@@ -11,9 +11,12 @@ import (
 	"github.com/mskKote/prospero_backend/pkg/tracing"
 	"go.uber.org/zap"
 	"net/http"
+	"strconv"
 )
 
 var logger = logging.GetLogger()
+
+const pageSize int = 2
 
 // usecase - зависимые сервисы
 type usecase struct {
@@ -66,21 +69,40 @@ func (u *usecase) ReadSourcesRSS(c *gin.Context) {
 	tracing.LogRequestTrace(c)
 
 	ctx := c.Request.Context()
-	dto := source.DTO{}
-	if err := c.Bind(&dto); err != nil {
+	var src []*source.DTO
+	var err error
+
+	// Total
+	var total int64
+	if count, err := u.sources.Count(ctx); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Неправильное тело запроса",
+			"message": "Не получилось посчитать количество элементов " + c.Query("search"),
+			"error":   err.Error()})
+		return
+	} else {
+		total = count
+	}
+
+	pageQuery := c.DefaultQuery("page", "0")
+	page, err := strconv.Atoi(pageQuery)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Неправильные параметры запроса",
 			"error":   err.Error()})
 		return
 	}
 
-	var sources []*source.DTO
-	var err error
+	if int(total) < pageSize*page {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Страницы " + c.Query("page") + " нет",
+			"error":   err.Error()})
+		return
+	}
 
 	if search := c.Query("search"); search != "" {
-		sources, err = u.sources.FindByPublisherName(ctx, search)
+		src, err = u.sources.FindByPublisherName(ctx, search, page, pageSize)
 	} else {
-		sources, err = u.sources.FindAll(ctx)
+		src, err = u.sources.FindAll(ctx, page, pageSize)
 	}
 
 	if err != nil {
@@ -90,7 +112,96 @@ func (u *usecase) ReadSourcesRSS(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "ok",
-		"data":    sources,
+		"data":    src,
+	})
+}
+
+func (u *usecase) ReadSourcesRSSWithPublishers(c *gin.Context) {
+	tracing.TraceHeader(c)
+	tracing.LogRequestTrace(c)
+
+	ctx := c.Request.Context()
+	var src []*source.DTO
+	var err error
+
+	// Total
+	var total int64
+	if count, err := u.sources.Count(ctx); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Не получилось посчитать количество элементов " + c.Query("search"),
+			"error":   err.Error()})
+		return
+	} else {
+		total = count
+	}
+
+	pageQuery := c.DefaultQuery("page", "1")
+	page, err := strconv.Atoi(pageQuery)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Неправильные параметры запроса",
+			"error":   err.Error()})
+		return
+	}
+
+	if int(total) < pageSize*page {
+		c.JSON(http.StatusNotFound, gin.H{
+			"message": "Страницы " + c.Query("page") + " нет"})
+		return
+	}
+
+	// Поиск
+	if search := c.Query("search"); search != "" {
+		src, err = u.sources.FindByPublisherName(ctx, search, page-1, pageSize)
+	} else {
+		src, err = u.sources.FindAll(ctx, page-1, pageSize)
+	}
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Не получилось найти RSS источники " + c.Query("search"),
+			"error":   err.Error()})
+		return
+	}
+
+	// Enrich
+	pubMap := map[string]*publisher.DTO{}
+
+	var srcIDs []string
+	for _, s := range src {
+		srcIDs = append(srcIDs, s.PublisherID)
+	}
+
+	if publishers, err := u.publishers.FindPublishersByIDs(ctx, srcIDs); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Не нашли publishers",
+			"error":   err.Error()})
+		return
+	} else {
+		for _, p := range publishers {
+			pubMap[p.PublisherID] = p
+		}
+	}
+
+	// Join 2 сущностей по publisherID
+	var srcEnriched []*source.WithPublisher
+	for _, s := range src {
+		if p, ok := pubMap[s.PublisherID]; ok {
+			srcEnriched = append(srcEnriched, &source.WithPublisher{
+				Source:    s,
+				Publisher: p,
+			})
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "ok",
+		"data":    srcEnriched,
+		"pagination": gin.H{
+			"total":     total,
+			"page":      page,
+			"page_size": pageSize,
+		},
 	})
 }
 
@@ -175,14 +286,6 @@ func (u *usecase) ReadPublishers(c *gin.Context) {
 	tracing.LogRequestTrace(c)
 
 	ctx := c.Request.Context()
-	dto := source.DTO{}
-	if err := c.Bind(&dto); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Неправильное тело запроса",
-			"error":   err.Error()})
-		return
-	}
-
 	var publishers []*publisher.DTO
 	var err error
 

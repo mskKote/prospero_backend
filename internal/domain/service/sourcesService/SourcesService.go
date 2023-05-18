@@ -16,17 +16,21 @@ func New(sources sourcesRepository.IRepository) ISourceService {
 	return &service{sources}
 }
 
-func (s *service) FindAll(ctx context.Context) ([]*source.DTO, error) {
+func (s *service) Count(ctx context.Context) (int64, error) {
+	return s.sources.Count(ctx)
+}
 
-	sourcesRSS, err := s.sources.FindAll(ctx)
+func (s *service) FindAll(ctx context.Context, page, pageSize int) ([]*source.DTO, error) {
+
+	sourcesRSS, err := s.sources.FindAll(ctx, page*pageSize, pageSize)
 	if err != nil {
 		return nil, err
 	}
 	return source.ToDTOs(sourcesRSS), nil
 }
 
-func (s *service) FindByPublisherName(ctx context.Context, name string) (sec []*source.DTO, err error) {
-	src, err := s.sources.FindByPublisherName(ctx, name)
+func (s *service) FindByPublisherName(ctx context.Context, name string, page, pageSize int) (sec []*source.DTO, err error) {
+	src, err := s.sources.FindByPublisherName(ctx, name, page*pageSize, pageSize)
 	if err != nil {
 		return nil, err
 	}

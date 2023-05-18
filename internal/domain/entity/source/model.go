@@ -9,4 +9,5 @@ type RSS struct {
 	RssID     pgtype.UUID         `json:"rss_id"`
 	RssURL    string              `json:"rss_url"`
 	Publisher publisher.Publisher `json:"publisher_id"`
+	AddDate   pgtype.Timestamp    `json:"add_date"`
 }
