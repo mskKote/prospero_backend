@@ -11,6 +11,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	traceSDK "go.opentelemetry.io/otel/sdk/trace"
 	semConv "go.opentelemetry.io/otel/semconv/v1.17.0"
+	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 )
 
@@ -61,3 +62,25 @@ func tracerProvider(url string) (*traceSDK.TracerProvider, error) {
 	)
 	return tp, nil
 }
+
+func LogRequestTrace(c *gin.Context) {
+	ctx := c.Request.Context()
+	span := trace.SpanFromContext(ctx)
+	traceID := span.SpanContext().TraceID().String()
+
+	logger.InfoContext(ctx, c.FullPath()+"\ttrace\t"+traceID)
+}
+
+func TraceHeader(c *gin.Context) {
+	ctx := c.Request.Context()
+	span := trace.SpanFromContext(ctx)
+	traceID := span.SpanContext().TraceID().String()
+
+	c.Header("x-trace-id", traceID)
+}
+
+//func SetAttributes(c *gin.Context, kv ...attribute.KeyValue) {
+//	ctx := c.Request.Context()
+//	span := trace.SpanFromContext(ctx)
+//	span.SetAttributes(kv...)
+//}

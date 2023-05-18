@@ -16,6 +16,7 @@ type appConfig struct {
 	CronSourcesRSS    string `yaml:"cron_sources_rss"`
 	UseCronSourcesRSS bool   `yaml:"use_cron_sources_rss"`
 	IsDebug           bool   `yaml:"is_debug"`
+	Migrate           bool   `yaml:"migrate"`
 	Tracing           bool   `yaml:"tracing"`
 	Metrics           bool   `yaml:"metrics"`
 	Logger            struct {
@@ -35,6 +36,17 @@ type appConfig struct {
 type Config struct {
 	*appConfig
 	SecretKeyJWT string
+	Adminka      struct {
+		Username string
+		Password string
+	}
+	Postgres struct {
+		Username string
+		Password string
+		Host     string
+		Port     string
+		Database string
+	}
 }
 
 const configPath = "app.yml"
@@ -60,12 +72,22 @@ func GetConfig() *Config {
 			log.Fatal("Error loading .env file")
 		}
 
-		if jwtKey, exists := os.LookupEnv("JWT_SECRET_KEY"); exists {
-			instance.SecretKeyJWT = jwtKey
-			log.Println(instance.SecretKeyJWT)
-		} else {
-			log.Fatalf("Нет ключа аутентификации JWT_SECRET_KEY")
-		}
+		instance.SecretKeyJWT = getEnvKey("JWT_SECRET_KEY")
+		instance.Postgres.Username = getEnvKey("POSTGRES_USERNAME")
+		instance.Postgres.Password = getEnvKey("POSTGRES_PASSWORD")
+		instance.Postgres.Host = getEnvKey("POSTGRES_HOST")
+		instance.Postgres.Port = getEnvKey("POSTGRES_PORT")
+		instance.Postgres.Database = getEnvKey("POSTGRES_DATABASE")
+		instance.Adminka.Username = getEnvKey("ADMINKA_USERNAME")
+		instance.Adminka.Password = getEnvKey("ADMINKA_PASSWORD")
 	})
 	return instance
+}
+
+func getEnvKey(key string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	log.Fatalf("Нет значения для " + key)
+	return ""
 }

@@ -3,27 +3,22 @@ package routes
 import "github.com/gin-gonic/gin"
 
 const (
-	addSourceURL    = "/RSS/addSource"
-	getSourcesURL   = "/RSS/getSources"
-	deleteSourceURL = "/RSS/deleteSource"
+	createSourceURL = "/RSS/addSource"
+	readSourcesURL  = "/RSS/getSources"
+	updateSourceURL = "/RSS/updateSource"
+	deleteSourceURL = "/RSS/removeSource"
 )
 
 type ISourcesUsecase interface {
-	AddSourceRSS(c *gin.Context)
-	GetSourcesRSS(c *gin.Context)
-	DeleteSourcesRSS(c *gin.Context)
+	CreateSourceRSS(c *gin.Context)
+	ReadSourcesRSS(c *gin.Context)
+	UpdateSourceRSS(c *gin.Context)
+	DeleteSourceRSS(c *gin.Context)
 }
 
-type SourcesHandlers struct {
-	sources ISourcesUsecase
-}
-
-func NewSourcesRoutes(sources ISourcesUsecase) *SourcesHandlers {
-	return &SourcesHandlers{sources}
-}
-
-func (h *SourcesHandlers) RegisterSources(g *gin.RouterGroup) {
-	g.POST(addSourceURL, h.sources.AddSourceRSS)
-	g.GET(getSourcesURL, h.sources.GetSourcesRSS)
-	g.DELETE(deleteSourceURL, h.sources.DeleteSourcesRSS)
+func RegisterSourcesRoutes(g *gin.RouterGroup, sources ISourcesUsecase) {
+	g.POST(createSourceURL, sources.CreateSourceRSS)
+	g.GET(readSourcesURL, sources.ReadSourcesRSS)
+	g.PUT(updateSourceURL, sources.UpdateSourceRSS)
+	g.DELETE(deleteSourceURL, sources.DeleteSourceRSS)
 }

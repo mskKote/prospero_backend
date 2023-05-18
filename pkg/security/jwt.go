@@ -4,6 +4,8 @@ import (
 	"fmt"
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/mskKote/prospero_backend/internal/domain/entity/admin"
+	"github.com/mskKote/prospero_backend/internal/domain/service/adminService"
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	"go.uber.org/zap"
@@ -11,26 +13,19 @@ import (
 	"time"
 )
 
-type login struct {
-	Username string `form:"username" json:"username" binding:"required"`
-	Password string `form:"password" json:"password" binding:"required"`
-}
-
 var (
 	logger      = logging.GetLogger()
 	cfg         = config.GetConfig()
 	identityKey = "id"
 )
 
-// AdminUser DTO
-type AdminUser struct {
-	UserID    string
-	FirstName string
-	LastName  string
+type login struct {
+	Username string `form:"username" json:"username" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required"`
 }
 
 // Startup - returns protected router group
-func Startup() *jwt.GinJWTMiddleware {
+func Startup(service adminService.IAdminService) *jwt.GinJWTMiddleware {
 
 	// the jwt middleware
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
@@ -40,7 +35,7 @@ func Startup() *jwt.GinJWTMiddleware {
 		MaxRefresh:  time.Hour,
 		IdentityKey: identityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
-			if v, ok := data.(*AdminUser); ok {
+			if v, ok := data.(*admin.Admin); ok {
 				return jwt.MapClaims{
 					identityKey: v.UserID,
 				}
@@ -49,7 +44,7 @@ func Startup() *jwt.GinJWTMiddleware {
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
 			claims := jwt.ExtractClaims(c)
-			return &AdminUser{
+			return &admin.Admin{
 				UserID: claims[identityKey].(string),
 			}
 		},
@@ -58,24 +53,22 @@ func Startup() *jwt.GinJWTMiddleware {
 			if err := c.ShouldBind(&loginValues); err != nil {
 				return "", jwt.ErrMissingLoginValues
 			}
-			userID := loginValues.Username
-			password := loginValues.Password
 
-			//TODO: прокинуть функцию для обращение к базе админов
-			if (userID == "admin" && password == "admin") ||
-				(userID == "test" && password == "test") {
-				return &AdminUser{
-					UserID:    userID,
-					LastName:  "Bo-Yi",
-					FirstName: "Wu",
-				}, nil
+			ctx := c.Request.Context()
+			dto := &admin.DTO{
+				Name:     loginValues.Username,
+				Password: loginValues.Password,
+			}
+			logger.Info(fmt.Sprintf("[ADMINKA] Пытаемся войти с {%s} {%s}", dto.Name, dto.Password))
+			if a, ok := service.Login(ctx, dto); ok {
+				return a, nil
 			}
 
 			return nil, jwt.ErrFailedAuthentication
 		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
-			v, ok := data.(*AdminUser)
-			return ok && v.UserID == "admin"
+			_, ok := data.(*admin.Admin)
+			return ok
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			c.JSON(code, gin.H{

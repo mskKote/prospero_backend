@@ -11,6 +11,7 @@ services:
       - "5000:5000"
     networks:
       - prospero
+
   # ----------------------------------- DATABASES
   # ElasticSearch
   elasticsearch:
@@ -37,16 +38,43 @@ services:
 
   # Postgres
   postgres:
-    image: postgres
+    image: postgres:15-alpine
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
+    user: postgres
     environment:
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+#      - PGUSER=postgres
+      - "POSTGRES_USER=${POSTGRES_USERNAME:-postgres}"
+      - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}"
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx3072m"
+    volumes:
+      - postgres:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD", "pg_isready -U postgres" ]
+      test: [ "CMD-SHELL", "pg_isready", "-U", "${POSTGRES_USERNAME}", "-d", "${POSTGRES_DATABASE}", "-W", "${POSTGRES_PASSWORD}" ]
       interval: 5s
       timeout: 5s
       retries: 20
+    networks:
+      - prospero
+
+  # Redis
+#  redis:
+#    image: "bitnami/redis:latest"
+#    restart: always
+#    ports:
+#      - '6379:6379'
+#    environment:
+#      - ALLOW_EMPTY_PASSWORD=yes
+#    healthcheck:
+#      test: [ "CMD", "redis-cli","ping" ]
+#      interval: 5s
+#      timeout: 5s
+#      retries: 20
+#    volumes:
+#      - redis:/data
+#    networks:
+#      - prospero
+
   # ----------------------------------- METRICS
   # Prometheus
   prometheus:
@@ -70,6 +98,7 @@ services:
     volumes:
       - ./resources/grafana.yml:/etc/grafana/provisioning/datasources/datasources.yaml
       - grafana:/var/lib/grafana
+
   # ----------------------------------- LOGGER
   # Logstash
   logstash:
@@ -130,3 +159,5 @@ volumes:
   elasticsearch:
   kibana:
   prospero:
+  postgres:
+  redis:

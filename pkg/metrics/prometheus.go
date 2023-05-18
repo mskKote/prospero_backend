@@ -11,7 +11,6 @@ import (
 )
 
 var (
-	//logger = logging.GetLogrus()
 	logger = logging.GetLogger()
 	cfg    = config.GetConfig()
 )
@@ -33,8 +32,7 @@ func RegisterCustomMetric(
 	metricCollector := ginPrometheus.NewMetric(m, cfg.Service)
 
 	if err := prometheus.Register(metricCollector); err != nil {
-		logger.Error(fmt.Sprintf("could not be registered in Prometheus %s", m.Name), zap.Error(err))
-		//logger.WithError(err).Errorf("%s could not be registered in Prometheus", m.Name)
+		logger.Error(fmt.Sprintf("[METRICS] could not be registered in Prometheus %s", m.Name), zap.Error(err))
 	}
 
 	m.MetricCollector = metricCollector

@@ -5,6 +5,7 @@ is_debug: true
 use_cron_sources_rss: false
 cron_sources_rss: "*/1 * * * *"
 #cron_sources_rss: "0 * * * *"
+migrate: true
 tracing: false
 metrics: false
 logger:
