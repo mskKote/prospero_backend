@@ -29,7 +29,7 @@ func Startup(service adminService.IAdminService) *jwt.GinJWTMiddleware {
 
 	// the jwt middleware
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:       "Prospero test zone",
+		Realm:       "Prospero",
 		Key:         []byte(cfg.SecretKeyJWT),
 		Timeout:     time.Hour,
 		MaxRefresh:  time.Hour,

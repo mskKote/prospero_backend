@@ -33,13 +33,14 @@ func NewClient(ctx context.Context, maxAttempts int) (pool *pgxpool.Pool, err er
 		cfg.Postgres.Host,
 		cfg.Postgres.Port,
 		cfg.Postgres.Database)
+	logger.InfoContext(ctx, dsn)
 
 	err = lib.DoWithTries(func() error {
 		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 		defer cancel()
 
-		pool, err = pgxpool.New(ctx, dsn)
-		if err != nil {
+		if pool, err = pgxpool.New(ctx, dsn); err != nil {
+			logger.Error("Проблемы с подключением", zap.Error(err))
 			return err
 		}
 
@@ -48,6 +49,10 @@ func NewClient(ctx context.Context, maxAttempts int) (pool *pgxpool.Pool, err er
 
 	if err != nil {
 		logger.Fatal("error do with tries postgresql", zap.Error(err))
+	}
+
+	if err1 := pool.Ping(ctx); err1 != nil {
+		logger.Fatal("Не подключились!", zap.Error(err1))
 	}
 
 	return pool, nil

@@ -44,10 +44,7 @@ func tracerProvider(url string) (*traceSDK.TracerProvider, error) {
 		return nil, err
 	}
 
-	environment := "production"
-	if cfg.IsDebug {
-		environment = "development"
-	}
+	environment := cfg.Environment
 
 	tp := traceSDK.NewTracerProvider(
 		// Always be sure to batch in production.

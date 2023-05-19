@@ -27,8 +27,7 @@ func (s service) Create(ctx context.Context, dto *admin.DTO) error {
 		dto.Password = hash
 	}
 
-	err := s.repository.Create(ctx, dto.ToDomain())
-	if err != nil {
+	if err := s.repository.Create(ctx, dto.ToDomain()); err != nil {
 		logger.Error("Не создали админа", zap.Error(err))
 		return err
 	}
@@ -38,7 +37,7 @@ func (s service) Create(ctx context.Context, dto *admin.DTO) error {
 func (s service) Login(ctx context.Context, dto *admin.DTO) (*admin.Admin, bool) {
 	a, err := s.repository.FindAdminByName(ctx, dto.Name)
 	if err != nil {
-		logger.Info("Админа {" + dto.Name + "} не существует")
+		logger.Error("Админа {"+dto.Name+"} не существует", zap.Error(err))
 		return nil, false
 	}
 	if lib.CheckPasswordHash(dto.Password, a.Password) {

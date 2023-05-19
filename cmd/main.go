@@ -162,6 +162,8 @@ func adminkaStartup(client postgres.Client, r *gin.Engine) {
 		Name:     cfg.Adminka.Username,
 		Password: cfg.Adminka.Password,
 	}
+	logger.Info(fmt.Sprintf("[ADMINKA] Админка: {%s}, {%s}", adminMskKote.Name, adminMskKote.Password))
+
 	if err := adminSERVICE.Create(context.Background(), adminMskKote); err != nil {
 		logger.Fatal("[ADMINKA] Не смогли создать админа: "+adminMskKote.Name, zap.Error(err))
 	} else {
@@ -179,12 +181,19 @@ func adminkaStartup(client postgres.Client, r *gin.Engine) {
 		// TEST STAND
 		adminkaGroup.GET("/hello", func(c *gin.Context) {
 			claims := jwt.ExtractClaims(c)
-			user, _ := c.Get("id")
-			c.JSON(http.StatusOK, gin.H{
-				"userID":   claims["id"],
-				"userName": user.(*admin.Admin).Name,
-				"text":     "Hello World.",
-			})
+			if user, ok := c.Get("id"); ok {
+				c.JSON(http.StatusOK, gin.H{
+					"userID":   claims["id"],
+					"userName": user.(*admin.Admin).Name,
+					"text":     "Hello World.",
+				})
+			} else {
+				c.JSON(http.StatusNotFound, gin.H{
+					"userID":   claims["id"],
+					"userName": "Not found",
+					"text":     "Bye World.",
+				})
+			}
 		})
 
 		adminkaApiV1 := adminkaGroup.Group("api/v1")

@@ -9,7 +9,7 @@ FROM alpine:3.17
 WORKDIR /app
 COPY --from=builder /app/main .
 COPY --from=builder /app/app.yml .
-COPY --from=builder /app/.env .
+COPY --from=builder /app/.env .env
 COPY --from=builder /app/resources/migration_*.sql ./resources/
 
 EXPOSE 5000

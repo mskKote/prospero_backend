@@ -41,10 +41,11 @@ func (r *repository) Create(ctx context.Context, a *admin.Admin) error {
 	q := lib.FormatQuery(`
 		INSERT INTO admins(name, password) 
 		VALUES ($1, $2)
+		RETURNING user_id
 	`)
 
-	r.client.QueryRow(ctx, q, a.Name, a.Password)
+	err := r.client.QueryRow(ctx, q, a.Name, a.Password).Scan(&a.UserID)
 	logger.Info(q)
 
-	return nil
+	return lib.HandleErr(err)
 }

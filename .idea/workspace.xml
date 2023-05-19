@@ -4,23 +4,22 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-29] fix errors">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-29] pagination">
+      <change afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/a2f7474d-724d-49fd-8e03-5da4029ac8cc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a2f7474d-724d-49fd-8e03-5da4029ac8cc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/a2f7474d-724d-49fd-8e03-5da4029ac8cc/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a2f7474d-724d-49fd-8e03-5da4029ac8cc/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/publishersRepository/IPublishersRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/publishersRepository/IPublishersRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/publishersRepository/PublishersRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/publishersRepository/PublishersRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/ISourceRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/ISourceRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/SourcesRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/SourcesRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/sources.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/sources.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/entity/source/dto.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/entity/source/dto.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/entity/source/modelRSS.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/entity/source/model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/service/publishersService/IPublishersService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/publishersService/IPublishersService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/service/publishersService/PublishersService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/publishersService/PublishersService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/service/sourcesService/ISourcesService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/sourcesService/ISourcesService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/service/sourcesService/SourcesService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/sourcesService/SourcesService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/adminka.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/adminka.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/migration_20230517_1.sql" beforeDir="false" afterPath="$PROJECT_DIR$/resources/migration_20230517_1.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/adminsRepository/AdminRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/adminsRepository/AdminRepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/adminService/AdminService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/adminService/AdminService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/client/postgres/postgres.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/client/postgres/postgres.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/security/jwt.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/security/jwt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/tracing/tracing.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/tracing/tracing.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +46,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectId" id="2PXE3BmkMa4qzunONlDUbbiI504" />
   <component name="ProjectLevelVcsManager">
@@ -58,36 +57,39 @@
     <option name="showLibraryContents" value="true" />
     <option name="sortByType" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;release/PROS-29&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ALIENWARE&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultGoTemplateProperty": "Go File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "release/PROS-29",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/mskKote/HSE/prospero/backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.keymap"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;redis&quot;,
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "redis",
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\mskKote\HSE\prospero\backend" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\mskKote\HSE\prospero\backend\pkg\lib" />
       <recent name="C:\mskKote\HSE\prospero\backend\resources" />
@@ -145,20 +147,25 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="sourceFilePath" value="docker-compose.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
     <configuration name="docker-compose.yml.postgres: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="services">
             <list>
               <option value="postgres" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.prospero: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="prospero" />
             </list>
           </option>
           <option name="sourceFilePath" value="docker-compose.yml" />
@@ -182,10 +189,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
-        <item itemvalue="Docker.Dockerfile" />
+        <item itemvalue="Docker.docker-compose.yml.prospero: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.postgres: Compose Deployment" />
+        <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Docker.docker-compose.yml.redis: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -223,7 +230,8 @@
     <MESSAGE value="[PROS-29] .env" />
     <MESSAGE value="[PROS-29] adminka" />
     <MESSAGE value="[PROS-29] fix errors" />
-    <option name="LAST_COMMIT_MESSAGE" value="[PROS-29] fix errors" />
+    <MESSAGE value="[PROS-29] pagination" />
+    <option name="LAST_COMMIT_MESSAGE" value="[PROS-29] pagination" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

@@ -15,7 +15,6 @@ type appConfig struct {
 	Port              string `yaml:"port" env-default:"5000"`
 	CronSourcesRSS    string `yaml:"cron_sources_rss"`
 	UseCronSourcesRSS bool   `yaml:"use_cron_sources_rss"`
-	IsDebug           bool   `yaml:"is_debug"`
 	Migrate           bool   `yaml:"migrate"`
 	Tracing           bool   `yaml:"tracing"`
 	Metrics           bool   `yaml:"metrics"`
@@ -35,6 +34,8 @@ type appConfig struct {
 // Config - app.yml + .env
 type Config struct {
 	*appConfig
+	Environment  string
+	IsDebug      bool
 	SecretKeyJWT string
 	Adminka      struct {
 		Username string
@@ -80,6 +81,8 @@ func GetConfig() *Config {
 		instance.Postgres.Database = getEnvKey("POSTGRES_DATABASE")
 		instance.Adminka.Username = getEnvKey("ADMINKA_USERNAME")
 		instance.Adminka.Password = getEnvKey("ADMINKA_PASSWORD")
+		instance.Environment = getEnvKey("ENVIRONMENT")
+		instance.IsDebug = instance.Environment != "production"
 	})
 	return instance
 }
