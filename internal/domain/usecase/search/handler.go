@@ -11,17 +11,20 @@ import (
 
 var logger = logging.GetLogger()
 
-// Service - зависимые сервисы
-type services interface {
+// ISearchUsecase - зависимые сервисы
+type ISearchUsecase interface {
 	routes.ISearchUsecase
 }
 
 // Usecase использование сервисов
-type Usecase struct {
-	services
+type usecase struct {
 }
 
-func (h *Usecase) GrandFilter(c *gin.Context) {
+func New() ISearchUsecase {
+	return &usecase{}
+}
+
+func (h *usecase) GrandFilter(c *gin.Context) {
 	ctx := c.Request.Context()
 	searchStr := c.Param("search")
 

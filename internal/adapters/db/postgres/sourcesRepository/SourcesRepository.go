@@ -2,8 +2,6 @@ package sourcesRepository
 
 import (
 	"context"
-	"errors"
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/source"
 	"github.com/mskKote/prospero_backend/pkg/client/postgres"
 	"github.com/mskKote/prospero_backend/pkg/lib"
@@ -33,7 +31,7 @@ func (r *repository) Create(ctx context.Context, s *source.RSS) (*source.RSS, er
 		Scan(&s.RssID)
 	logger.Info(q)
 
-	return s, lib.HandleErr(err)
+	return s, lib.HandlePgErr(err)
 }
 
 func (r *repository) FindAll(ctx context.Context, offset, limit int) (s []*source.RSS, err error) {
@@ -46,7 +44,7 @@ func (r *repository) FindAll(ctx context.Context, offset, limit int) (s []*sourc
 
 	rows, err := r.client.Query(ctx, q, offset, limit)
 	if err != nil {
-		return nil, err
+		return nil, lib.HandlePgErr(err)
 	}
 
 	logger.Info(q)
@@ -54,10 +52,10 @@ func (r *repository) FindAll(ctx context.Context, offset, limit int) (s []*sourc
 	for rows.Next() {
 		src := &source.RSS{}
 		if err = rows.Scan(&src.RssID, &src.RssURL, &src.Publisher.PublisherID, &src.AddDate); err != nil {
-			return nil, err
+			return nil, lib.HandlePgErr(err)
 		}
 		s = append(s, src)
-		logger.Info(lib.UuidToString(src.RssID))
+		//logger.Info(lib.UuidToString(src.RssID))
 	}
 	return s, nil
 }
@@ -75,13 +73,7 @@ func (r *repository) FindByPublisherName(ctx context.Context, name string, offse
 
 	rows, err := r.client.Query(ctx, q, name, offset, limit)
 	if err != nil {
-		var pgErr *pgconn.PgError
-		if errors.As(err, &pgErr) {
-			pgErr = err.(*pgconn.PgError)
-			logger.Error(pgErr.Message, zap.Error(pgErr))
-			return nil, pgErr
-		}
-		return nil, err
+		return nil, lib.HandlePgErr(err)
 	}
 
 	logger.Info(q)
@@ -94,7 +86,7 @@ func (r *repository) FindByPublisherName(ctx context.Context, name string, offse
 			&src.Publisher.AddDate, &src.Publisher.Country,
 			&src.Publisher.City, &src.Publisher.Point)
 		if err != nil {
-			return nil, err
+			return nil, lib.HandlePgErr(err)
 		}
 		s = append(s, src)
 	}
@@ -111,7 +103,7 @@ func (r *repository) Update(ctx context.Context, s source.RSS) error {
 	_, err := r.client.Query(ctx, q, s.RssURL, s.Publisher.PublisherID, s.RssID)
 	logger.Info(q)
 
-	return lib.HandleErr(err)
+	return lib.HandlePgErr(err)
 }
 
 func (r *repository) Delete(ctx context.Context, id string) error {
@@ -123,7 +115,7 @@ func (r *repository) Delete(ctx context.Context, id string) error {
 	_, err := r.client.Query(ctx, q, id)
 	logger.Info(q)
 
-	return lib.HandleErr(err)
+	return lib.HandlePgErr(err)
 }
 
 func (r *repository) Count(ctx context.Context) (count int64, err error) {
@@ -134,5 +126,5 @@ func (r *repository) Count(ctx context.Context) (count int64, err error) {
 	err = r.client.QueryRow(ctx, q).Scan(&count)
 	logger.Info(q)
 
-	return count, lib.HandleErr(err)
+	return count, lib.HandlePgErr(err)
 }

@@ -10,9 +10,6 @@ CREATE TABLE public.admins
     password VARCHAR(100) NOT NULL
 );
 
--- INSERT INTO public.admins(user_id, name, password)
--- VALUES (0, 'admin', '???');
-
 -- publishers {1:N} SourcesRSS
 CREATE TABLE public.publishers
 (
@@ -23,7 +20,6 @@ CREATE TABLE public.publishers
     city         VARCHAR(100) NOT NULL,
     point        point        NOT NULL
 );
-
 -- RSS links and their publishers
 CREATE TABLE public.sources_rss
 (
@@ -37,23 +33,32 @@ CREATE TABLE public.sources_rss
             REFERENCES public.publishers (publisher_id)
 );
 
+
 -- test RSS
-INSERT INTO public.publishers(publisher_id, name, country, city, point)
-VALUES (default, 'The New York Times', 'USA', 'New York', point(40.756133, -73.990322));
+INSERT INTO public.publishers(name, country, city, point)
+VALUES
+    ('The New York Times', 'USA', 'New York', point(40.756133, -73.990322)),
+    ('The Guardian', 'UK', 'London', point(51.534839, -0.122149)),
+    ('Vedomosti', 'Russia', 'Sankt Petersburg', point(59.917904, 30.348691)),
+    ('ООН', 'USA', 'New York', point(40.749571, -73.967716)),
+    ('Hindustan Times', 'Delhi', 'New York', point(28.628026, 77.223106)),
+    ('Rambler', 'Russia', 'Moscow', point(55.698645, 37.624570)),
+    ('lenta.ru', 'Russia', 'Moscow', point(55.698645, 37.624570)),
+    ('Wall Street Journal', 'USA', 'New York', point(40.749995, -73.983758)),
+    ('France 24', 'France', 'Paris', point(48.830639, 2.264886)),
+    ('CNN', 'US', 'Atlanta', point(33.758040, -84.394692));
 
 INSERT INTO public.sources_rss(publisher_id, rss_url, add_date)
-VALUES ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',  '2023-05-1 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World1.xml', '2023-05-2 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World2.xml', '2023-05-3 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World3.xml', '2023-05-4 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World4.xml', '2023-05-5 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World5.xml', '2023-05-6 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World6.xml', '2023-05-7 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World7.xml', '2023-05-8 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World8.xml', '2023-05-9 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World9.xml', '2023-05-10 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World10.xml',  '2023-05-11 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY add_date DESC LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml',  '2023-05-12 19:30:06.887661 +00:00' :: timestamptz);
+VALUES ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 0 LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',  '2023-05-1 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 1 LIMIT 1), 'https://www.theguardian.com/world/rss', '2023-05-2 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 2 LIMIT 1), 'https://www.vedomosti.ru/rss/news', '2023-05-3 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 3 LIMIT 1), 'https://news.un.org/feed/subscribe/ru/news/all/rss.xml', '2023-05-4 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 4 LIMIT 1), 'https://www.hindustantimes.com/feeds/rss/world-news/rssfeed.xml', '2023-05-5 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 5 LIMIT 1), 'https://news.rambler.ru/rss/world/', '2023-05-6 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 6 LIMIT 1), 'https://lenta.ru/rss/news', '2023-05-7 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 7 LIMIT 1), 'https://feeds.a.dj.com/rss/RSSWorldNews.xml', '2023-05-8 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 8 LIMIT 1), 'http://america.aljazeera.com/content/ajam/articles.rss', '2023-05-9 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 9 LIMIT 1), 'http://rss.cnn.com/rss/edition_world.rss', '2023-05-10 19:30:06.887661 +00:00' :: timestamptz);
 
 -- search
 

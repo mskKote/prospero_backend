@@ -34,7 +34,7 @@ func (r *repository) FindAdminByName(ctx context.Context, name string) (*admin.A
 
 	logger.Info(fmt.Sprintf("Запрашиваем админа %s", name))
 
-	return a, lib.HandleErr(err)
+	return a, lib.HandlePgErr(err)
 }
 
 func (r *repository) Create(ctx context.Context, a *admin.Admin) error {
@@ -47,5 +47,5 @@ func (r *repository) Create(ctx context.Context, a *admin.Admin) error {
 	err := r.client.QueryRow(ctx, q, a.Name, a.Password).Scan(&a.UserID)
 	logger.Info(q)
 
-	return lib.HandleErr(err)
+	return lib.HandlePgErr(err)
 }

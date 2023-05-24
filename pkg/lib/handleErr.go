@@ -9,7 +9,7 @@ import (
 
 var logger = logging.GetLogger()
 
-func HandleErr(err error) error {
+func HandlePgErr(err error) error {
 	if err != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) {

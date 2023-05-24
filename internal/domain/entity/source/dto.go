@@ -7,6 +7,15 @@ import (
 	"time"
 )
 
+type AddSourceAndPublisherDTO struct {
+	Name      string  `json:"name"`
+	Country   string  `json:"country"`
+	City      string  `json:"city"`
+	Longitude float64 `json:"longitude"`
+	Latitude  float64 `json:"latitude"`
+	RssUrl    string  `json:"rss_Url"`
+}
+
 type AddSourceDTO struct {
 	RssURL      string `json:"rss_url"`
 	PublisherID string `json:"publisher_id"`

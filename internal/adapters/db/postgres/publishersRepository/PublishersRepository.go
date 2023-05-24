@@ -34,7 +34,7 @@ func (r *repository) Create(ctx context.Context, p *publisher.Publisher) (*publi
 		Scan(&p.PublisherID, &p.AddDate)
 	logger.Info(q)
 
-	return p, lib.HandleErr(err)
+	return p, lib.HandlePgErr(err)
 }
 
 func (r *repository) FindAll(ctx context.Context) (p []*publisher.Publisher, err error) {
@@ -130,13 +130,13 @@ func (r *repository) Update(ctx context.Context, p *publisher.Publisher) error {
 	_, err := r.client.Query(ctx, q, p.Name, p.PublisherID)
 	logger.Info(q)
 
-	return lib.HandleErr(err)
+	return lib.HandlePgErr(err)
 }
 
 func (r *repository) Delete(ctx context.Context, id string) error {
 	begin, err := r.client.Begin(ctx)
 	if err != nil {
-		return lib.HandleErr(err)
+		return lib.HandlePgErr(err)
 	}
 
 	// Удалить RSS
@@ -146,7 +146,7 @@ func (r *repository) Delete(ctx context.Context, id string) error {
 	`)
 	logger.Info(q1)
 	if _, err = begin.Exec(ctx, q1, id); err != nil {
-		return lib.HandleErr(err)
+		return lib.HandlePgErr(err)
 	}
 	// Удалить источинк
 	q2 := lib.FormatQuery(`
@@ -155,12 +155,12 @@ func (r *repository) Delete(ctx context.Context, id string) error {
 	`)
 	logger.Info(q2)
 	if _, err = begin.Exec(ctx, q2, id); err != nil {
-		return lib.HandleErr(err)
+		return lib.HandlePgErr(err)
 	}
 
 	if err = begin.Commit(ctx); err != nil {
-		return lib.HandleErr(err)
+		return lib.HandlePgErr(err)
 	}
 
-	return lib.HandleErr(err)
+	return lib.HandlePgErr(err)
 }

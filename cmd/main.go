@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	jwt "github.com/appleboy/gin-jwt/v2"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/adminsRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/publishersRepository"
@@ -54,11 +55,22 @@ func startup(cfg *config.Config) {
 		migrations(client)
 	}
 
+	sourcesREPO := sourcesRepository.New(client)
+	publishersREPO := publishersRepository.New(client)
+	publishersSERVICE := publishersService.New(publishersREPO)
+	sourcesSERVICE := sourcesService.New(sourcesREPO)
+
 	// --------------------------------------- GIN
 	r := gin.New()
 	if cfg.IsDebug == false {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
+	corsCfg := cors.DefaultConfig()
+	corsCfg.AllowAllOrigins = true
+	corsCfg.AddAllowHeaders("Authorization")
+	r.Use(cors.New(corsCfg))
+
 	// массив из cfg?
 	//err := r.SetTrustedProxies([]string{"127.0.0.1"})
 	//if err != nil {
@@ -114,11 +126,11 @@ func startup(cfg *config.Config) {
 
 	// --------------------------------------- ROUTES
 	prosperoRoutes(r)
-	adminkaStartup(client, r)
+	adminkaStartup(client, sourcesSERVICE, publishersSERVICE, r)
 
 	// --------------------------------------- IGNITION
 	if cfg.UseCronSourcesRSS {
-		go (&RSS.Usecase{}).Startup()
+		go (RSS.New(sourcesSERVICE)).Startup()
 	}
 
 	if err := r.Run(":" + cfg.Port); err != nil {
@@ -146,34 +158,31 @@ func migrations(client postgres.Client) {
 	}
 }
 
-func adminkaStartup(client postgres.Client, r *gin.Engine) {
+func adminkaStartup(client postgres.Client, s sourcesService.ISourceService, p publishersService.IPublishersService, r *gin.Engine) {
 	adminREPO := adminsRepository.New(client)
-	sourcesREPO := sourcesRepository.New(client)
-	publishersREPO := publishersRepository.New(client)
-
-	publishersSERVICE := publishersService.New(publishersREPO)
-	sourcesSERVICE := sourcesService.New(sourcesREPO)
 	adminSERVICE := adminService.New(adminREPO)
-
-	adminkaUSECASE := adminka.New(sourcesSERVICE, publishersSERVICE)
+	adminkaUSECASE := adminka.New(s, p)
 
 	// Админ
-	adminMskKote := &admin.DTO{
-		Name:     cfg.Adminka.Username,
-		Password: cfg.Adminka.Password,
-	}
-	logger.Info(fmt.Sprintf("[ADMINKA] Админка: {%s}, {%s}", adminMskKote.Name, adminMskKote.Password))
-
-	if err := adminSERVICE.Create(context.Background(), adminMskKote); err != nil {
-		logger.Fatal("[ADMINKA] Не смогли создать админа: "+adminMskKote.Name, zap.Error(err))
-	} else {
+	if cfg.Migrate {
+		adminMskKote := &admin.DTO{
+			Name:     cfg.Adminka.Username,
+			Password: cfg.Adminka.Password,
+		}
 		logger.Info(fmt.Sprintf("[ADMINKA] Админка: {%s}, {%s}", adminMskKote.Name, adminMskKote.Password))
+
+		if err := adminSERVICE.Create(context.Background(), adminMskKote); err != nil {
+			logger.Fatal("[ADMINKA] Не смогли создать админа: "+adminMskKote.Name, zap.Error(err))
+		} else {
+			logger.Info(fmt.Sprintf("[ADMINKA] Админка: {%s}, {%s}", adminMskKote.Name, adminMskKote.Password))
+		}
 	}
 
 	auth := security.Startup(adminSERVICE)
 
 	adminkaGroup := r.Group("/adminka")
 	adminkaGroup.POST("/login", auth.LoginHandler)
+	adminkaGroup.OPTIONS("/login")
 	adminkaGroup.Use(auth.MiddlewareFunc())
 	{
 		adminkaGroup.GET("/refresh_token", auth.RefreshHandler)
@@ -205,7 +214,7 @@ func adminkaStartup(client postgres.Client, r *gin.Engine) {
 }
 
 func prosperoRoutes(r *gin.Engine) {
-	searchUSECASE := &search.Usecase{}
+	searchUSECASE := search.New()
 
 	apiV1 := r.Group("/api/v1")
 	{
