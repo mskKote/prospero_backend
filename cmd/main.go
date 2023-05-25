@@ -4,22 +4,30 @@ import (
 	"context"
 	"fmt"
 	jwt "github.com/appleboy/gin-jwt/v2"
+	"github.com/elastic/go-elasticsearch/v8"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/indices/create"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/tokenchar"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	publishersSearchRepository "github.com/mskKote/prospero_backend/internal/adapters/db/elastic/publisherSearchRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/adminsRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/publishersRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/sourcesRepository"
 	internalMetrics "github.com/mskKote/prospero_backend/internal/adapters/metrics"
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/routes"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/admin"
+	"github.com/mskKote/prospero_backend/internal/domain/entity/publisher"
 	"github.com/mskKote/prospero_backend/internal/domain/service/adminService"
 	"github.com/mskKote/prospero_backend/internal/domain/service/publishersService"
 	"github.com/mskKote/prospero_backend/internal/domain/service/sourcesService"
 	"github.com/mskKote/prospero_backend/internal/domain/usecase/RSS"
 	"github.com/mskKote/prospero_backend/internal/domain/usecase/adminka"
 	"github.com/mskKote/prospero_backend/internal/domain/usecase/search"
+	"github.com/mskKote/prospero_backend/pkg/client/elastic"
 	"github.com/mskKote/prospero_backend/pkg/client/postgres"
 	"github.com/mskKote/prospero_backend/pkg/config"
+	"github.com/mskKote/prospero_backend/pkg/lib"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	pkgMetrics "github.com/mskKote/prospero_backend/pkg/metrics"
 	"github.com/mskKote/prospero_backend/pkg/security"
@@ -27,6 +35,7 @@ import (
 	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.uber.org/zap"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -44,20 +53,33 @@ func main() {
 func startup(cfg *config.Config) {
 
 	// --------------------------------------- DATABASES
-	client, err := postgres.NewClient(context.Background(), 3)
+	ctx := context.Background()
+	pgClient, err := postgres.NewClient(ctx, 3)
 	if err != nil {
 		logger.Fatal("[POSTGRES] Не подключились к postgres", zap.Error(err))
 	} else {
 		logger.Info("[POSTGRES] УСПЕШНО подключилсь к POSTGRES!")
 	}
 
-	if cfg.Migrate {
-		migrations(client)
+	esClient, err := elastic.NewClient(ctx)
+	if err != nil {
+		logger.Fatal("[ELASTIC] Не подключились к elastic", zap.Error(err))
+	} else {
+		logger.Info("[ELASTIC] УСПЕШНО подключилсь к ELASTICSEARCH!")
 	}
 
-	sourcesREPO := sourcesRepository.New(client)
-	publishersREPO := publishersRepository.New(client)
-	publishersSERVICE := publishersService.New(publishersREPO)
+	if cfg.MigratePostgres {
+		migrationsPg(pgClient)
+	}
+	if cfg.MigrateElastic {
+		migrationsEs(ctx, esClient)
+	}
+
+	sourcesREPO := sourcesRepository.New(pgClient)
+	publishersREPO := publishersRepository.New(pgClient)
+	publishersSearchREPO := publishersSearchRepository.New(esClient)
+
+	publishersSERVICE := publishersService.New(publishersREPO, publishersSearchREPO)
 	sourcesSERVICE := sourcesService.New(sourcesREPO)
 
 	// --------------------------------------- GIN
@@ -125,8 +147,8 @@ func startup(cfg *config.Config) {
 	}
 
 	// --------------------------------------- ROUTES
-	prosperoRoutes(r)
-	adminkaStartup(client, sourcesSERVICE, publishersSERVICE, r)
+	prosperoRoutes(r, &publishersSERVICE)
+	adminkaStartup(pgClient, &sourcesSERVICE, &publishersSERVICE, r)
 
 	// --------------------------------------- IGNITION
 	if cfg.UseCronSourcesRSS {
@@ -138,7 +160,7 @@ func startup(cfg *config.Config) {
 	}
 }
 
-func migrations(client postgres.Client) {
+func migrationsPg(client postgres.Client) {
 	migration, err := os.OpenFile("./resources/migration_20230517_1.sql", os.O_RDONLY, 0666)
 	if err != nil {
 		logger.Fatal("[MIGRATION] Невозможно прочитать файл", zap.Error(err))
@@ -157,14 +179,116 @@ func migrations(client postgres.Client) {
 		logger.Info("[MIGRATION] УСПЕШНО мигрировали POSTGRES")
 	}
 }
+func migrationsEs(ctx context.Context, client *elasticsearch.TypedClient) {
+	log.Printf("\n\n")
 
-func adminkaStartup(client postgres.Client, s sourcesService.ISourceService, p publishersService.IPublishersService, r *gin.Engine) {
+	publishersSearchREPO := publishersSearchRepository.New(client)
+
+	// Разбивает предложения по 3 буквы, включая пробелы
+	// Для поиска названий
+	MyTokenizer := types.NGramTokenizer{
+		MinGram:    2,
+		MaxGram:    50,
+		TokenChars: []tokenchar.TokenChar{tokenchar.Letter, tokenchar.Digit, tokenchar.Whitespace},
+		Type:       "ngram",
+	}
+
+	// Не разбивает строку
+	//MySearchTokenizer := types.NewKeywordTokenizer()
+
+	// 1. Создать индекс
+	if publisherExists, err := client.Indices.Exists(publishersSearchRepository.Index).Perform(ctx); err != nil {
+		logger.FatalContext(ctx, "yt ", zap.Error(err))
+	} else if publisherExists.StatusCode == http.StatusOK {
+		//logger.Info(fmt.Sprintf("Индекс %s уже существует", publishersSearchRepository.Index))
+		if _, err := client.Indices.Delete(publishersSearchRepository.Index).Do(ctx); err != nil {
+			logger.FatalContext(ctx, "Не удалили индекс "+publishersSearchRepository.Index, zap.Error(err))
+			return
+		}
+	}
+
+	if res, err := client.Indices.Create(publishersSearchRepository.Index).
+		Request(&create.Request{
+			Settings: &types.IndexSettings{
+				Analysis: &types.IndexSettingsAnalysis{
+					Tokenizer: map[string]types.Tokenizer{
+						"my_tokenizer": MyTokenizer,
+					},
+					Analyzer: map[string]types.Analyzer{
+						"my_analyzer": types.CustomAnalyzer{
+							Tokenizer: "my_tokenizer",
+							Filter:    []string{types.NewLowercaseTokenFilter().Type},
+						},
+						"my_search_analyzer": types.CustomAnalyzer{
+							Tokenizer: "keyword",
+							Type:      "custom",
+							Filter:    []string{types.NewLowercaseTokenFilter().Type},
+						},
+					},
+				},
+				MaxNgramDiff: lib.PointerFrom(50),
+			},
+			Mappings: &types.TypeMapping{
+				Properties: map[string]types.Property{
+					"name": &types.TextProperty{
+						Analyzer:       lib.PointerFrom("my_analyzer"),
+						SearchAnalyzer: lib.PointerFrom("my_search_analyzer"),
+						Type:           "text",
+						Index:          lib.PointerFrom(true),
+					},
+				},
+			},
+		}).
+		Do(ctx); err != nil {
+
+		logger.FatalContext(ctx, "Не создали индекс "+publishersSearchRepository.Index, zap.Error(err))
+	} else {
+		log.Println(res)
+	}
+
+	// 2. Закинуть дефолтные значения
+	publishers := []publisher.EsDBO{
+		{Name: "The New York Times"},
+		{Name: "The Guardian"},
+		{Name: "Vedomosti"},
+		{Name: "ООН"},
+		{Name: "Hindustan Times"},
+		{Name: "Rambler"},
+		{Name: "lenta.ru"},
+		{Name: "Wall Street Journal"},
+		{Name: "France 24"},
+		{Name: "CNN"},
+	}
+
+	for _, p := range publishers {
+		if ok := publishersSearchREPO.IndexPublisher(ctx, &p); !ok {
+			logger.FatalContext(ctx, "Не записали данные в "+publishersSearchRepository.Index)
+		}
+	}
+
+	// 3. Неточный поиск
+	time.Sleep(2 * time.Second)
+	if p, err := publishersSearchREPO.FindPublishersByNameViaES(ctx, "the new"); err != nil {
+		logger.FatalContext(ctx, "Не нашли ", zap.Error(err))
+	} else {
+		for _, dbo := range p {
+			logger.Info(fmt.Sprintf("Нашли %s с id=[%s] добавленный %s", dbo.Name, dbo.PublisherID, dbo.AddDate))
+		}
+	}
+}
+
+func adminkaStartup(
+	client postgres.Client,
+	s *sourcesService.ISourceService,
+	p *publishersService.IPublishersService,
+	r *gin.Engine) {
+
 	adminREPO := adminsRepository.New(client)
 	adminSERVICE := adminService.New(adminREPO)
 	adminkaUSECASE := adminka.New(s, p)
 
 	// Админ
-	if cfg.Migrate {
+	if cfg.MigratePostgres {
 		adminMskKote := &admin.DTO{
 			Name:     cfg.Adminka.Username,
 			Password: cfg.Adminka.Password,
@@ -213,8 +337,8 @@ func adminkaStartup(client postgres.Client, s sourcesService.ISourceService, p p
 	r.NoRoute(auth.MiddlewareFunc(), security.NoRoute)
 }
 
-func prosperoRoutes(r *gin.Engine) {
-	searchUSECASE := search.New()
+func prosperoRoutes(r *gin.Engine, p *publishersService.IPublishersService) {
+	searchUSECASE := search.New(p)
 
 	apiV1 := r.Group("/api/v1")
 	{

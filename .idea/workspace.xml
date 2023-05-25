@@ -4,23 +4,35 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-29] db test data">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/a2f7474d-724d-49fd-8e03-5da4029ac8cc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/a2f7474d-724d-49fd-8e03-5da4029ac8cc.xml" afterDir="false" />
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-29] adminka">
+      <change afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/IPublishersSearchRepository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/PublishersSearchRepository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/domain/entity/publisher/esModel.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/lib/PointerFrom.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/lib/ResponseBadRequest.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/adminsRepository/AdminRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/adminsRepository/AdminRepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/publishersRepository/IPublishersRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/publishersRepository/IPublishersRepository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/publishersRepository/PublishersRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/publishersRepository/PublishersRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/SourcesRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/SourcesRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/sources.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/sources.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/search.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/entity/publisher/dto.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/entity/publisher/dto.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/entity/publisher/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/entity/publisher/pgModel.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/domain/entity/source/dto.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/entity/source/dto.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/RSS/parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/RSS/parser.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/entity/source/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/entity/source/model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/publishersService/IPublishersService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/publishersService/IPublishersService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/publishersService/PublishersService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/publishersService/PublishersService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/sourcesService/SourcesService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/sourcesService/SourcesService.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/adminka.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/adminka.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/lib/handleErr.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/lib/handleErr.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/migration_20230517_1.sql" beforeDir="false" afterPath="$PROJECT_DIR$/resources/migration_20230517_1.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/client/elasticsearch/elasticsearch.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/client/elastic/elastic.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/lib/handleErr.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/lib/handlePgErr.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,37 +70,38 @@
     <option name="showLibraryContents" value="true" />
     <option name="sortByType" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;release/PROS-29&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/mskKote/HSE/prospero/backend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultGoTemplateProperty": "Go File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "release/PROS-29",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/mskKote/HSE/prospero/backend/internal/adapters/db/elastic/publisherSearchRepository",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.keymap"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;redis&quot;,
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "redis",
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\mskKote\HSE\prospero\backend\internal\adapters\db\elastic\publisherSearchRepository" />
       <recent name="C:\mskKote\HSE\prospero\backend" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -128,14 +141,6 @@
       <framework value="gotest" />
       <method v="2" />
     </configuration>
-    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="sourceFilePath" value="Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
@@ -145,6 +150,19 @@
     <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
       <deployment type="dockerfile">
         <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.elasticsearch: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="elasticsearch" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
       </deployment>
       <method v="2" />
     </configuration>
@@ -161,12 +179,12 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.postgres: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+    <configuration name="docker-compose.yml.kibana: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="services">
             <list>
-              <option value="postgres" />
+              <option value="kibana" />
             </list>
           </option>
           <option name="sourceFilePath" value="docker-compose.yml" />
@@ -174,12 +192,12 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.prospero: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+    <configuration name="docker-compose.yml.logstash: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="services">
             <list>
-              <option value="prospero" />
+              <option value="logstash" />
             </list>
           </option>
           <option name="sourceFilePath" value="docker-compose.yml" />
@@ -190,10 +208,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
+        <item itemvalue="Docker.docker-compose.yml.kibana: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.logstash: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.elasticsearch: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml.prospero: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml.postgres: Compose Deployment" />
-        <item itemvalue="Docker.Dockerfile" />
       </list>
     </recent_temporary>
   </component>
@@ -229,13 +247,24 @@
     <MESSAGE value="[PROS-29] parse RSS every N time" />
     <MESSAGE value="[PROS-29] jwt auth for admin" />
     <MESSAGE value="[PROS-29] .env" />
-    <MESSAGE value="[PROS-29] adminka" />
     <MESSAGE value="[PROS-29] fix errors" />
     <MESSAGE value="[PROS-29] pagination" />
     <MESSAGE value="[PROS-29] environments &amp; postgres connection" />
-    <option name="LAST_COMMIT_MESSAGE" value="[PROS-29] environments &amp; postgres connection" />
+    <MESSAGE value="[PROS-29] adminka" />
+    <option name="LAST_COMMIT_MESSAGE" value="[PROS-29] adminka" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/PublishersSearchRepository.go</url>
+          <line>68</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -15,7 +15,8 @@ type appConfig struct {
 	Port              string `yaml:"port" env-default:"5000"`
 	CronSourcesRSS    string `yaml:"cron_sources_rss"`
 	UseCronSourcesRSS bool   `yaml:"use_cron_sources_rss"`
-	Migrate           bool   `yaml:"migrate"`
+	MigratePostgres   bool   `yaml:"migrate_postgres"`
+	MigrateElastic    bool   `yaml:"migrate_elastic"`
 	Tracing           bool   `yaml:"tracing"`
 	Metrics           bool   `yaml:"metrics"`
 	Logger            struct {
@@ -48,6 +49,10 @@ type Config struct {
 		Port     string
 		Database string
 	}
+	Elastic struct {
+		Host string
+		Port string
+	}
 }
 
 const configPath = "app.yml"
@@ -70,15 +75,20 @@ func GetConfig() *Config {
 
 		// .env
 		if err := godotenv.Load(); err != nil {
-			log.Fatal("Error loading .env file")
+			log.Fatal("Ошибка загрузки .env файла")
 		}
 
 		instance.SecretKeyJWT = getEnvKey("JWT_SECRET_KEY")
+
 		instance.Postgres.Username = getEnvKey("POSTGRES_USERNAME")
 		instance.Postgres.Password = getEnvKey("POSTGRES_PASSWORD")
 		instance.Postgres.Host = getEnvKey("POSTGRES_HOST")
 		instance.Postgres.Port = getEnvKey("POSTGRES_PORT")
 		instance.Postgres.Database = getEnvKey("POSTGRES_DATABASE")
+
+		instance.Elastic.Host = getEnvKey("ELASTIC_HOST")
+		instance.Elastic.Port = getEnvKey("ELASTIC_PORT")
+
 		instance.Adminka.Username = getEnvKey("ADMINKA_USERNAME")
 		instance.Adminka.Password = getEnvKey("ADMINKA_PASSWORD")
 		instance.Environment = getEnvKey("ENVIRONMENT")

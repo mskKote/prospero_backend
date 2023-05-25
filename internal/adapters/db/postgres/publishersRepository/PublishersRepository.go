@@ -22,7 +22,7 @@ func New(client postgres.Client) IRepository {
 	return &repository{client}
 }
 
-func (r *repository) Create(ctx context.Context, p *publisher.Publisher) (*publisher.Publisher, error) {
+func (r *repository) Create(ctx context.Context, p *publisher.PgDBO) (*publisher.PgDBO, error) {
 	q := lib.FormatQuery(`
 		INSERT INTO publishers(name, country, city, point) 
 		VALUES ($1, $2, $3, $4) 
@@ -37,7 +37,7 @@ func (r *repository) Create(ctx context.Context, p *publisher.Publisher) (*publi
 	return p, lib.HandlePgErr(err)
 }
 
-func (r *repository) FindAll(ctx context.Context) (p []*publisher.Publisher, err error) {
+func (r *repository) FindAll(ctx context.Context) (p []*publisher.PgDBO, err error) {
 	q := lib.FormatQuery(`
 		SELECT 	p.name, p.publisher_id, p.add_date, p.country, p.city, p.point
 		FROM publishers p
@@ -51,7 +51,7 @@ func (r *repository) FindAll(ctx context.Context) (p []*publisher.Publisher, err
 	logger.Info(q)
 
 	for rows.Next() {
-		src := &publisher.Publisher{}
+		src := &publisher.PgDBO{}
 		if err = rows.Scan(&src.Name, &src.PublisherID, &src.AddDate, &src.Country, &src.City, &src.Point); err != nil {
 			return nil, err
 		}
@@ -60,7 +60,7 @@ func (r *repository) FindAll(ctx context.Context) (p []*publisher.Publisher, err
 	return p, nil
 }
 
-func (r *repository) FindPublishersByName(ctx context.Context, name string) (p []*publisher.Publisher, err error) {
+func (r *repository) FindPublishersByName(ctx context.Context, name string) (p []*publisher.PgDBO, err error) {
 	q := lib.FormatQuery(`
 		SELECT 	p.name, p.publisher_id, p.add_date, p.country, p.city, p.point
 		FROM publishers p
@@ -81,7 +81,7 @@ func (r *repository) FindPublishersByName(ctx context.Context, name string) (p [
 	logger.Info(q)
 
 	for rows.Next() {
-		src := &publisher.Publisher{}
+		src := &publisher.PgDBO{}
 		if err = rows.Scan(&src.Name, &src.PublisherID, &src.AddDate, &src.Country, &src.City, &src.Point); err != nil {
 			return nil, err
 		}
@@ -90,7 +90,7 @@ func (r *repository) FindPublishersByName(ctx context.Context, name string) (p [
 	return p, nil
 }
 
-func (r *repository) FindPublishersByIDs(ctx context.Context, ids []pgtype.UUID) (p []*publisher.Publisher, err error) {
+func (r *repository) FindPublishersByIDs(ctx context.Context, ids []pgtype.UUID) (p []*publisher.PgDBO, err error) {
 	q := lib.FormatQuery(`
 		SELECT 	p.name, p.publisher_id, p.add_date, p.country, p.city, p.point
 		FROM publishers p
@@ -111,7 +111,7 @@ func (r *repository) FindPublishersByIDs(ctx context.Context, ids []pgtype.UUID)
 	logger.Info(q)
 
 	for rows.Next() {
-		src := &publisher.Publisher{}
+		src := &publisher.PgDBO{}
 		if err = rows.Scan(&src.Name, &src.PublisherID, &src.AddDate, &src.Country, &src.City, &src.Point); err != nil {
 			return nil, err
 		}
@@ -120,7 +120,7 @@ func (r *repository) FindPublishersByIDs(ctx context.Context, ids []pgtype.UUID)
 	return p, nil
 }
 
-func (r *repository) Update(ctx context.Context, p *publisher.Publisher) error {
+func (r *repository) Update(ctx context.Context, p *publisher.PgDBO) error {
 	q := lib.FormatQuery(`
 		UPDATE publishers
 		SET name = $1

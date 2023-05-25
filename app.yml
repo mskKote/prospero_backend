@@ -4,7 +4,8 @@ port: 5000
 cron_sources_rss: "*/1 * * * *"
 #cron_sources_rss: "0 * * * *"
 use_cron_sources_rss: false
-migrate: false
+migrate_postgres: false
+migrate_elastic: true
 tracing: false
 metrics: false
 logger:

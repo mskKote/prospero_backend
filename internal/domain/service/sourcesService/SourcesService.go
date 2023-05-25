@@ -48,7 +48,7 @@ func (s *service) Delete(ctx context.Context, dto source.DeleteSourceDTO) error 
 
 func (s *service) AddSource(ctx context.Context, dto source.AddSourceDTO) (*source.DTO, error) {
 	id := lib.StringToUUID(dto.PublisherID)
-	p := publisher.Publisher{PublisherID: id}
+	p := publisher.PgDBO{PublisherID: id}
 
 	saved, err := s.sources.Create(ctx, &source.RSS{
 		RssURL:    dto.RssURL,

@@ -28,7 +28,9 @@ type DTO struct {
 	Latitude    float64   `json:"latitude"`
 }
 
-func (p *Publisher) ToDTO() *DTO {
+// ----------------------------------- POSTGRES
+
+func (p *PgDBO) ToDTO() *DTO {
 	return &DTO{
 		PublisherID: lib.UuidToString(p.PublisherID),
 		AddDate:     p.AddDate.Time,
@@ -40,9 +42,9 @@ func (p *Publisher) ToDTO() *DTO {
 	}
 }
 
-func (dto *DTO) ToDomain() *Publisher {
+func (dto *DTO) ToDomain() *PgDBO {
 
-	return &Publisher{
+	return &PgDBO{
 		PublisherID: lib.StringToUUID(dto.PublisherID),
 		AddDate: pgtype.Timestamp{
 			Time:  dto.AddDate,
@@ -61,9 +63,38 @@ func (dto *DTO) ToDomain() *Publisher {
 	}
 }
 
-func ToDTOs(p []*Publisher) (d []*DTO) {
+func PgDBOsToDTOs(p []*PgDBO) (d []*DTO) {
 	for _, publisher := range p {
 		d = append(d, publisher.ToDTO())
+	}
+	return d
+}
+
+// ----------------------------------- ELASTIC
+
+func (p *EsDBO) EsToDTO() *DTO {
+	return &DTO{
+		PublisherID: p.PublisherID,
+		AddDate:     p.AddDate,
+		Name:        p.Name,
+		//Country:     p.Country,
+		//City:        p.City,
+		//Longitude:   0,
+		//Latitude:    0,
+	}
+}
+
+func (dto *DTO) ToDomainES() *EsDBO {
+	return &EsDBO{
+		PublisherID: dto.PublisherID,
+		Name:        dto.Name,
+		AddDate:     dto.AddDate,
+	}
+}
+
+func EsDBOsToDTOs(p []*EsDBO) (d []*DTO) {
+	for _, publisher := range p {
+		d = append(d, publisher.EsToDTO())
 	}
 	return d
 }

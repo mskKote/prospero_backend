@@ -36,7 +36,7 @@ func (dto *DTO) ToDomain() RSS {
 	return RSS{
 		RssID:     lib.StringToUUID(dto.RssID),
 		RssURL:    dto.RssURL,
-		Publisher: publisher.Publisher{PublisherID: lib.StringToUUID(dto.PublisherID)},
+		Publisher: publisher.PgDBO{PublisherID: lib.StringToUUID(dto.PublisherID)},
 		AddDate: pgtype.Timestamp{
 			Time:  dto.AddDate,
 			Valid: true,

@@ -3,6 +3,7 @@ package publishersService
 import (
 	"context"
 	"github.com/jackc/pgx/v5/pgtype"
+	publishersSearchRepository "github.com/mskKote/prospero_backend/internal/adapters/db/elastic/publisherSearchRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/publishersRepository"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/publisher"
 	"github.com/mskKote/prospero_backend/pkg/lib"
@@ -10,7 +11,8 @@ import (
 )
 
 type service struct {
-	repository publishersRepository.IRepository
+	postgres publishersRepository.IRepository
+	elastic  publishersSearchRepository.IRepository
 }
 
 func (s *service) Create(ctx context.Context, addDTO *publisher.AddPublisherDTO) (*publisher.DTO, error) {
@@ -23,24 +25,24 @@ func (s *service) Create(ctx context.Context, addDTO *publisher.AddPublisherDTO)
 		Longitude:   addDTO.Longitude,
 		Latitude:    addDTO.Latitude,
 	}
-	data, err := s.repository.Create(ctx, dto.ToDomain())
+	data, err := s.postgres.Create(ctx, dto.ToDomain())
 	return data.ToDTO(), err
 }
 
 func (s *service) FindAll(ctx context.Context) ([]*publisher.DTO, error) {
-	p, err := s.repository.FindAll(ctx)
+	p, err := s.postgres.FindAll(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return publisher.ToDTOs(p), nil
+	return publisher.PgDBOsToDTOs(p), nil
 }
 
 func (s *service) FindPublishersByName(ctx context.Context, name string) ([]*publisher.DTO, error) {
-	p, err := s.repository.FindPublishersByName(ctx, name)
+	p, err := s.postgres.FindPublishersByName(ctx, name)
 	if err != nil {
 		return nil, err
 	}
-	return publisher.ToDTOs(p), nil
+	return publisher.PgDBOsToDTOs(p), nil
 }
 
 func (s *service) FindPublishersByIDs(ctx context.Context, ids []string) ([]*publisher.DTO, error) {
@@ -49,22 +51,32 @@ func (s *service) FindPublishersByIDs(ctx context.Context, ids []string) ([]*pub
 		uuids = append(uuids, lib.StringToUUID(id))
 	}
 
-	p, err := s.repository.FindPublishersByIDs(ctx, uuids)
+	p, err := s.postgres.FindPublishersByIDs(ctx, uuids)
 	if err != nil {
 		return nil, err
 	}
 
-	return publisher.ToDTOs(p), nil
+	return publisher.PgDBOsToDTOs(p), nil
+}
+
+func (s *service) FindPublishersByNameViaES(ctx context.Context, name string) ([]*publisher.DTO, error) {
+	p, err := s.elastic.FindPublishersByNameViaES(ctx, name)
+	if err != nil {
+		return nil, err
+	}
+	return publisher.EsDBOsToDTOs(p), nil
 }
 
 func (s *service) Update(ctx context.Context, dto *publisher.DTO) error {
-	return s.repository.Update(ctx, dto.ToDomain())
+	return s.postgres.Update(ctx, dto.ToDomain())
 }
 
 func (s *service) Delete(ctx context.Context, dto *publisher.DeletePublisherDTO) error {
-	return s.repository.Delete(ctx, dto.PublisherID)
+	return s.postgres.Delete(ctx, dto.PublisherID)
 }
 
-func New(publishersRepo publishersRepository.IRepository) IPublishersService {
-	return &service{publishersRepo}
+func New(
+	postgres publishersRepository.IRepository,
+	elastic publishersSearchRepository.IRepository) IPublishersService {
+	return &service{postgres, elastic}
 }
