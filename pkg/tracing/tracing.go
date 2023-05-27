@@ -1,6 +1,7 @@
 package tracing
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
@@ -21,7 +22,12 @@ var (
 )
 
 func Startup(router *gin.Engine) *traceSDK.TracerProvider {
-	tp, err := tracerProvider("http://jaeger:14268/api/traces")
+
+	url := fmt.Sprintf("http://%s:%s/api/traces",
+		cfg.Tracing.Host,
+		cfg.Tracing.Port)
+
+	tp, err := tracerProvider(url)
 	if err != nil {
 		logger.Fatal("Ошибка на старте", zap.Error(err))
 	}
@@ -65,7 +71,8 @@ func LogRequestTrace(c *gin.Context) {
 	span := trace.SpanFromContext(ctx)
 	traceID := span.SpanContext().TraceID().String()
 
-	logger.InfoContext(ctx, c.FullPath()+"\ttrace\t"+traceID)
+	logger.InfoContext(ctx, fmt.Sprintf("path=[%s] trace=[%s]", c.FullPath(), traceID))
+	//span.SetAttributes(attribute.String("path", c.FullPath()))
 }
 
 func TraceHeader(c *gin.Context) {

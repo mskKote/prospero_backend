@@ -17,8 +17,8 @@ type appConfig struct {
 	UseCronSourcesRSS bool   `yaml:"use_cron_sources_rss"`
 	MigratePostgres   bool   `yaml:"migrate_postgres"`
 	MigrateElastic    bool   `yaml:"migrate_elastic"`
-	Tracing           bool   `yaml:"tracing"`
 	Metrics           bool   `yaml:"metrics"`
+	UseTracingJaeger  bool   `yaml:"use_tracing_jaeger"`
 	Logger            struct {
 		ToFile        bool `yaml:"to_file"`
 		ToConsole     bool `yaml:"to_console"`
@@ -38,7 +38,11 @@ type Config struct {
 	Environment  string
 	IsDebug      bool
 	SecretKeyJWT string
-	Adminka      struct {
+	Tracing      struct {
+		Host string
+		Port string
+	}
+	Adminka struct {
 		Username string
 		Password string
 	}
@@ -79,6 +83,9 @@ func GetConfig() *Config {
 		}
 
 		instance.SecretKeyJWT = getEnvKey("JWT_SECRET_KEY")
+
+		instance.Tracing.Host = getEnvKey("JAEGER_HOST")
+		instance.Tracing.Port = getEnvKey("JAEGER_PORT")
 
 		instance.Postgres.Username = getEnvKey("POSTGRES_USERNAME")
 		instance.Postgres.Password = getEnvKey("POSTGRES_PASSWORD")
