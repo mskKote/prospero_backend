@@ -3,22 +3,17 @@ package search
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/dto"
-	"github.com/mskKote/prospero_backend/internal/controller/http/v1/routes"
 	"github.com/mskKote/prospero_backend/internal/domain/service/articleService"
 	"github.com/mskKote/prospero_backend/internal/domain/service/publishersService"
 	"github.com/mskKote/prospero_backend/pkg/lib"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	"github.com/mskKote/prospero_backend/pkg/tracing"
+	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"net/http"
 )
 
 var logger = logging.GetLogger()
-
-// ISearchUsecase - зависимые сервисы
-type ISearchUsecase interface {
-	routes.ISearchUsecase
-}
 
 // usecase - зависимые сервисы
 type usecase struct {
@@ -67,19 +62,23 @@ func (u *usecase) SearchPublisherWithHints(c *gin.Context) {
 func (u *usecase) GrandFilter(c *gin.Context) {
 	tracing.TraceHeader(c)
 	tracing.LogRequestTrace(c)
+	tracer := tracing.GetTracer(c)
 	ctx := c.Request.Context()
+	ctx = tracing.TracerToContext(ctx, tracer)
+	span := trace.SpanFromContext(ctx)
 
 	req := dto.GrandFilterRequest{}
 	if err := c.ShouldBind(&req); err != nil {
-		logger.Error("Ошибка при поиске", zap.Error(err))
+		logger.Error("Ошибка поиска", zap.Error(err))
+		span := trace.SpanFromContext(ctx)
+		tracing.SpanLogErr(span, err)
 		lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
 		return
 	}
 
-	grandFilter, err := u.articles.FindWithGrandFilter(ctx, req)
-	if err != nil {
+	if grandFilter, err := u.articles.FindWithGrandFilter(ctx, req); err != nil {
+		tracing.SpanLogErr(span, err)
 		lib.ResponseBadRequest(c, err, "Не смогли найти")
-		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"data":    grandFilter,

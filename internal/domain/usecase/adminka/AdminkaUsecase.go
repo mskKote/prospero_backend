@@ -2,7 +2,6 @@ package adminka
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mskKote/prospero_backend/internal/controller/http/v1/routes"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/publisher"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/source"
 	"github.com/mskKote/prospero_backend/internal/domain/service/publishersService"
@@ -23,11 +22,6 @@ const pageSize int = 6
 type usecase struct {
 	sources    sourcesService.ISourceService
 	publishers publishersService.IPublishersService
-}
-
-type IAdminkaUsecase interface {
-	routes.ISourcesUsecase
-	routes.IPublishersUsecase
 }
 
 func New(

@@ -8,13 +8,17 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/search"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/indices/create"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/fieldsortnumerictype"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/operator"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/result"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/sortorder"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/tokenchar"
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/dto"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/article"
 	"github.com/mskKote/prospero_backend/pkg/lib"
 	"github.com/mskKote/prospero_backend/pkg/logging"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"log"
 	"net/http"
@@ -69,7 +73,7 @@ func (r *repository) Setup(ctx context.Context) {
 				{FullName: "Donald J. Trump"},
 			},
 			Links:         []string{},
-			DatePublished: time.Now(),
+			DatePublished: lib.PointerFrom(time.Now()),
 		},
 	}
 	for _, a := range articles {
@@ -195,10 +199,11 @@ func (r *repository) Create(ctx context.Context) error {
 }
 
 func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest) ([]*article.EsArticleDBO, error) {
+	span := trace.SpanFromContext(ctx)
+	var must []types.Query
 
 	// 1. Поисковые строки
-	var must []types.Query
-	for _, filterString := range f.FilterStrings {
+	for i, filterString := range f.FilterStrings {
 		q := &types.Query{Bool: &types.BoolQuery{}}
 		s := strings.ToLower(filterString.Search)
 
@@ -213,16 +218,22 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 				{Fuzzy: map[string]types.FuzzyQuery{"description": {Value: s}}},
 			}
 		}
+		span.SetAttributes(attribute.String(
+			fmt.Sprintf("Ищем строку №%d", i),
+			fmt.Sprintf("Строка=[%s] Точный поиск=[%t]", s, filterString.IsExact)))
 		must = append(must, *q)
 	}
 
 	// 2. Страна
 	countryMust := types.Query{Bool: &types.BoolQuery{}}
-	for _, country := range f.FilterCountry {
+	for i, country := range f.FilterCountry {
 		q := types.Query{Match: map[string]types.MatchQuery{
 			"address.country": {Query: country.Country}},
 		}
 		countryMust.Bool.Should = append(countryMust.Bool.Should, q)
+		span.SetAttributes(attribute.String(
+			fmt.Sprintf("Ищем страну №%d", i),
+			fmt.Sprintf("Страна=[%s]", country)))
 	}
 	if len(f.FilterCountry) > 0 {
 		must = append(must, countryMust)
@@ -230,11 +241,14 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 
 	// 3. Издание
 	pubMust := types.Query{Bool: &types.BoolQuery{}}
-	for _, p := range f.FilterPublishers {
+	for i, p := range f.FilterPublishers {
 		q := types.Query{Match: map[string]types.MatchQuery{
 			"publisher.name": {Query: p.Name},
 		}}
 		pubMust.Bool.Should = append(pubMust.Bool.Should, q)
+		span.SetAttributes(attribute.String(
+			fmt.Sprintf("Ищем издание №%d", i),
+			fmt.Sprintf("Издание=[%s]", p.Name)))
 	}
 	if len(f.FilterPublishers) > 0 {
 		must = append(must, pubMust)
@@ -242,11 +256,14 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 
 	// 4. Люди
 	peopleMust := types.Query{Bool: &types.BoolQuery{}}
-	for _, person := range f.FilterPeople {
+	for i, person := range f.FilterPeople {
 		q := types.Query{Match: map[string]types.MatchQuery{
 			"people.fullName": {Query: person.Name},
 		}}
 		peopleMust.Bool.Should = append(pubMust.Bool.Should, q)
+		span.SetAttributes(attribute.String(
+			fmt.Sprintf("Ищем человека №%d", i),
+			fmt.Sprintf("Имя=[%s]", person.Name)))
 	}
 	if len(f.FilterPeople) > 0 {
 		must = append(must, peopleMust)
@@ -255,7 +272,15 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 	// 5. Время f.FilterTime
 
 	req := &search.Request{
-		Size: lib.PointerFrom(100),
+		Size: lib.PointerFrom(150),
+		Sort: types.Sort{
+			map[string]types.FieldSort{
+				"datePublished": {
+					NumericType: lib.PointerFrom(fieldsortnumerictype.Date),
+					Order:       lib.PointerFrom(sortorder.Desc),
+				},
+			},
+		},
 		Query: &types.Query{
 			Bool: &types.BoolQuery{Must: must},
 		},
@@ -270,6 +295,9 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 	}
 
 	logger.Info(fmt.Sprintf("По запросу grandFilter нашли %d", resp.Hits.Total.Value))
+	span.SetAttributes(attribute.Int64(
+		fmt.Sprintf("Найдено"),
+		resp.Hits.Total.Value))
 
 	var p []*article.EsArticleDBO
 	for _, hit := range resp.Hits.Hits {

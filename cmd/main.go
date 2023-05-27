@@ -89,6 +89,7 @@ func startup(cfg *config.Config) {
 
 	corsCfg := cors.DefaultConfig()
 	corsCfg.AllowAllOrigins = true
+	corsCfg.AddExposeHeaders(tracing.ProsperoHeader)
 	corsCfg.AddAllowHeaders("Authorization")
 	r.Use(cors.New(corsCfg))
 
@@ -151,7 +152,7 @@ func startup(cfg *config.Config) {
 
 	// --------------------------------------- IGNITION
 	if cfg.UseCronSourcesRSS {
-		go (RSS.New(sourcesSERVICE)).Startup()
+		go RSS.New(sourcesSERVICE, articlesSERVICE).Startup()
 	}
 
 	if err := r.Run(":" + cfg.Port); err != nil {

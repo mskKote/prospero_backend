@@ -4,25 +4,23 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-29] drop filter publishers">
-      <change afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/IArticlesSearchRepository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/controller/http/v1/dto/grandFilter.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/domain/entity/article/esModel.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/domain/service/articleService/IArticleService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-29] grandFilter">
+      <change afterPath="$PROJECT_DIR$/internal/domain/usecase/RSS/IParserUsecase.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/IAdminkaUsecase.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/domain/usecase/search/ISearchUsecase.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/IPublishersSearchRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/IPublishersSearchRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/PublishersSearchRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/PublishersSearchRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/search.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/entity/publisher/esModel.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/entity/publisher/esModel.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/SourcesRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/SourcesRepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/entity/article/esModel.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/entity/article/esModel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/articleService/IArticleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/articleService/IArticleService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/sourcesService/ISourcesService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/sourcesService/ISourcesService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/sourcesService/SourcesService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/sourcesService/SourcesService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/RSS/parser.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/RSS/ParserUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/adminka.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pkg/tracing/tracing.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/tracing/tracing.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -239,9 +237,17 @@
     <MESSAGE value="[PROS-29] environments &amp; postgres connection" />
     <MESSAGE value="[PROS-29] adminka" />
     <MESSAGE value="[PROS-29] drop filter publishers" />
-    <option name="LAST_COMMIT_MESSAGE" value="[PROS-29] drop filter publishers" />
+    <MESSAGE value="[PROS-29] grandFilter" />
+    <option name="LAST_COMMIT_MESSAGE" value="[PROS-29] grandFilter" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="GoApplicationRunConfiguration">
+        <watch expression="ctx.Value(&quot;otel-go-contrib-tracer&quot;)" language="go" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

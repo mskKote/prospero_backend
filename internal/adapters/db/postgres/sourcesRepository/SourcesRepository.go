@@ -15,10 +15,6 @@ type repository struct {
 	client postgres.Client
 }
 
-func New(client postgres.Client) IRepository {
-	return &repository{client}
-}
-
 func (r *repository) Create(ctx context.Context, s *source.RSS) (*source.RSS, error) {
 	q := lib.FormatQuery(`
 		INSERT INTO sources_rss(rss_url, publisher_id) 
@@ -127,4 +123,8 @@ func (r *repository) Count(ctx context.Context) (count int64, err error) {
 	logger.Info(q)
 
 	return count, lib.HandlePgErr(err)
+}
+
+func New(client postgres.Client) IRepository {
+	return &repository{client}
 }

@@ -7,5 +7,6 @@ import (
 )
 
 type IArticleService interface {
+	AddArticle(ctx context.Context, dto *article.EsArticleDBO) bool
 	FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequest) ([]*article.EsArticleDBO, error)
 }

@@ -12,10 +12,6 @@ type service struct {
 	sources sourcesRepository.IRepository
 }
 
-func New(sources sourcesRepository.IRepository) ISourceService {
-	return &service{sources}
-}
-
 func (s *service) Count(ctx context.Context) (int64, error) {
 	return s.sources.Count(ctx)
 }
@@ -27,6 +23,14 @@ func (s *service) FindAll(ctx context.Context, page, pageSize int) ([]*source.DT
 		return nil, err
 	}
 	return source.ToDTOs(sourcesRSS), nil
+}
+
+func (s *service) FindAllWithPublisher(ctx context.Context, page, pageSize int) ([]*source.RSS, error) {
+	sourcesRSS, err := s.sources.FindAll(ctx, page*pageSize, pageSize)
+	if err != nil {
+		return nil, err
+	}
+	return sourcesRSS, nil
 }
 
 func (s *service) FindByPublisherName(ctx context.Context, name string, page, pageSize int) (sec []*source.DTO, err error) {
@@ -55,4 +59,8 @@ func (s *service) AddSource(ctx context.Context, dto source.AddSourceDTO) (*sour
 		Publisher: p,
 	})
 	return saved.ToDTO(), err
+}
+
+func New(sources sourcesRepository.IRepository) ISourceService {
+	return &service{sources}
 }
