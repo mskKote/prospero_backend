@@ -1,6 +1,8 @@
 package search
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/dto"
 	"github.com/mskKote/prospero_backend/internal/domain/service/articleService"
@@ -8,6 +10,7 @@ import (
 	"github.com/mskKote/prospero_backend/pkg/lib"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	"github.com/mskKote/prospero_backend/pkg/tracing"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"net/http"
@@ -75,11 +78,19 @@ func (u *usecase) GrandFilter(c *gin.Context) {
 		lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
 		return
 	}
+	reqJSON, _ := json.Marshal(req)
+	span.SetAttributes(attribute.String("1. Тело запроса", string(reqJSON)))
 
 	if grandFilter, err := u.articles.FindWithGrandFilter(ctx, req); err != nil {
 		tracing.SpanLogErr(span, err)
 		lib.ResponseBadRequest(c, err, "Не смогли найти")
 	} else {
+		var respSpan []string
+		for _, dbo := range grandFilter {
+			respSpan = append(respSpan,
+				fmt.Sprintf("[%s] %s", dbo.Publisher.Name, dbo.Name))
+		}
+		span.SetAttributes(attribute.StringSlice("Полученные статьи", respSpan))
 		c.JSON(http.StatusOK, gin.H{
 			"data":    grandFilter,
 			"message": "ok",

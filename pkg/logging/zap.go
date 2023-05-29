@@ -51,9 +51,7 @@ func startupZap() {
 	c.OutputPaths = output
 	loggerZap, _ := c.Build()
 
-	zapLogger = otelzap.New(
-		loggerZap,
-		otelzap.WithTraceIDField(true))
+	zapLogger = otelzap.New(loggerZap)
 }
 
 // ----------------------------- Fields

@@ -6,12 +6,15 @@ import (
 	"fmt"
 	"github.com/go-co-op/gocron"
 	"github.com/mmcdole/gofeed"
+	customMetrics "github.com/mskKote/prospero_backend/internal/adapters/metrics"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/article"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/publisher"
 	"github.com/mskKote/prospero_backend/internal/domain/service/articleService"
 	"github.com/mskKote/prospero_backend/internal/domain/service/sourcesService"
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
+	"github.com/mskKote/prospero_backend/pkg/metrics"
+
 	"go.uber.org/zap"
 	"regexp"
 	"strings"
@@ -46,8 +49,7 @@ func (u *usecase) Startup() {
 	s := gocron.NewScheduler(time.UTC)
 	logger.Info("Парсим каждые " + cfg.CronSourcesRSS)
 
-	_, err := s.Cron(cfg.CronSourcesRSS).Do(u.parseJob)
-	if err != nil {
+	if _, err := s.Cron(cfg.CronSourcesRSS).Do(u.parseJob); err != nil {
 		logger.Fatal("Не стартовали CRON RSS", zap.Error(err))
 	}
 
@@ -61,6 +63,7 @@ func (u *usecase) Startup() {
 }
 
 func (u *usecase) parseJob() {
+	start := time.Now()
 	ctx := context.Background()
 	count, err := u.sources.Count(ctx)
 	if err != nil {
@@ -96,6 +99,10 @@ func (u *usecase) parseJob() {
 	}
 
 	logger.InfoContext(ctx, fmt.Sprintf("Потенциальные топонимы/имена %d", potential))
+
+	elapsed := time.Since(start)
+
+	metrics.ObserveSummaryMetric(customMetrics.MetricRssObtainName, elapsed.Seconds())
 }
 
 func (u *usecase) ParseRSS(src string) *gofeed.Feed {

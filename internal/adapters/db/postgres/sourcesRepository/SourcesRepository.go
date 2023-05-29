@@ -56,6 +56,38 @@ func (r *repository) FindAll(ctx context.Context, offset, limit int) (s []*sourc
 	return s, nil
 }
 
+func (r *repository) FindAllWithPublishers(ctx context.Context, offset, limit int) (s []*source.RSS, err error) {
+	q := lib.FormatQuery(`
+		SELECT 	s.rss_id, s.rss_url, s.add_date,
+				p.name, p.publisher_id, p.add_date, p.country, p.city, p.point
+		FROM sources_rss s
+			JOIN publishers p on p.publisher_id = s.publisher_id
+		ORDER BY s.add_date DESC
+		OFFSET $1 LIMIT $2
+	`)
+
+	rows, err := r.client.Query(ctx, q, offset, limit)
+	if err != nil {
+		return nil, lib.HandlePgErr(err)
+	}
+
+	logger.Info(q)
+
+	for rows.Next() {
+		src := &source.RSS{}
+		err = rows.Scan(
+			&src.RssID, &src.RssURL, &src.AddDate,
+			&src.Publisher.Name, &src.Publisher.PublisherID,
+			&src.Publisher.AddDate, &src.Publisher.Country,
+			&src.Publisher.City, &src.Publisher.Point)
+		if err != nil {
+			return nil, lib.HandlePgErr(err)
+		}
+		s = append(s, src)
+	}
+	return s, nil
+}
+
 func (r *repository) FindByPublisherName(ctx context.Context, name string, offset, limit int) (s []*source.RSS, err error) {
 	q := lib.FormatQuery(`
 		SELECT 	s.rss_id, s.rss_url, s.add_date,

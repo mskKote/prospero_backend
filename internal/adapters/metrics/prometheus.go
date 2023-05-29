@@ -6,24 +6,31 @@ import (
 )
 
 const (
-	MetricCounterTestID = "1234"
-	MetricSummaryTestID = "1235"
+	MetricCounterTestName = "test_metric"
+	MetricSummaryTestName = "test_metric_2"
+	MetricRssObtainName   = "metric_rss_harvest"
 )
 
 func RegisterMetrics(p *ginPrometheus.Prometheus) {
 	metricCounter := &ginPrometheus.Metric{
-		ID:          MetricCounterTestID,   // optional string
-		Name:        "test_metric",         // required string
+		Name:        MetricCounterTestName, // required string
 		Description: "Counter test metric", // required string
 		Type:        "counter",             // required string
 	}
 	metrics.RegisterCustomMetric(p, metricCounter)
 
 	metricSummary := &ginPrometheus.Metric{
-		ID:          MetricSummaryTestID,   // Identifier
-		Name:        "test_metric_2",       // Metric Name
+		Name:        MetricSummaryTestName, // Metric Name
 		Description: "Summary test metric", // Help Description
 		Type:        "summary",             // type associated with prometheus collector
 	}
 	metrics.RegisterCustomMetric(p, metricSummary)
+
+	// Время прохода по RSS источникам
+	metricRssHarvestSummary := &ginPrometheus.Metric{
+		Name:        MetricRssObtainName,               // Metric Name
+		Description: "Время прохода по RSS источникам", // Help Description
+		Type:        "summary",                         // type associated with prometheus collector
+	}
+	metrics.RegisterCustomMetric(p, metricRssHarvestSummary)
 }

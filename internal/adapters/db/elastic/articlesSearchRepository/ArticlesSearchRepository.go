@@ -23,7 +23,6 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 )
 
 const Index = "article"
@@ -49,58 +48,58 @@ func (r *repository) Setup(ctx context.Context) {
 		logger.Fatal(fmt.Sprintf("Проблема с индексом %s", Index), zap.Error(err))
 	}
 	// 2. Закинуть дефолтные значения
-	articles := []article.EsArticleDBO{
-		{
-			Name:        "In Israel, Ron DeSantis Promotes His Foreign Policy Credentials",
-			Description: "The Florida governor, a likely contender for the Republican presidential nomination, stressed his strong interest in the country’s affairs, an issue that Donald J. Trump once made his own.",
-			URL:         "https://www.nytimes.com/2023/04/27/world/middleeast/israel-ron-desantis.html",
-			Address: article.AddressES{
-				Coords:  [2]float64{40.756133, -73.990322},
-				Country: "US",
-				City:    "Florida",
-			},
-			Publisher: article.PublisherES{
-				Name: "The New York Times",
-				Address: article.AddressES{
-					Coords:  [2]float64{40.756133, -73.990322},
-					Country: "US",
-					City:    "New York",
-				},
-			},
-			Categories: []string{"politics", "economics"},
-			People: []article.PersonES{
-				{FullName: "Ron DeSantis"},
-				{FullName: "Donald J. Trump"},
-			},
-			Links:         []string{},
-			DatePublished: lib.PointerFrom(time.Now()),
-		},
-	}
-	for _, a := range articles {
-		if ok := r.IndexArticle(ctx, &a); !ok {
-			logger.Fatal("Не записали данные в " + Index)
-		}
-	}
+	//articles := []article.EsArticleDBO{
+	//	{
+	//		Name:        "In Israel, Ron DeSantis Promotes His Foreign Policy Credentials",
+	//		Description: "The Florida governor, a likely contender for the Republican presidential nomination, stressed his strong interest in the country’s affairs, an issue that Donald J. Trump once made his own.",
+	//		URL:         "https://www.nytimes.com/2023/04/27/world/middleeast/israel-ron-desantis.html",
+	//		Address: article.AddressES{
+	//			Coords:  [2]float64{40.756133, -73.990322},
+	//			Country: "US",
+	//			City:    "Florida",
+	//		},
+	//		Publisher: article.PublisherES{
+	//			Name: "The New York Times",
+	//			Address: article.AddressES{
+	//				Coords:  [2]float64{40.756133, -73.990322},
+	//				Country: "US",
+	//				City:    "New York",
+	//			},
+	//		},
+	//		Categories: []string{"politics", "economics"},
+	//		People: []article.PersonES{
+	//			{FullName: "Ron DeSantis"},
+	//			{FullName: "Donald J. Trump"},
+	//		},
+	//		Links:         []string{},
+	//		DatePublished: lib.PointerFrom(time.Now()),
+	//	},
+	//}
+	//for _, a := range articles {
+	//	if ok := r.IndexArticle(ctx, &a); !ok {
+	//		logger.Fatal("Не записали данные в " + Index)
+	//	}
+	//}
 
 	// 3. Тест поиска
-	time.Sleep(2 * time.Second)
-	f := dto.GrandFilterRequest{
-		FilterStrings: []dto.SearchString{
-			{Search: "Ron DeSantis", IsExact: true},
-		},
-		FilterPeople:     []dto.SearchPeople{},
-		FilterPublishers: []dto.SearchPublishers{{Name: "The New York Times"}},
-		FilterCountry:    []dto.SearchCountry{{Country: "US"}},
-		FilterTime:       dto.SearchTime{},
-	}
-
-	if p, err := r.FindArticles(ctx, f); err != nil {
-		logger.Fatal("Ошибка во время поиска...", zap.Error(err))
-	} else if len(p) == 0 {
-		logger.Fatal("Не нашли тестовые данные...")
-	} else {
-		logger.Info(fmt.Sprintf("Нашли %d статей", len(p)))
-	}
+	//time.Sleep(2 * time.Second)
+	//f := dto.GrandFilterRequest{
+	//	FilterStrings: []dto.SearchString{
+	//		{Search: "Ron DeSantis", IsExact: true},
+	//	},
+	//	FilterPeople:     []dto.SearchPeople{},
+	//	FilterPublishers: []dto.SearchPublishers{{Name: "The New York Times"}},
+	//	FilterCountry:    []dto.SearchCountry{{Country: "US"}},
+	//	FilterTime:       dto.SearchTime{},
+	//}
+	//
+	//if p, err := r.FindArticles(ctx, f); err != nil {
+	//	logger.Fatal("Ошибка во время поиска...", zap.Error(err))
+	//} else if len(p) == 0 {
+	//	logger.Fatal("Не нашли тестовые данные...")
+	//} else {
+	//	logger.Info(fmt.Sprintf("Нашли %d статей", len(p)))
+	//}
 }
 
 func (r *repository) Exists(ctx context.Context) bool {
@@ -281,9 +280,12 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 				},
 			},
 		},
-		Query: &types.Query{
+	}
+
+	if len(must) > 0 {
+		req.Query = &types.Query{
 			Bool: &types.BoolQuery{Must: must},
-		},
+		}
 	}
 
 	resp, err := r.client.Search().
@@ -319,7 +321,7 @@ func (r *repository) IndexArticle(ctx context.Context, a *article.EsArticleDBO) 
 	if err != nil {
 		logger.Error(fmt.Sprintf("Не записали данные в %s", Index), zap.Error(err))
 	} else {
-		logger.Info(fmt.Sprintf("Добавили %s в ES[%s] с id=[%s]", a.Name, Index, res.Id_))
+		logger.Info(fmt.Sprintf("Добавили %s в ES[%s] с id=[%s] от [%s]", a.Name, Index, res.Id_, a.Publisher.Name))
 	}
 
 	return res.Result == result.Created

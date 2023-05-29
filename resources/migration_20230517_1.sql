@@ -49,16 +49,16 @@ VALUES
     ('CNN', 'US', 'Atlanta', point(33.758040, -84.394692));
 
 INSERT INTO public.sources_rss(publisher_id, rss_url, add_date)
-VALUES ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 0 LIMIT 1), 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',  '2023-05-1 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 1 LIMIT 1), 'https://www.theguardian.com/world/rss', '2023-05-2 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 2 LIMIT 1), 'https://www.vedomosti.ru/rss/news', '2023-05-3 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 3 LIMIT 1), 'https://news.un.org/feed/subscribe/ru/news/all/rss.xml', '2023-05-4 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 4 LIMIT 1), 'https://www.hindustantimes.com/feeds/rss/world-news/rssfeed.xml', '2023-05-5 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 5 LIMIT 1), 'https://news.rambler.ru/rss/world/', '2023-05-6 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 6 LIMIT 1), 'https://lenta.ru/rss/news', '2023-05-7 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 7 LIMIT 1), 'https://feeds.a.dj.com/rss/RSSWorldNews.xml', '2023-05-8 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 8 LIMIT 1), 'http://america.aljazeera.com/content/ajam/articles.rss', '2023-05-9 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers ORDER BY publisher_id DESC OFFSET 9 LIMIT 1), 'http://rss.cnn.com/rss/edition_world.rss', '2023-05-10 19:30:06.887661 +00:00' :: timestamptz);
+VALUES ((SELECT publisher_id FROM public.publishers WHERE name = 'The New York Times'), 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',  '2023-05-1 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'The Guardian'), 'https://www.theguardian.com/world/rss', '2023-05-2 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'Vedomosti'), 'https://www.vedomosti.ru/rss/news', '2023-05-3 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'ООН'), 'https://news.un.org/feed/subscribe/ru/news/all/rss.xml', '2023-05-4 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'Hindustan Times'), 'https://www.hindustantimes.com/feeds/rss/world-news/rssfeed.xml', '2023-05-5 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'Rambler'), 'https://news.rambler.ru/rss/world/', '2023-05-6 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'lenta.ru'), 'https://lenta.ru/rss/news', '2023-05-7 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'Wall Street Journal'), 'https://feeds.a.dj.com/rss/RSSWorldNews.xml', '2023-05-8 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'France 24'), 'http://america.aljazeera.com/content/ajam/articles.rss', '2023-05-9 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'CNN'), 'http://rss.cnn.com/rss/edition_world.rss', '2023-05-10 19:30:06.887661 +00:00' :: timestamptz);
 
 -- search
 
