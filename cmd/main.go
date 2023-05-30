@@ -78,7 +78,7 @@ func startup(cfg *config.Config) {
 	publishersSearchREPO := publishersSearchRepository.New(esClient)
 
 	publishersSERVICE := publishersService.New(publishersREPO, publishersSearchREPO)
-	articlesSERVICE := articleService.New(articlesREPO)
+	articlesSERVICE := articleService.New(sourcesREPO, articlesREPO)
 	sourcesSERVICE := sourcesService.New(sourcesREPO)
 
 	// --------------------------------------- GIN
@@ -148,7 +148,7 @@ func startup(cfg *config.Config) {
 
 	// --------------------------------------- ROUTES
 	prosperoRoutes(r, &publishersSERVICE, &articlesSERVICE)
-	adminkaStartup(pgClient, &sourcesSERVICE, &publishersSERVICE, r)
+	adminkaStartup(r, pgClient, &sourcesSERVICE, &publishersSERVICE, &articlesSERVICE)
 
 	// --------------------------------------- IGNITION
 	if cfg.UseCronSourcesRSS {
@@ -188,14 +188,15 @@ func migrationsEs(client *elasticsearch.TypedClient, ctx context.Context) {
 }
 
 func adminkaStartup(
+	r *gin.Engine,
 	client postgres.Client,
 	s *sourcesService.ISourceService,
 	p *publishersService.IPublishersService,
-	r *gin.Engine) {
+	a *articleService.IArticleService) {
 
 	adminREPO := adminsRepository.New(client)
 	adminSERVICE := adminService.New(adminREPO)
-	adminkaUSECASE := adminka.New(s, p)
+	adminkaUSECASE := adminka.New(s, p, a)
 
 	// Админ
 	if cfg.MigratePostgres {

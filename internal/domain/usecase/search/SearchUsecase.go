@@ -31,10 +31,9 @@ func New(p *publishersService.IPublishersService, a *articleService.IArticleServ
 func (u *usecase) SearchDefaultPublisherWithHints(c *gin.Context) {
 	tracing.TraceHeader(c)
 	tracing.LogRequestTrace(c)
-	ctx := c.Request.Context()
 
 	// Строка поиска
-	if publishers, err := u.publishers.FindPublishersByNameViaES(ctx, ""); err != nil {
+	if publishers, err := u.publishers.FindPublishersByNameViaES(c, ""); err != nil {
 		lib.ResponseBadRequest(c, err, "Не получилось найти публицистов по умолчанию")
 	} else {
 		c.JSON(http.StatusOK, gin.H{
@@ -47,12 +46,11 @@ func (u *usecase) SearchDefaultPublisherWithHints(c *gin.Context) {
 func (u *usecase) SearchPublisherWithHints(c *gin.Context) {
 	tracing.TraceHeader(c)
 	tracing.LogRequestTrace(c)
-	ctx := c.Request.Context()
 
 	// Строка поиска
 	search := c.Param("search")
 
-	if publishers, err := u.publishers.FindPublishersByNameViaES(ctx, search); err != nil {
+	if publishers, err := u.publishers.FindPublishersByNameViaES(c, search); err != nil {
 		lib.ResponseBadRequest(c, err, "Не получилось найти публицистов по "+search)
 	} else {
 		c.JSON(http.StatusOK, gin.H{
@@ -66,8 +64,7 @@ func (u *usecase) GrandFilter(c *gin.Context) {
 	tracing.TraceHeader(c)
 	tracing.LogRequestTrace(c)
 	tracer := tracing.GetTracer(c)
-	ctx := c.Request.Context()
-	ctx = tracing.TracerToContext(ctx, tracer)
+	ctx := tracing.TracerToContext(c, tracer)
 	span := trace.SpanFromContext(ctx)
 
 	req := dto.GrandFilterRequest{}
