@@ -146,7 +146,7 @@ func (r *repository) Create(ctx context.Context) error {
 							Tokenizer: "article_tokenizer",
 							Filter:    []string{types.NewLowercaseTokenFilter().Type},
 						},
-						"article_search_analyzer": types.NewStandardAnalyzer(),
+						"article_search_analyzer": types.NewWhitespaceAnalyzer(),
 					},
 				},
 				MaxNgramDiff: lib.PointerFrom(20),
@@ -205,16 +205,33 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 	for i, filterString := range f.FilterStrings {
 		q := &types.Query{Bool: &types.BoolQuery{}}
 		s := strings.ToLower(filterString.Search)
-
 		if filterString.IsExact {
+			//q.CombinedFields = &types.CombinedFieldsQuery{
+			//	Query:    s,
+			//	Operator: &combinedfieldsoperator.And,
+			//	Fields:   []string{"name", "description"},
+			//}
 			q.Bool.Should = []types.Query{
 				{Match: map[string]types.MatchQuery{"name": {Query: s, Operator: &operator.And}}},
 				{Match: map[string]types.MatchQuery{"description": {Query: s, Operator: &operator.And}}},
 			}
 		} else {
+			// Разбиваю строку
+			fuzzyMustName := &types.BoolQuery{Must: []types.Query{}}
+			fuzzyMustDescription := &types.BoolQuery{Must: []types.Query{}}
+
+			for _, word := range strings.Split(s, " ") {
+				fuzzyMustName.Must = append(fuzzyMustName.Must,
+					types.Query{Fuzzy: map[string]types.FuzzyQuery{"name": {Value: word}}})
+				fuzzyMustDescription.Must = append(fuzzyMustDescription.Must,
+					types.Query{Fuzzy: map[string]types.FuzzyQuery{"description": {Value: word}}})
+			}
+
 			q.Bool.Should = []types.Query{
-				{Fuzzy: map[string]types.FuzzyQuery{"name": {Value: s}}},
-				{Fuzzy: map[string]types.FuzzyQuery{"description": {Value: s}}},
+				{Bool: fuzzyMustName},
+				{Bool: fuzzyMustDescription},
+				//{Fuzzy: map[string]types.FuzzyQuery{"name": {Value: s}}},
+				//{Fuzzy: map[string]types.FuzzyQuery{"description": {Value: s}}},
 			}
 		}
 		span.SetAttributes(attribute.String(
@@ -296,7 +313,7 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 		return nil, err
 	}
 
-	logger.Info(fmt.Sprintf("По запросу grandFilter нашли %d", resp.Hits.Total.Value))
+	logger.Info(fmt.Sprintf("По запросу grandFilter нашли [%d]", resp.Hits.Total.Value))
 	span.SetAttributes(attribute.Int64(
 		fmt.Sprintf("Найдено"),
 		resp.Hits.Total.Value))
