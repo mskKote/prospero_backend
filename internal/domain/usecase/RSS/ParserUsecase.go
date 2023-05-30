@@ -53,7 +53,5 @@ func (u *usecase) Startup() {
 
 func (u *usecase) ParseJob() {
 	ctx := context.Background()
-	if err := u.articles.ParseAllOnce(ctx); err != nil {
-		return
-	}
+	_ = u.articles.ParseAllOnce(ctx)
 }

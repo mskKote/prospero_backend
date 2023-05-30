@@ -38,7 +38,7 @@ func New(client *elasticsearch.TypedClient) IRepository {
 }
 
 func (r *repository) Setup(ctx context.Context) {
-	// 1. Создать индекс публициста
+	// 1. Создать индексы
 	if r.Exists(ctx) {
 		logger.Info(fmt.Sprintf("Индекс %s уже существует, удаляем", Index))
 		r.Delete(ctx)
@@ -182,6 +182,7 @@ func (r *repository) Create(ctx context.Context) error {
 						Type: "object",
 					},
 					"links":         types.NewKeywordProperty(),
+					"language":      types.NewKeywordProperty(),
 					"datePublished": types.NewDateProperty(),
 				},
 			},

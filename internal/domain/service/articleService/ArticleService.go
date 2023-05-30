@@ -11,6 +11,7 @@ import (
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/dto"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/article"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/publisher"
+	"github.com/mskKote/prospero_backend/internal/domain/entity/source"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	"github.com/mskKote/prospero_backend/pkg/metrics"
 	"github.com/mskKote/prospero_backend/pkg/tracing"
@@ -55,14 +56,22 @@ func (s *service) ParseAllOnce(ctx context.Context) error {
 			fmt.Sprintf("Прочитали партию источников {%d/%d}", i+1, parts+1))
 
 		// Читаем партию источников
+		partPotential := make(chan int)
 		for srcI, src := range sources {
-			logger.Info(fmt.Sprintf("Парсим источник #%d: %s", i*batch+srcI+1, src.RssURL))
+			go func(_srcI int, _src *source.RSS) {
+				logger.Info(fmt.Sprintf("Парсим источник #%d: %s", i*batch+_srcI+1, _src.RssURL))
 
-			feed := s.ParseRSS(src.RssURL)
-			//u.logFeed(feed)
-			potential += s.analyseFeed(feed)
-			// сохранить новости в ES
-			s.indexFeed(ctx, src.Publisher.ToDTO(), feed)
+				feed := s.ParseRSS(_src.RssURL)
+				//u.logFeed(feed)
+				feedPotential := s.analyseFeed(feed)
+				// сохранить новости в ES
+				s.indexFeed(ctx, _src.Publisher.ToDTO(), feed)
+				partPotential <- feedPotential
+			}(srcI, src)
+		}
+		// Ждём чтение партии
+		for range sources {
+			potential += <-partPotential
 		}
 	}
 
@@ -87,58 +96,71 @@ func (s *service) logFeed(feed *gofeed.Feed) {
 
 func (s *service) analyseFeed(feed *gofeed.Feed) int {
 	potential := 0
+	potentialChan := make(chan int)
 	// TODO: достать слова с большой буквы
 	// TODO: обгатить новости в NameAPI и 2gis
 	for _, item := range feed.Items {
-		for _, s := range strings.Fields(item.Description) {
-			if matched, err := regexp.MatchString(`^[A-Z|А-Я][a-z|а-я]+`, s); err != nil {
-				logger.Error("Проблема в regexp", zap.Error(err))
-			} else if matched {
-				//logger.Info("POTENTIAL NAME/TOPONYM : " + s)
-				potential++
+		go func(_item *gofeed.Item) {
+			itemPotential := 0
+			for _, s := range strings.Fields(_item.Description) {
+				if matched, err := regexp.MatchString(`^[A-Z|А-Я][a-z|а-я]+`, s); err != nil {
+					logger.Error("Проблема в regexp", zap.Error(err))
+				} else if matched {
+					//logger.Info("POTENTIAL NAME/TOPONYM : " + s)
+					itemPotential++
+				}
 			}
-		}
+			potentialChan <- itemPotential
+		}(item)
+	}
+	for range feed.Items {
+		potential += <-potentialChan
 	}
 	return potential
 }
 
 func (s *service) indexFeed(ctx context.Context, p *publisher.DTO, feed *gofeed.Feed) {
-	for _, item := range feed.Items {
-		var people []article.PersonES
-		for _, author := range item.Authors {
-			people = append(people, article.PersonES{FullName: author.Name})
-		}
+	itemsChan := make(chan bool)
 
-		articleDBO := &article.EsArticleDBO{
-			Name:        item.Title,
-			Description: item.Description,
-			URL:         item.Link,
-			// TODO Address PlaceAPI
-			Address: article.AddressES{
-				Coords:  [2]float64{p.Latitude, p.Longitude},
-				Country: p.Country,
-				City:    p.City,
-			},
-			Publisher: article.PublisherES{
-				Name: p.Name,
+	for _, item := range feed.Items {
+		go func(_item *gofeed.Item) {
+			var people []article.PersonES
+			for _, author := range _item.Authors {
+				people = append(people, article.PersonES{FullName: author.Name})
+			}
+
+			articleDBO := &article.EsArticleDBO{
+				Name:        _item.Title,
+				Description: _item.Description,
+				URL:         _item.Link,
 				Address: article.AddressES{
 					Coords:  [2]float64{p.Latitude, p.Longitude},
 					Country: p.Country,
 					City:    p.City,
 				},
-			},
-			Categories: item.Categories,
-			// TODO People по NameAPI
-			People:        people,
-			Links:         item.Links,
-			DatePublished: item.PublishedParsed,
-		}
+				Publisher: article.PublisherES{
+					Name: p.Name,
+					Address: article.AddressES{
+						Coords:  [2]float64{p.Latitude, p.Longitude},
+						Country: p.Country,
+						City:    p.City,
+					},
+				},
+				Categories:    _item.Categories,
+				People:        people,
+				Links:         _item.Links,
+				DatePublished: _item.PublishedParsed,
+				Language:      feed.Language,
+			}
 
-		if ok := s.AddArticle(ctx, articleDBO); !ok {
-			logger.FatalContext(ctx, "Ошибка добавления статьи")
-		} else {
-			//logger.InfoContext(ctx, "Добавили статью")
-		}
+			if ok := s.AddArticle(ctx, articleDBO); !ok {
+				logger.ErrorContext(ctx, "Ошибка добавления статьи")
+			}
+			itemsChan <- true
+		}(item)
+	}
+	for range feed.Items {
+		<-itemsChan
 	}
 }
 

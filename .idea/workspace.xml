@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-36] Тестовая ручка подтягивания RSS">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-36] fuzzy &amp; match по нескольким словам">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/PublishersSearchRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/PublishersSearchRepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/entity/article/esModel.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/entity/article/esModel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/RSS/ParserUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/RSS/ParserUsecase.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -234,7 +235,8 @@
     <MESSAGE value="[PROS-29] metrics" />
     <MESSAGE value="[PROS-29] workspace.xml" />
     <MESSAGE value="[PROS-36] Тестовая ручка подтягивания RSS" />
-    <option name="LAST_COMMIT_MESSAGE" value="[PROS-36] Тестовая ручка подтягивания RSS" />
+    <MESSAGE value="[PROS-36] fuzzy &amp; match по нескольким словам" />
+    <option name="LAST_COMMIT_MESSAGE" value="[PROS-36] fuzzy &amp; match по нескольким словам" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
