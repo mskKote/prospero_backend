@@ -4,20 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-29] jaeger trace grandFilter">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-29] metrics">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/ISourceRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/ISourceRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/SourcesRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/postgres/sourcesRepository/SourcesRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/metrics/prometheus.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/metrics/prometheus.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/metrics/prometheus_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/metrics/prometheus_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/service/sourcesService/SourcesService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/sourcesService/SourcesService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/RSS/ParserUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/RSS/ParserUsecase.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/logging/zap.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/logging/zap.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/metrics/prometheus.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/metrics/prometheus.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/migration_20230517_1.sql" beforeDir="false" afterPath="$PROJECT_DIR$/resources/migration_20230517_1.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +86,7 @@
       <recent name="C:\mskKote\HSE\prospero\backend\internal\domain\entity\publisher" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build github.com/mskKote/prospero_backend/cmd">
+  <component name="RunManager" selected="Docker.docker-compose.yml.kibana: Compose Deployment">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="backend" />
       <working_directory value="$PROJECT_DIR$" />
@@ -106,15 +94,6 @@
       <package value="github.com/mskKote/prospero_backend" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="go build github.com/mskKote/prospero_backend/cmd" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="backend" />
-      <working_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="github.com/mskKote/prospero_backend/cmd" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/cmd/main.go" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
@@ -139,12 +118,12 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.elasticsearch: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+    <configuration name="docker-compose.yml.filebeat: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="services">
             <list>
-              <option value="elasticsearch" />
+              <option value="filebeat" />
             </list>
           </option>
           <option name="sourceFilePath" value="docker-compose.yml" />
@@ -165,12 +144,12 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.jaeger: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+    <configuration name="docker-compose.yml.kibana: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="services">
             <list>
-              <option value="jaeger" />
+              <option value="kibana" />
             </list>
           </option>
           <option name="sourceFilePath" value="docker-compose.yml" />
@@ -178,12 +157,25 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.postgres: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+    <configuration name="docker-compose.yml.logstash: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="services">
             <list>
-              <option value="postgres" />
+              <option value="logstash" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.prometheus: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="prometheus" />
             </list>
           </option>
           <option name="sourceFilePath" value="docker-compose.yml" />
@@ -193,11 +185,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
-        <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml.elasticsearch: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml.postgres: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.kibana: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.logstash: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.filebeat: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.grafana: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.prometheus: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -240,7 +232,8 @@
     <MESSAGE value="[PROS-29] drop filter publishers" />
     <MESSAGE value="[PROS-29] grandFilter" />
     <MESSAGE value="[PROS-29] jaeger trace grandFilter" />
-    <option name="LAST_COMMIT_MESSAGE" value="[PROS-29] jaeger trace grandFilter" />
+    <MESSAGE value="[PROS-29] metrics" />
+    <option name="LAST_COMMIT_MESSAGE" value="[PROS-29] metrics" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
