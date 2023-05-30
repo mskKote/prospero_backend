@@ -51,15 +51,7 @@ func startupZap() {
 	c.OutputPaths = output
 	loggerZap, _ := c.Build()
 
-	zapLogger = otelzap.New(
-		loggerZap,
-		otelzap.WithTraceIDField(true))
-	defer func(loggerZap *zap.Logger) {
-		err := loggerZap.Sync()
-		if err != nil {
-			loggerZap.Error("Не получилось синхронизироваться", zap.Error(err))
-		}
-	}(loggerZap)
+	zapLogger = otelzap.New(loggerZap)
 }
 
 // ----------------------------- Fields

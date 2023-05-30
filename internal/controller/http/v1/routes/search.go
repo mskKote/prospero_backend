@@ -5,21 +5,19 @@ import (
 )
 
 const (
-	searchURL = "/grandFilter/:search"
+	searchURL                 = "/grandFilter"
+	searchPublisherURL        = "/searchPublisherWithHints/:search"
+	searchDefaultPublisherURL = "/searchPublisherWithHints/"
 )
 
 type ISearchUsecase interface {
 	GrandFilter(g *gin.Context)
+	SearchPublisherWithHints(c *gin.Context)
+	SearchDefaultPublisherWithHints(c *gin.Context)
 }
 
-type SearchHandlers struct {
-	search ISearchUsecase
-}
-
-func NewSearchRoute(search ISearchUsecase) *SearchHandlers {
-	return &SearchHandlers{search}
-}
-
-func (h *SearchHandlers) Register(g *gin.RouterGroup) {
-	g.POST(searchURL, h.search.GrandFilter)
+func RegisterSearchRoutes(g *gin.RouterGroup, s ISearchUsecase) {
+	g.POST(searchURL, s.GrandFilter)
+	g.GET(searchPublisherURL, s.SearchPublisherWithHints)
+	g.GET(searchDefaultPublisherURL, s.SearchDefaultPublisherWithHints)
 }

@@ -11,30 +11,52 @@ import (
 )
 
 var (
-	//logger = logging.GetLogrus()
-	logger = logging.GetLogger()
-	cfg    = config.GetConfig()
+	logger      = logging.GetLogger()
+	cfg         = config.GetConfig()
+	prometheus_ *ginPrometheus.Prometheus
 )
 
-func GetMetricByID(p *ginPrometheus.Prometheus, id string) (*ginPrometheus.Metric, bool) {
-	for i := range p.MetricsList {
-		if p.MetricsList[i].ID == id {
-			a := p.MetricsList[i]
+func GetMetricByName(name string) (*ginPrometheus.Metric, bool) {
+	for i := range prometheus_.MetricsList {
+		if prometheus_.MetricsList[i].Name == name {
+			a := prometheus_.MetricsList[i]
 			return a, true
 		}
 	}
 	return nil, false
 }
 
+func IncMetric(name string) {
+	if m, ok := GetMetricByName(name); ok {
+		m.MetricCollector.(prometheus.Counter).Inc()
+	} else {
+		logger.Error(fmt.Sprintf("Нет метрики [%s]", name))
+	}
+}
+
+//func SetGaugeMetric(name string, value float64) {
+//	if m, ok := GetMetricByName(name); ok {
+//		m.MetricCollector.(prometheus.Gauge).Set(value)
+//	} else {
+//		logger.Error(fmt.Sprintf("Нет метрики [%s]", name))
+//	}
+//}
+
+func ObserveSummaryMetric(name string, value float64) {
+	if m, ok := GetMetricByName(name); ok {
+		m.MetricCollector.(prometheus.Summary).Observe(value)
+	} else {
+		logger.Error(fmt.Sprintf("Нет метрики [%s]", name))
+	}
+}
+
 func RegisterCustomMetric(
 	p *ginPrometheus.Prometheus,
 	m *ginPrometheus.Metric) {
-
 	metricCollector := ginPrometheus.NewMetric(m, cfg.Service)
 
 	if err := prometheus.Register(metricCollector); err != nil {
-		logger.Error(fmt.Sprintf("could not be registered in Prometheus %s", m.Name), zap.Error(err))
-		//logger.WithError(err).Errorf("%s could not be registered in Prometheus", m.Name)
+		logger.Error(fmt.Sprintf("[METRICS] could not be registered in Prometheus %s", m.Name), zap.Error(err))
 	}
 
 	m.MetricCollector = metricCollector
@@ -43,6 +65,7 @@ func RegisterCustomMetric(
 
 func Startup(router *gin.Engine) *ginPrometheus.Prometheus {
 	p := ginPrometheus.NewPrometheus(cfg.Service)
+	prometheus_ = p
 	// gin middleware
 	p.Use(router)
 	return p

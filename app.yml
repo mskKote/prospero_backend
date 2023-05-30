@@ -1,7 +1,13 @@
 runtime: go120
 service: prospero_searcher
-is_debug: true
 port: 5000
+#cron_sources_rss: "*/1 * * * *"
+cron_sources_rss: "*/5 * * * *"
+use_cron_sources_rss: false
+use_tracing_jaeger: true
+migrate_postgres: true
+migrate_elastic: false
+metrics: true
 logger:
     to_file: true
     to_console: true
