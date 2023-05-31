@@ -6,7 +6,7 @@ cron_sources_rss: "*/5 * * * *"
 use_cron_sources_rss: false
 use_tracing_jaeger: true
 migrate_postgres: true
-migrate_elastic: true
+migrate_elastic: false
 metrics: true
 logger:
     to_file: true

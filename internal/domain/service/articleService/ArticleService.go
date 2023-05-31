@@ -176,7 +176,7 @@ func (s *service) AddArticle(ctx context.Context, dto *article.EsArticleDBO) boo
 	return s.elastic.IndexArticle(ctx, dto)
 }
 
-func (s *service) FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequest) ([]*article.EsArticleDBO, error) {
+func (s *service) FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequest) ([]*article.EsArticleDBO, int64, error) {
 	tracer := tracing.TracerFromContext(ctx)
 	ctxWithSpan, span := tracer.Start(ctx, "ElasticSearch")
 	logger.InfoContext(ctxWithSpan, "Создали Span")

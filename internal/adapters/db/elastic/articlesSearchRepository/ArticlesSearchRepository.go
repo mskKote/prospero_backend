@@ -198,7 +198,7 @@ func (r *repository) Create(ctx context.Context) error {
 	return err
 }
 
-func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest) ([]*article.EsArticleDBO, error) {
+func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest) ([]*article.EsArticleDBO, int64, error) {
 	span := trace.SpanFromContext(ctx)
 	var must []types.Query
 
@@ -311,7 +311,7 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 		Request(req).
 		Do(ctx)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	logger.Info(fmt.Sprintf("По запросу grandFilter нашли [%d]", resp.Hits.Total.Value))
@@ -323,12 +323,12 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 	for _, hit := range resp.Hits.Hits {
 		var res *article.EsArticleDBO
 		if err := json.Unmarshal(hit.Source_, &res); err != nil {
-			return nil, err
+			return nil, 0, err
 		}
 		p = append(p, res)
 	}
 
-	return p, nil
+	return p, resp.Hits.Total.Value, nil
 }
 
 func (r *repository) IndexArticle(ctx context.Context, a *article.EsArticleDBO) bool {

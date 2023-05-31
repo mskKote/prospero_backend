@@ -11,6 +11,6 @@ type IRepository interface {
 	Exists(ctx context.Context) bool
 	Delete(ctx context.Context)
 	Create(ctx context.Context) error
-	FindArticles(ctx context.Context, f dto.GrandFilterRequest) ([]*article.EsArticleDBO, error)
+	FindArticles(ctx context.Context, f dto.GrandFilterRequest) ([]*article.EsArticleDBO, int64, error)
 	IndexArticle(ctx context.Context, a *article.EsArticleDBO) bool
 }

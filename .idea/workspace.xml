@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-36] fuzzy &amp; match по нескольким словам">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[PROS-36] goroutines">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/entity/article/esModel.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/entity/article/esModel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/IArticlesSearchRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/IArticlesSearchRepository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/RSS/ParserUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/RSS/ParserUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/articleService/IArticleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/articleService/IArticleService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +69,8 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.keymap"
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\GoLand 2022.3.3\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
@@ -236,7 +239,8 @@
     <MESSAGE value="[PROS-29] workspace.xml" />
     <MESSAGE value="[PROS-36] Тестовая ручка подтягивания RSS" />
     <MESSAGE value="[PROS-36] fuzzy &amp; match по нескольким словам" />
-    <option name="LAST_COMMIT_MESSAGE" value="[PROS-36] fuzzy &amp; match по нескольким словам" />
+    <MESSAGE value="[PROS-36] goroutines" />
+    <option name="LAST_COMMIT_MESSAGE" value="[PROS-36] goroutines" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

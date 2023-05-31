@@ -64,7 +64,8 @@ func (u *usecase) GrandFilter(c *gin.Context) {
 	tracing.TraceHeader(c)
 	tracing.LogRequestTrace(c)
 	tracer := tracing.GetTracer(c)
-	ctx := tracing.TracerToContext(c, tracer)
+	ctx := c.Request.Context()
+	ctx = tracing.TracerToContext(ctx, tracer)
 	span := trace.SpanFromContext(ctx)
 
 	req := dto.GrandFilterRequest{}
@@ -78,7 +79,7 @@ func (u *usecase) GrandFilter(c *gin.Context) {
 	reqJSON, _ := json.Marshal(req)
 	span.SetAttributes(attribute.String("1. Тело запроса", string(reqJSON)))
 
-	if grandFilter, err := u.articles.FindWithGrandFilter(ctx, req); err != nil {
+	if grandFilter, total, err := u.articles.FindWithGrandFilter(ctx, req); err != nil {
 		tracing.SpanLogErr(span, err)
 		lib.ResponseBadRequest(c, err, "Не смогли найти")
 	} else {
@@ -90,6 +91,7 @@ func (u *usecase) GrandFilter(c *gin.Context) {
 		span.SetAttributes(attribute.StringSlice("Полученные статьи", respSpan))
 		c.JSON(http.StatusOK, gin.H{
 			"data":    grandFilter,
+			"total":   total,
 			"message": "ok",
 		})
 	}

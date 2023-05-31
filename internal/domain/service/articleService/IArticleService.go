@@ -9,7 +9,7 @@ import (
 
 type IArticleService interface {
 	AddArticle(ctx context.Context, dto *article.EsArticleDBO) bool
-	FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequest) ([]*article.EsArticleDBO, error)
+	FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequest) ([]*article.EsArticleDBO, int64, error)
 
 	// ParseAllOnce проходит по всем источникам
 	ParseAllOnce(ctx context.Context) error
