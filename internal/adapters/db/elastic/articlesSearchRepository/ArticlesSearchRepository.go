@@ -10,6 +10,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/fieldsortnumerictype"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/operator"
+	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/optype"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/result"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/sortorder"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/tokenchar"
@@ -20,12 +21,16 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
+	"hash/fnv"
 	"log"
 	"net/http"
 	"strings"
 )
 
-const Index = "article"
+const (
+	ArticleIndex  = "article"
+	CategoryIndex = "category"
+)
 
 var logger = logging.GetLogger().With(zap.String("prefix", "[ES]"))
 
@@ -39,13 +44,17 @@ func New(client *elasticsearch.TypedClient) IRepository {
 
 func (r *repository) Setup(ctx context.Context) {
 	// 1. Создать индексы
-	if r.Exists(ctx) {
-		logger.Info(fmt.Sprintf("Индекс %s уже существует, удаляем", Index))
-		r.Delete(ctx)
+	if r.Exists(ctx, ArticleIndex) {
+		logger.Info(fmt.Sprintf("Индекс %s уже существует, удаляем", ArticleIndex))
+		r.Delete(ctx, ArticleIndex)
+	}
+	if r.Exists(ctx, CategoryIndex) {
+		logger.Info(fmt.Sprintf("Индекс %s уже существует, удаляем", CategoryIndex))
+		r.Delete(ctx, CategoryIndex)
 	}
 
 	if err := r.Create(ctx); err != nil {
-		logger.Fatal(fmt.Sprintf("Проблема с индексом %s", Index), zap.Error(err))
+		logger.Fatal(fmt.Sprintf("Проблема с индексом %s", ArticleIndex), zap.Error(err))
 	}
 	// 2. Закинуть дефолтные значения
 	//articles := []article.EsArticleDBO{
@@ -77,7 +86,7 @@ func (r *repository) Setup(ctx context.Context) {
 	//}
 	//for _, a := range articles {
 	//	if ok := r.IndexArticle(ctx, &a); !ok {
-	//		logger.Fatal("Не записали данные в " + Index)
+	//		logger.Fatal("Не записали данные в " + ArticleIndex)
 	//	}
 	//}
 
@@ -102,8 +111,8 @@ func (r *repository) Setup(ctx context.Context) {
 	//}
 }
 
-func (r *repository) Exists(ctx context.Context) bool {
-	if resp, err := r.client.Indices.Exists(Index).Perform(ctx); err != nil {
+func (r *repository) Exists(ctx context.Context, index string) bool {
+	if resp, err := r.client.Indices.Exists(index).Perform(ctx); err != nil {
 		logger.Error("Не смогли узнать о существовании индекса", zap.Error(err))
 		return false
 	} else {
@@ -111,13 +120,14 @@ func (r *repository) Exists(ctx context.Context) bool {
 	}
 }
 
-func (r *repository) Delete(ctx context.Context) {
-	if _, err := r.client.Indices.Delete(Index).Do(ctx); err != nil {
-		logger.Error("Не удалили индекс "+Index, zap.Error(err))
+func (r *repository) Delete(ctx context.Context, index string) {
+	if _, err := r.client.Indices.Delete(index).Do(ctx); err != nil {
+		logger.Error("Не удалили индекс "+index, zap.Error(err))
 	}
 }
 
 func (r *repository) Create(ctx context.Context) error {
+	// ------------------------------------------------- Статьи
 	articlesTokenizer := types.NGramTokenizer{
 		MinGram:    2,
 		MaxGram:    20,
@@ -134,7 +144,7 @@ func (r *repository) Create(ctx context.Context) error {
 		Type: "object",
 	}
 
-	res, err := r.client.Indices.Create(Index).
+	res, err := r.client.Indices.Create(ArticleIndex).
 		Request(&create.Request{
 			Settings: &types.IndexSettings{
 				Analysis: &types.IndexSettingsAnalysis{
@@ -190,15 +200,105 @@ func (r *repository) Create(ctx context.Context) error {
 		Do(ctx)
 
 	if err != nil {
-		logger.Error("Не создали индекс " + Index)
+		logger.Error("Не создали индекс " + ArticleIndex)
+		return err
 	} else {
 		log.Println(res)
 	}
 
-	return err
+	// ------------------------------------------------- Категории
+	categoryTokenizer := types.NGramTokenizer{
+		MinGram: 2,
+		MaxGram: 20,
+		TokenChars: []tokenchar.TokenChar{
+			tokenchar.Letter,
+			tokenchar.Digit,
+			tokenchar.Whitespace,
+			tokenchar.Punctuation,
+			tokenchar.Symbol},
+		Type: "ngram",
+	}
+
+	res, err = r.client.Indices.Create(CategoryIndex).
+		Request(&create.Request{
+			Settings: &types.IndexSettings{
+				Analysis: &types.IndexSettingsAnalysis{
+					Tokenizer: map[string]types.Tokenizer{
+						"category_tokenizer": categoryTokenizer,
+					},
+					Analyzer: map[string]types.Analyzer{
+						"category_analyzer": types.CustomAnalyzer{
+							Tokenizer: "category_tokenizer",
+							Filter:    []string{types.NewLowercaseTokenFilter().Type},
+						},
+						"category_search_analyzer": types.NewKeywordAnalyzer(),
+					},
+				},
+				MaxNgramDiff: lib.PointerFrom(20),
+			},
+			Mappings: &types.TypeMapping{
+				Properties: map[string]types.Property{
+					"name": &types.TextProperty{
+						Analyzer:       lib.PointerFrom("category_analyzer"),
+						SearchAnalyzer: lib.PointerFrom("category_search_analyzer"),
+						Type:           "text",
+						Index:          lib.PointerFrom(true),
+					},
+				},
+			},
+		}).
+		Do(ctx)
+
+	if err != nil {
+		logger.Error("Не создали индекс " + CategoryIndex)
+		return err
+	} else {
+		log.Println(res)
+	}
+
+	return nil
 }
 
-func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest) ([]*article.EsArticleDBO, int64, error) {
+func (r *repository) IndexArticle(ctx context.Context, a *article.EsArticleDBO) bool {
+	res, err := r.client.Index(ArticleIndex).
+		Request(a).
+		Do(ctx)
+
+	if err != nil {
+		logger.Error(fmt.Sprintf("Не записали данные в %s", ArticleIndex), zap.Error(err))
+	} else {
+		logger.Info(
+			fmt.Sprintf("Добавили в ES[%s] статью [%s] с id=[%s] от [%s]",
+				ArticleIndex, a.Name, res.Id_, a.Publisher.Name))
+	}
+
+	return res.Result == result.Created
+}
+
+func (r *repository) IndexCategory(ctx context.Context, a *article.CategoryES) bool {
+	h := fnv.New32a()
+	if _, err := h.Write([]byte(a.Name)); err != nil {
+		logger.Error(fmt.Sprintf("Не записали [%s][%s] данные в [%s] error=[%v]", a.Name, CategoryIndex, err))
+		return false
+	}
+	hash := h.Sum32()
+
+	res, err := r.client.Index(CategoryIndex).
+		Id(fmt.Sprintf("%d", hash)).
+		Request(a).
+		OpType(optype.Index).
+		Do(ctx)
+
+	if err != nil {
+		logger.Error(fmt.Sprintf("Не записали [%s][%s] данные в [%s] error=[%v]", a.Name, hash, CategoryIndex, err))
+	} else {
+		logger.Info(fmt.Sprintf("Добавили в ES[%s] категорию [%s] с id=[%s]", CategoryIndex, a.Name, res.Id_))
+	}
+
+	return res.Result == result.Created
+}
+
+func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest, size int) ([]*article.EsArticleDBO, int64, error) {
 	span := trace.SpanFromContext(ctx)
 	var must []types.Query
 
@@ -286,10 +386,40 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 		must = append(must, peopleMust)
 	}
 
-	// 5. Время f.FilterTime
+	// 5. Категории
+	categoriesMust := types.Query{Bool: &types.BoolQuery{}}
+	for i, category := range f.FilterCategories {
+		q := types.Query{Match: map[string]types.MatchQuery{
+			"categories": {Query: category.Name},
+		}}
+		categoriesMust.Bool.Should = append(categoriesMust.Bool.Should, q)
+		span.SetAttributes(attribute.String(
+			fmt.Sprintf("Ищем категорию №%d", i),
+			fmt.Sprintf("Категория=[%s]", category.Name)))
+	}
+	if len(f.FilterCategories) > 0 {
+		must = append(must, categoriesMust)
+	}
+
+	// 6. Языки
+	languagesMust := types.Query{Bool: &types.BoolQuery{}}
+	for i, language := range f.FilterLanguages {
+		q := types.Query{Match: map[string]types.MatchQuery{
+			"language": {Query: language.Name},
+		}}
+		languagesMust.Bool.Should = append(languagesMust.Bool.Should, q)
+		span.SetAttributes(attribute.String(
+			fmt.Sprintf("Ищем язык №%d", i),
+			fmt.Sprintf("Язык=[%s]", language.Name)))
+	}
+	if len(f.FilterLanguages) > 0 {
+		must = append(must, languagesMust)
+	}
+
+	// 7. Время f.FilterTime
 
 	req := &search.Request{
-		Size: lib.PointerFrom(150),
+		Size: &size,
 		Sort: types.Sort{
 			map[string]types.FieldSort{
 				"datePublished": {
@@ -307,7 +437,7 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 	}
 
 	resp, err := r.client.Search().
-		Index(Index).
+		Index(ArticleIndex).
 		Request(req).
 		Do(ctx)
 	if err != nil {
@@ -331,18 +461,77 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest)
 	return p, resp.Hits.Total.Value, nil
 }
 
-func (r *repository) IndexArticle(ctx context.Context, a *article.EsArticleDBO) bool {
-	res, err := r.client.Index(Index).
-		Request(a).
-		Do(ctx)
-
-	if err != nil {
-		logger.Error(fmt.Sprintf("Не записали данные в %s", Index), zap.Error(err))
-	} else {
-		logger.Info(
-			fmt.Sprintf("Добавили в ES[%s] статью [%s] с id=[%s] от [%s]",
-				Index, a.Name, res.Id_, a.Publisher.Name))
+func (r *repository) FindLanguages(ctx context.Context) ([]*article.LanguageES, error) {
+	span := trace.SpanFromContext(ctx)
+	req := &search.Request{
+		Size: lib.PointerFrom(0),
+		Aggregations: map[string]types.Aggregations{
+			"langs": {
+				Terms: &types.TermsAggregation{
+					Field: lib.PointerFrom("language"),
+				},
+			},
+		},
 	}
 
-	return res.Result == result.Created
+	resp, err := r.client.Search().
+		Index(ArticleIndex).
+		Request(req).
+		Do(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	logger.Info(fmt.Sprintf("Языков нашли [%d]", len(resp.Aggregations)))
+	span.SetAttributes(attribute.Int(fmt.Sprintf("Найдено"), len(resp.Aggregations)))
+
+	languages := resp.Aggregations["langs"].(*types.StringTermsAggregate)
+	buckets := languages.Buckets.([]types.StringTermsBucket)
+	fmt.Printf("%v", buckets)
+
+	var p []*article.LanguageES
+	for _, hit := range buckets {
+		p = append(p, &article.LanguageES{Name: hit.Key.(string)})
+	}
+
+	return p, nil
+}
+
+func (r *repository) FindCategory(ctx context.Context, cat string) ([]*article.CategoryES, error) {
+	span := trace.SpanFromContext(ctx)
+
+	req := &search.Request{
+		Size: lib.PointerFrom(20),
+	}
+
+	if len(cat) > 0 {
+		span.SetAttributes(attribute.String("name:q", strings.ToLower(cat)))
+		req.Query = &types.Query{Match: map[string]types.MatchQuery{
+			"name": {Query: strings.ToLower(cat)},
+		}}
+	}
+
+	resp, err := r.client.Search().
+		Index(CategoryIndex).
+		Request(req).
+		Do(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	logger.Info(fmt.Sprintf("Нашли категорий [%d]", resp.Hits.Total.Value))
+	span.SetAttributes(attribute.Int64(
+		fmt.Sprintf("Найдено"),
+		resp.Hits.Total.Value))
+
+	var p []*article.CategoryES
+	for _, hit := range resp.Hits.Hits {
+		var res *article.CategoryES
+		if err := json.Unmarshal(hit.Source_, &res); err != nil {
+			return nil, err
+		}
+		p = append(p, res)
+	}
+
+	return p, nil
 }

@@ -128,6 +128,7 @@ func (s *service) indexFeed(ctx context.Context, p *publisher.DTO, feed *gofeed.
 			for _, author := range _item.Authors {
 				people = append(people, article.PersonES{FullName: author.Name})
 			}
+			language := strings.ToLower(strings.Split(feed.Language, "-")[0])
 
 			articleDBO := &article.EsArticleDBO{
 				Name:        _item.Title,
@@ -150,11 +151,16 @@ func (s *service) indexFeed(ctx context.Context, p *publisher.DTO, feed *gofeed.
 				People:        people,
 				Links:         _item.Links,
 				DatePublished: _item.PublishedParsed,
-				Language:      feed.Language,
+				Language:      language,
+			}
+			if ok := s.elastic.IndexArticle(ctx, articleDBO); !ok {
+				logger.ErrorContext(ctx, "Ошибка добавления статьи")
 			}
 
-			if ok := s.AddArticle(ctx, articleDBO); !ok {
-				logger.ErrorContext(ctx, "Ошибка добавления статьи")
+			for _, category := range _item.Categories {
+				categoryDBO := &article.CategoryES{Name: category}
+
+				s.elastic.IndexCategory(ctx, categoryDBO)
 			}
 			itemsChan <- true
 		}(item)
@@ -172,18 +178,34 @@ func (s *service) ParseRSS(src string) *gofeed.Feed {
 	return feed
 }
 
-func (s *service) AddArticle(ctx context.Context, dto *article.EsArticleDBO) bool {
-	return s.elastic.IndexArticle(ctx, dto)
-}
-
-func (s *service) FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequest) ([]*article.EsArticleDBO, int64, error) {
+func (s *service) FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequest, size int) ([]*article.EsArticleDBO, int64, error) {
 	tracer := tracing.TracerFromContext(ctx)
 	ctxWithSpan, span := tracer.Start(ctx, "ElasticSearch")
 	logger.InfoContext(ctxWithSpan, "Создали Span")
 	span.SetAttributes(attribute.String("[articleSERVICE]", "Идём в ElasticSearch"))
 	defer span.End()
 
-	return s.elastic.FindArticles(ctxWithSpan, p)
+	return s.elastic.FindArticles(ctxWithSpan, p, size)
+}
+
+func (s *service) FindAllLanguages(ctx context.Context) ([]*article.LanguageES, error) {
+	tracer := tracing.TracerFromContext(ctx)
+	ctxWithSpan, span := tracer.Start(ctx, "ElasticSearch")
+	logger.InfoContext(ctxWithSpan, "Создали Span")
+	span.SetAttributes(attribute.String("[articleSERVICE]", "Идём в ElasticSearch"))
+	defer span.End()
+
+	return s.elastic.FindLanguages(ctx)
+}
+
+func (s *service) FindCategory(ctx context.Context, cat string) ([]*article.CategoryES, error) {
+	tracer := tracing.TracerFromContext(ctx)
+	ctxWithSpan, span := tracer.Start(ctx, "ElasticSearch")
+	logger.InfoContext(ctxWithSpan, "Создали Span")
+	span.SetAttributes(attribute.String("[articleSERVICE]", "Идём в ElasticSearch"))
+	defer span.End()
+
+	return s.elastic.FindCategory(ctx, cat)
 }
 
 func New(

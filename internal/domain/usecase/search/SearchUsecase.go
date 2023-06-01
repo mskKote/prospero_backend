@@ -14,6 +14,7 @@ import (
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
 	"net/http"
+	"strconv"
 )
 
 var logger = logging.GetLogger()
@@ -79,9 +80,16 @@ func (u *usecase) GrandFilter(c *gin.Context) {
 	reqJSON, _ := json.Marshal(req)
 	span.SetAttributes(attribute.String("1. Тело запроса", string(reqJSON)))
 
-	if grandFilter, total, err := u.articles.FindWithGrandFilter(ctx, req); err != nil {
+	sizeQuery := c.Query("size")
+	span.SetAttributes(attribute.String("2. Параметр size", sizeQuery))
+	size, err := strconv.Atoi(sizeQuery)
+	if err != nil {
+		size = 150
+	}
+
+	if grandFilter, total, err := u.articles.FindWithGrandFilter(ctx, req, size); err != nil {
 		tracing.SpanLogErr(span, err)
-		lib.ResponseBadRequest(c, err, "Не смогли найти")
+		lib.ResponseBadRequest(c, err, "Не смогли найти статьи")
 	} else {
 		var respSpan []string
 		for _, dbo := range grandFilter {
@@ -92,6 +100,58 @@ func (u *usecase) GrandFilter(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"data":    grandFilter,
 			"total":   total,
+			"message": "ok",
+		})
+	}
+}
+
+func (u *usecase) SearchLanguages(c *gin.Context) {
+	tracing.TraceHeader(c)
+	tracing.LogRequestTrace(c)
+	tracer := tracing.GetTracer(c)
+	ctx := c.Request.Context()
+	ctx = tracing.TracerToContext(ctx, tracer)
+	span := trace.SpanFromContext(ctx)
+
+	if languages, err := u.articles.FindAllLanguages(ctx); err != nil {
+		tracing.SpanLogErr(span, err)
+		lib.ResponseBadRequest(c, err, "Не смогли найти языки")
+	} else {
+		var respSpan []string
+		for _, dbo := range languages {
+			respSpan = append(respSpan, dbo.Name)
+		}
+		span.SetAttributes(attribute.StringSlice("Полученные языки", respSpan))
+		c.JSON(http.StatusOK, gin.H{
+			"data":    languages,
+			"message": "ok",
+		})
+	}
+}
+
+func (u *usecase) SearchCategoriesWithHints(c *gin.Context) {
+	tracing.TraceHeader(c)
+	tracing.LogRequestTrace(c)
+	tracer := tracing.GetTracer(c)
+	ctx := c.Request.Context()
+	ctx = tracing.TracerToContext(ctx, tracer)
+	span := trace.SpanFromContext(ctx)
+
+	// Параметр поиска
+	req := c.Query("q")
+	span.SetAttributes(attribute.String("1. Тело запроса", req))
+
+	if categories, err := u.articles.FindCategory(ctx, req); err != nil {
+		tracing.SpanLogErr(span, err)
+		lib.ResponseBadRequest(c, err, "Не смогли найти категории")
+	} else {
+		var respSpan []string
+		for _, dbo := range categories {
+			respSpan = append(respSpan, dbo.Name)
+		}
+		span.SetAttributes(attribute.StringSlice("Полученные категории", respSpan))
+		c.JSON(http.StatusOK, gin.H{
+			"data":    categories,
 			"message": "ok",
 		})
 	}

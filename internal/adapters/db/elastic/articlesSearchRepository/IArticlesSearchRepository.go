@@ -8,9 +8,12 @@ import (
 
 type IRepository interface {
 	Setup(ctx context.Context)
-	Exists(ctx context.Context) bool
-	Delete(ctx context.Context)
+	Exists(ctx context.Context, index string) bool
+	Delete(ctx context.Context, index string)
 	Create(ctx context.Context) error
-	FindArticles(ctx context.Context, f dto.GrandFilterRequest) ([]*article.EsArticleDBO, int64, error)
 	IndexArticle(ctx context.Context, a *article.EsArticleDBO) bool
+	IndexCategory(ctx context.Context, a *article.CategoryES) bool
+	FindArticles(ctx context.Context, f dto.GrandFilterRequest, size int) ([]*article.EsArticleDBO, int64, error)
+	FindLanguages(ctx context.Context) ([]*article.LanguageES, error)
+	FindCategory(ctx context.Context, cat string) ([]*article.CategoryES, error)
 }

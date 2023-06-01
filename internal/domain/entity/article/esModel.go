@@ -38,3 +38,11 @@ type AddressES struct {
 	Country string     `json:"country"`
 	City    string     `json:"city"`
 }
+
+type CategoryES struct {
+	Name string `json:"name"`
+}
+
+type LanguageES struct {
+	Name string `json:"name"`
+}
