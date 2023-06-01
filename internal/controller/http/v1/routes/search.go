@@ -10,6 +10,7 @@ const (
 	searchDefaultPublisherURL    = "/searchPublisherWithHints/"
 	searchLanguagesURL           = "/searchLanguages"
 	searchCategoriesWithHintsURL = "/searchCategoryWithHints"
+	searchPeopleWithHintsURL     = "/searchPeopleWithHints"
 )
 
 type ISearchUsecase interface {
@@ -18,6 +19,7 @@ type ISearchUsecase interface {
 	SearchDefaultPublisherWithHints(c *gin.Context)
 	SearchLanguages(c *gin.Context)
 	SearchCategoriesWithHints(c *gin.Context)
+	SearchPeopleWithHints(c *gin.Context)
 }
 
 func RegisterSearchRoutes(g *gin.RouterGroup, s ISearchUsecase) {
@@ -26,4 +28,5 @@ func RegisterSearchRoutes(g *gin.RouterGroup, s ISearchUsecase) {
 	g.GET(searchDefaultPublisherURL, s.SearchDefaultPublisherWithHints)
 	g.GET(searchLanguagesURL, s.SearchLanguages)
 	g.GET(searchCategoriesWithHintsURL, s.SearchCategoriesWithHints)
+	g.GET(searchPeopleWithHintsURL, s.SearchPeopleWithHints)
 }

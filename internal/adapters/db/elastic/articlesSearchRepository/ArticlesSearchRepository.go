@@ -30,9 +30,13 @@ import (
 const (
 	ArticleIndex  = "article"
 	CategoryIndex = "category"
+	PeopleIndex   = "people"
 )
 
-var logger = logging.GetLogger().With(zap.String("prefix", "[ES]"))
+var (
+	logger  = logging.GetLogger().With(zap.String("prefix", "[ES]"))
+	Indices = [...]string{ArticleIndex, CategoryIndex, PeopleIndex}
+)
 
 type repository struct {
 	client *elasticsearch.TypedClient
@@ -44,17 +48,15 @@ func New(client *elasticsearch.TypedClient) IRepository {
 
 func (r *repository) Setup(ctx context.Context) {
 	// 1. Создать индексы
-	if r.Exists(ctx, ArticleIndex) {
-		logger.Info(fmt.Sprintf("Индекс %s уже существует, удаляем", ArticleIndex))
-		r.Delete(ctx, ArticleIndex)
-	}
-	if r.Exists(ctx, CategoryIndex) {
-		logger.Info(fmt.Sprintf("Индекс %s уже существует, удаляем", CategoryIndex))
-		r.Delete(ctx, CategoryIndex)
+	for _, index := range Indices {
+		if r.Exists(ctx, index) {
+			logger.Info(fmt.Sprintf("Индекс %s уже существует, удаляем", index))
+			r.Delete(ctx, index)
+		}
 	}
 
 	if err := r.Create(ctx); err != nil {
-		logger.Fatal(fmt.Sprintf("Проблема с индексом %s", ArticleIndex), zap.Error(err))
+		logger.Fatal(fmt.Sprintf("Проблема с индексами"), zap.Error(err))
 	}
 	// 2. Закинуть дефолтные значения
 	//articles := []article.EsArticleDBO{
@@ -256,6 +258,56 @@ func (r *repository) Create(ctx context.Context) error {
 		log.Println(res)
 	}
 
+	// ------------------------------------------------- Люди
+	peopleTokenizer := types.NGramTokenizer{
+		MinGram: 2,
+		MaxGram: 20,
+		TokenChars: []tokenchar.TokenChar{
+			tokenchar.Letter,
+			tokenchar.Digit,
+			tokenchar.Whitespace,
+			tokenchar.Punctuation,
+			tokenchar.Symbol},
+		Type: "ngram",
+	}
+
+	res, err = r.client.Indices.Create(PeopleIndex).
+		Request(&create.Request{
+			Settings: &types.IndexSettings{
+				Analysis: &types.IndexSettingsAnalysis{
+					Tokenizer: map[string]types.Tokenizer{
+						"people_tokenizer": peopleTokenizer,
+					},
+					Analyzer: map[string]types.Analyzer{
+						"people_analyzer": types.CustomAnalyzer{
+							Tokenizer: "people_tokenizer",
+							Filter:    []string{types.NewLowercaseTokenFilter().Type},
+						},
+						"people_search_analyzer": types.NewKeywordAnalyzer(),
+					},
+				},
+				MaxNgramDiff: lib.PointerFrom(20),
+			},
+			Mappings: &types.TypeMapping{
+				Properties: map[string]types.Property{
+					"fullName": &types.TextProperty{
+						Analyzer:       lib.PointerFrom("people_analyzer"),
+						SearchAnalyzer: lib.PointerFrom("people_search_analyzer"),
+						Type:           "text",
+						Index:          lib.PointerFrom(true),
+					},
+				},
+			},
+		}).
+		Do(ctx)
+
+	if err != nil {
+		logger.Error("Не создали индекс " + CategoryIndex)
+		return err
+	} else {
+		log.Println(res)
+	}
+
 	return nil
 }
 
@@ -278,7 +330,7 @@ func (r *repository) IndexArticle(ctx context.Context, a *article.EsArticleDBO) 
 func (r *repository) IndexCategory(ctx context.Context, a *article.CategoryES) bool {
 	h := fnv.New32a()
 	if _, err := h.Write([]byte(a.Name)); err != nil {
-		logger.Error(fmt.Sprintf("Не записали [%s][%s] данные в [%s] error=[%v]", a.Name, CategoryIndex, err))
+		logger.Error(fmt.Sprintf("Не записали [%s] данные в [%s] error=[%v]", a.Name, CategoryIndex, err))
 		return false
 	}
 	hash := h.Sum32()
@@ -290,9 +342,32 @@ func (r *repository) IndexCategory(ctx context.Context, a *article.CategoryES) b
 		Do(ctx)
 
 	if err != nil {
-		logger.Error(fmt.Sprintf("Не записали [%s][%s] данные в [%s] error=[%v]", a.Name, hash, CategoryIndex, err))
+		logger.Error(fmt.Sprintf("Не записали [%s][%d] данные в [%s] error=[%v]", a.Name, hash, CategoryIndex, err))
 	} else {
 		logger.Info(fmt.Sprintf("Добавили в ES[%s] категорию [%s] с id=[%s]", CategoryIndex, a.Name, res.Id_))
+	}
+
+	return res.Result == result.Created
+}
+
+func (r *repository) IndexPeople(ctx context.Context, a *article.PersonES) bool {
+	h := fnv.New32a()
+	if _, err := h.Write([]byte(a.FullName)); err != nil {
+		logger.Error(fmt.Sprintf("Не записали [%s] данные в [%s] error=[%v]", a.FullName, PeopleIndex, err))
+		return false
+	}
+	hash := h.Sum32()
+
+	res, err := r.client.Index(PeopleIndex).
+		Id(fmt.Sprintf("%d", hash)).
+		Request(a).
+		OpType(optype.Index).
+		Do(ctx)
+
+	if err != nil {
+		logger.Error(fmt.Sprintf("Не записали [%s][%d] данные в [%s] error=[%v]", a.FullName, hash, PeopleIndex, err))
+	} else {
+		logger.Info(fmt.Sprintf("Добавили в ES[%s] человека [%s] с id=[%s]", PeopleIndex, a.FullName, res.Id_))
 	}
 
 	return res.Result == result.Created
@@ -375,12 +450,12 @@ func (r *repository) FindArticles(ctx context.Context, f dto.GrandFilterRequest,
 	peopleMust := types.Query{Bool: &types.BoolQuery{}}
 	for i, person := range f.FilterPeople {
 		q := types.Query{Match: map[string]types.MatchQuery{
-			"people.fullName": {Query: person.Name},
+			"people.fullName": {Query: person.FullName},
 		}}
 		peopleMust.Bool.Should = append(pubMust.Bool.Should, q)
 		span.SetAttributes(attribute.String(
 			fmt.Sprintf("Ищем человека №%d", i),
-			fmt.Sprintf("Имя=[%s]", person.Name)))
+			fmt.Sprintf("Имя=[%s]", person.FullName)))
 	}
 	if len(f.FilterPeople) > 0 {
 		must = append(must, peopleMust)
@@ -527,6 +602,45 @@ func (r *repository) FindCategory(ctx context.Context, cat string) ([]*article.C
 	var p []*article.CategoryES
 	for _, hit := range resp.Hits.Hits {
 		var res *article.CategoryES
+		if err := json.Unmarshal(hit.Source_, &res); err != nil {
+			return nil, err
+		}
+		p = append(p, res)
+	}
+
+	return p, nil
+}
+
+func (r *repository) FindPeople(ctx context.Context, name string) ([]*article.PersonES, error) {
+	span := trace.SpanFromContext(ctx)
+
+	req := &search.Request{
+		Size: lib.PointerFrom(20),
+	}
+
+	if len(name) > 0 {
+		span.SetAttributes(attribute.String("name:q", strings.ToLower(name)))
+		req.Query = &types.Query{Match: map[string]types.MatchQuery{
+			"fullName": {Query: strings.ToLower(name)},
+		}}
+	}
+
+	resp, err := r.client.Search().
+		Index(PeopleIndex).
+		Request(req).
+		Do(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	logger.Info(fmt.Sprintf("Нашли людей [%d]", resp.Hits.Total.Value))
+	span.SetAttributes(attribute.Int64(
+		fmt.Sprintf("Найдено"),
+		resp.Hits.Total.Value))
+
+	var p []*article.PersonES
+	for _, hit := range resp.Hits.Hits {
+		var res *article.PersonES
 		if err := json.Unmarshal(hit.Source_, &res); err != nil {
 			return nil, err
 		}

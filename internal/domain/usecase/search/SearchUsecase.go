@@ -139,7 +139,7 @@ func (u *usecase) SearchCategoriesWithHints(c *gin.Context) {
 
 	// Параметр поиска
 	req := c.Query("q")
-	span.SetAttributes(attribute.String("1. Тело запроса", req))
+	span.SetAttributes(attribute.String("1. Поиск", req))
 
 	if categories, err := u.articles.FindCategory(ctx, req); err != nil {
 		tracing.SpanLogErr(span, err)
@@ -152,6 +152,34 @@ func (u *usecase) SearchCategoriesWithHints(c *gin.Context) {
 		span.SetAttributes(attribute.StringSlice("Полученные категории", respSpan))
 		c.JSON(http.StatusOK, gin.H{
 			"data":    categories,
+			"message": "ok",
+		})
+	}
+}
+
+func (u *usecase) SearchPeopleWithHints(c *gin.Context) {
+	tracing.TraceHeader(c)
+	tracing.LogRequestTrace(c)
+	tracer := tracing.GetTracer(c)
+	ctx := c.Request.Context()
+	ctx = tracing.TracerToContext(ctx, tracer)
+	span := trace.SpanFromContext(ctx)
+
+	// Параметр поиска
+	req := c.Query("q")
+	span.SetAttributes(attribute.String("1. Поиск", req))
+
+	if people, err := u.articles.FindPeople(ctx, req); err != nil {
+		tracing.SpanLogErr(span, err)
+		lib.ResponseBadRequest(c, err, "Не смогли найти людей")
+	} else {
+		var respSpan []string
+		for _, dbo := range people {
+			respSpan = append(respSpan, dbo.FullName)
+		}
+		span.SetAttributes(attribute.StringSlice("Полученные люди", respSpan))
+		c.JSON(http.StatusOK, gin.H{
+			"data":    people,
 			"message": "ok",
 		})
 	}

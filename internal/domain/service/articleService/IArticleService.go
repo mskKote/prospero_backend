@@ -19,4 +19,6 @@ type IArticleService interface {
 	FindAllLanguages(ctx context.Context) ([]*article.LanguageES, error)
 
 	FindCategory(ctx context.Context, cat string) ([]*article.CategoryES, error)
+
+	FindPeople(ctx context.Context, name string) ([]*article.PersonES, error)
 }

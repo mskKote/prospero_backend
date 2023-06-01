@@ -9,7 +9,7 @@ type SearchString struct {
 
 type SearchPeople struct {
 	// имя
-	Name string `json:"name"`
+	FullName string `json:"fullName"`
 }
 
 type SearchPublishers struct {

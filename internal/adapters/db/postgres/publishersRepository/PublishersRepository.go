@@ -123,11 +123,11 @@ func (r *repository) FindPublishersByIDs(ctx context.Context, ids []pgtype.UUID)
 func (r *repository) Update(ctx context.Context, p *publisher.PgDBO) error {
 	q := lib.FormatQuery(`
 		UPDATE publishers
-		SET name = $1
-		WHERE publisher_id = $2
+		SET name=$1, country=$2, city=$3, point=$4
+		WHERE publisher_id = $5
 	`)
 
-	_, err := r.client.Query(ctx, q, p.Name, p.PublisherID)
+	_, err := r.client.Query(ctx, q, p.Name, p.Country, p.City, p.Point, p.PublisherID)
 	logger.Info(q)
 
 	return lib.HandlePgErr(err)

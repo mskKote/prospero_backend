@@ -162,6 +162,9 @@ func (s *service) indexFeed(ctx context.Context, p *publisher.DTO, feed *gofeed.
 
 				s.elastic.IndexCategory(ctx, categoryDBO)
 			}
+			for _, person := range people {
+				s.elastic.IndexPeople(ctx, &person)
+			}
 			itemsChan <- true
 		}(item)
 	}
@@ -206,6 +209,10 @@ func (s *service) FindCategory(ctx context.Context, cat string) ([]*article.Cate
 	defer span.End()
 
 	return s.elastic.FindCategory(ctx, cat)
+}
+
+func (s *service) FindPeople(ctx context.Context, name string) ([]*article.PersonES, error) {
+	return s.elastic.FindPeople(ctx, name)
 }
 
 func New(
