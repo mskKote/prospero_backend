@@ -41,12 +41,12 @@ VALUES
     ('The Guardian', 'UK', 'London', point(51.534839, -0.122149)),
     ('Vedomosti', 'Russia', 'Sankt Petersburg', point(59.917904, 30.348691)),
     ('ООН', 'USA', 'New York', point(40.749571, -73.967716)),
-    ('Hindustan Times', 'Delhi', 'New York', point(28.628026, 77.223106)),
+    ('Hindustan Times', 'India', 'Delhi', point(28.628026, 77.223106)),
     ('Rambler', 'Russia', 'Moscow', point(55.698645, 37.624570)),
     ('lenta.ru', 'Russia', 'Moscow', point(55.698645, 37.624570)),
     ('Wall Street Journal', 'USA', 'New York', point(40.749995, -73.983758)),
     ('France 24', 'France', 'Paris', point(48.830639, 2.264886)),
-    ('CNN', 'US', 'Atlanta', point(33.758040, -84.394692));
+    ('CNN', 'USA', 'Atlanta', point(33.758040, -84.394692));
 
 INSERT INTO public.sources_rss(publisher_id, rss_url, add_date)
 VALUES ((SELECT publisher_id FROM public.publishers WHERE name = 'The New York Times'), 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',  '2023-05-1 19:30:06.887661 +00:00' :: timestamptz),

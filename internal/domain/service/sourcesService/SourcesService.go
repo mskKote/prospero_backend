@@ -26,11 +26,7 @@ func (s *service) FindAll(ctx context.Context, page, pageSize int) ([]*source.DT
 }
 
 func (s *service) FindAllWithPublisher(ctx context.Context, page, pageSize int) ([]*source.RSS, error) {
-	sourcesRSS, err := s.sources.FindAllWithPublishers(ctx, page*pageSize, pageSize)
-	if err != nil {
-		return nil, err
-	}
-	return sourcesRSS, nil
+	return s.sources.FindAllWithPublishers(ctx, page*pageSize, pageSize)
 }
 
 func (s *service) FindByPublisherName(ctx context.Context, name string, page, pageSize int) (sec []*source.DTO, err error) {

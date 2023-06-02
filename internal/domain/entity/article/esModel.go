@@ -12,6 +12,7 @@ type EsArticleDBO struct {
 	People        []PersonES  `json:"people"`
 	Links         []string    `json:"links"`
 	DatePublished *time.Time  `json:"datePublished"`
+	Language      string      `json:"language"`
 	//Image       string  `json:"image"`
 	// tags any[],
 	// companies? [{
@@ -36,4 +37,12 @@ type AddressES struct {
 	Coords  [2]float64 `json:"coords"`
 	Country string     `json:"country"`
 	City    string     `json:"city"`
+}
+
+type CategoryES struct {
+	Name string `json:"name"`
+}
+
+type LanguageES struct {
+	Name string `json:"name"`
 }

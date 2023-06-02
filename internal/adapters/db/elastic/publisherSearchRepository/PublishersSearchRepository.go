@@ -186,7 +186,7 @@ func (r *repository) FindPublishersByNameViaES(ctx context.Context, name string)
 		return nil, err
 	}
 
-	logger.Info(fmt.Sprintf("По запросу %s нашли %d", name, resp.Hits.Total.Value))
+	logger.Info(fmt.Sprintf("По запросу [%s] нашли [%d]", name, resp.Hits.Total.Value))
 	var p []*publisher.EsDBO
 	for _, hit := range resp.Hits.Hits {
 		var res DTO

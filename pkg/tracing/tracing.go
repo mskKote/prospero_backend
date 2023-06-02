@@ -104,6 +104,7 @@ func GetTracer(c *gin.Context) trace.Tracer {
 	}
 	return nil
 }
+
 func TracerToContext(ctx context.Context, tracer trace.Tracer) context.Context {
 	return context.WithValue(ctx, ProsperoTraceKey, tracer)
 }

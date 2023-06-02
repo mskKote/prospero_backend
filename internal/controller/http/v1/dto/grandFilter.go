@@ -9,7 +9,7 @@ type SearchString struct {
 
 type SearchPeople struct {
 	// имя
-	Name string `json:"name"`
+	FullName string `json:"fullName"`
 }
 
 type SearchPublishers struct {
@@ -29,11 +29,21 @@ type SearchTime struct {
 	End string `json:"end"`
 }
 
+type SearchLanguage struct {
+	Name string `json:"name"`
+}
+
+type SearchCategory struct {
+	Name string `json:"name"`
+}
+
 type GrandFilterRequest struct {
 	// Массив поисковых строк, оператор объединения &&
 	FilterStrings    []SearchString     `json:"filterStrings"`
 	FilterPeople     []SearchPeople     `json:"filterPeople"`
 	FilterPublishers []SearchPublishers `json:"filterPublishers"`
 	FilterCountry    []SearchCountry    `json:"filterCountry"`
+	FilterCategories []SearchCategory   `json:"filterCategories"`
+	FilterLanguages  []SearchLanguage   `json:"filterLanguages"`
 	FilterTime       SearchTime         `json:"filterTime"`
 }
