@@ -30,6 +30,7 @@ require (
 	github.com/elastic/go-elasticsearch/v8 v8.7.1 // indirect
 	github.com/gin-contrib/cors v1.4.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/gin-gonic/autotls v0.0.5 // indirect
 	github.com/go-co-op/gocron v1.27.0 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
