@@ -217,7 +217,8 @@ func adminkaStartup(
 	auth := security.Startup(adminSERVICE)
 
 	adminkaGroup := r.Group("/adminka")
-	routes.RegisterServiceRoutes(adminkaGroup, adminkaUSECASE)
+	r.GET("/config", adminkaUSECASE.ReadConfig)
+
 	adminkaGroup.POST("/login", auth.LoginHandler)
 	adminkaGroup.OPTIONS("/login")
 	adminkaGroup.Use(auth.MiddlewareFunc())
@@ -245,6 +246,7 @@ func adminkaStartup(
 		adminkaApiV1 := adminkaGroup.Group("api/v1")
 		routes.RegisterSourcesRoutes(adminkaApiV1, adminkaUSECASE)
 		routes.RegisterPublishersRoutes(adminkaApiV1, adminkaUSECASE)
+		//routes.RegisterServiceRoutes(adminkaApiV1, adminkaUSECASE)
 	}
 
 	r.NoRoute(auth.MiddlewareFunc(), security.NoRoute)
