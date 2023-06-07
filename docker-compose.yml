@@ -5,6 +5,7 @@ services:
   prospero:
     build: .
     restart: on-failure
+    command: sh -c "sleep 15s && /app/main"
     volumes:
       - ./logs/:/logs/
       - prospero:/app/logs
@@ -30,7 +31,7 @@ services:
       test: [ "CMD", "curl", "-s", "-f", "http://localhost:9200/_cat/health" ]
       interval: 3s
       timeout: 3s
-      retries: 10
+      retries: 20
     ports:
       - "9200:9200"
     networks:
@@ -63,24 +64,6 @@ services:
       retries: 20
     networks:
       - prospero
-
-  # Redis
-#  redis:
-#    image: "bitnami/redis:latest"
-#    restart: always
-#    ports:
-#      - '6379:6379'
-#    environment:
-#      - ALLOW_EMPTY_PASSWORD=yes
-#    healthcheck:
-#      test: [ "CMD", "redis-cli","ping" ]
-#      interval: 5s
-#      timeout: 5s
-#      retries: 20
-#    volumes:
-#      - redis:/data
-#    networks:
-#      - prospero
 
   # ----------------------------------- METRICS
   # Prometheus
@@ -161,4 +144,3 @@ volumes:
   kibana:
   prospero:
   postgres:
-#  redis:

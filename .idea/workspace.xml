@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="deploy-job.yml test">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="Dockerfile">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +88,7 @@
       <recent name="C:\mskKote\HSE\prospero\backend\internal\domain\entity\publisher" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.Dockerfile">
+  <component name="RunManager" selected="Docker.docker-compose.yml.prospero: Compose Deployment">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="backend" />
       <working_directory value="$PROJECT_DIR$" />
@@ -178,10 +178,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.docker-compose.yml.prospero: Compose Deployment" />
         <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
         <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml.prospero: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.elasticsearch: Compose Deployment" />
       </list>
     </recent_temporary>
@@ -205,7 +205,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[PROS-29] workspace.xml" />
     <MESSAGE value="[PROS-36] Тестовая ручка подтягивания RSS" />
     <MESSAGE value="[PROS-36] fuzzy &amp; match по нескольким словам" />
     <MESSAGE value="[PROS-36] goroutines" />
@@ -230,7 +229,8 @@
     <MESSAGE value="deploy-job.yml №3" />
     <MESSAGE value="deploy-job.yml №4" />
     <MESSAGE value="deploy-job.yml test" />
-    <option name="LAST_COMMIT_MESSAGE" value="deploy-job.yml test" />
+    <MESSAGE value="Dockerfile" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dockerfile" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
