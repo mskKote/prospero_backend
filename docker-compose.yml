@@ -4,6 +4,7 @@ services:
   # Prospero
   prospero:
     build: .
+    restart: on-failure
     volumes:
       - ./logs/:/logs/
       - prospero:/app/logs
@@ -111,18 +112,12 @@ services:
     image: docker.elastic.co/logstash/logstash:8.7.1
     volumes:
       - ./resources/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
     networks:
       - prospero
   # Filebeat
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.7.1
     entrypoint: filebeat -e -strict.perms=false
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
     volumes:
       - ./resources/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./logs/:/logs/

@@ -1,4 +1,4 @@
-name: Deploy self-hosted
+name: Deploy self-hosted (Prospero without infra)
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
       - name: Stop & Remove containers, networks
-        run: docker-compose down
+        run: docker-compose rm prospero
       - name: Remove unused data
         run: docker system prune -a -f
   deploy:
