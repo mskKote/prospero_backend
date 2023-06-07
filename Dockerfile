@@ -1,8 +1,12 @@
 # build stage
 FROM golang:1.20.5-alpine3.18 AS builder
 WORKDIR /app
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
 COPY . .
-RUN go build -o main ./cmd/main.go
+RUN GOOS=linux GOARCH=amd64 go build -o main ./cmd/main.go
 
 # run stage
 FROM alpine:3.17

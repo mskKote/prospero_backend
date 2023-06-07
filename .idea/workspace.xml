@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="deploy-job.yml №4" />
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="deploy-job.yml test">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -85,7 +88,7 @@
       <recent name="C:\mskKote\HSE\prospero\backend\internal\domain\entity\publisher" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build github.com/mskKote/prospero_backend/cmd">
+  <component name="RunManager" selected="Docker.Dockerfile">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="backend" />
       <working_directory value="$PROJECT_DIR$" />
@@ -112,6 +115,14 @@
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
       <framework value="gotest" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
       <method v="2" />
     </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
@@ -152,19 +163,6 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.postgres: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="services">
-            <list>
-              <option value="postgres" />
-            </list>
-          </option>
-          <option name="sourceFilePath" value="docker-compose.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
     <configuration name="docker-compose.yml.prospero: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
@@ -180,11 +178,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
         <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.prospero: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.elasticsearch: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml.postgres: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -207,7 +205,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[PROS-29] metrics" />
     <MESSAGE value="[PROS-29] workspace.xml" />
     <MESSAGE value="[PROS-36] Тестовая ручка подтягивания RSS" />
     <MESSAGE value="[PROS-36] fuzzy &amp; match по нескольким словам" />
@@ -232,7 +229,8 @@
     <MESSAGE value="deploy-job.yml №2" />
     <MESSAGE value="deploy-job.yml №3" />
     <MESSAGE value="deploy-job.yml №4" />
-    <option name="LAST_COMMIT_MESSAGE" value="deploy-job.yml №4" />
+    <MESSAGE value="deploy-job.yml test" />
+    <option name="LAST_COMMIT_MESSAGE" value="deploy-job.yml test" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
