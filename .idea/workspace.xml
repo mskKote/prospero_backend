@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="config">
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="update Dockerfile">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,7 +209,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[PROS-29] environments &amp; postgres connection" />
     <MESSAGE value="[PROS-29] adminka" />
     <MESSAGE value="[PROS-29] drop filter publishers" />
     <MESSAGE value="[PROS-29] grandFilter" />
@@ -234,7 +233,8 @@
     <MESSAGE value="CI/CD test new handler #2" />
     <MESSAGE value="update deps" />
     <MESSAGE value="config" />
-    <option name="LAST_COMMIT_MESSAGE" value="config" />
+    <MESSAGE value="update Dockerfile" />
+    <option name="LAST_COMMIT_MESSAGE" value="update Dockerfile" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

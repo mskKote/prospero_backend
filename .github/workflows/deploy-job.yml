@@ -11,7 +11,7 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
       - name: Stop & Remove containers, networks
-        run: docker-compose rm prospero -f -v
+        run: docker-compose rm -a -f -v
   deploy:
     runs-on: self-hosted
     needs: prepare-environment
