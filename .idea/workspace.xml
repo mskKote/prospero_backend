@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="deployment with tls">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="deployment">
+      <change afterPath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,7 +210,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[PROS-28] grafana settings" />
     <MESSAGE value="[PROS-28] ELK" />
     <MESSAGE value="[PROS-28] Jaeger" />
     <MESSAGE value="[PROS-29] fix log" />
@@ -236,7 +234,8 @@
     <MESSAGE value="[PROS-36] language &amp; category filters" />
     <MESSAGE value="deployment Render" />
     <MESSAGE value="deployment with tls" />
-    <option name="LAST_COMMIT_MESSAGE" value="deployment with tls" />
+    <MESSAGE value="deployment" />
+    <option name="LAST_COMMIT_MESSAGE" value="deployment" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
