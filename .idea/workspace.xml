@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="update Dockerfile">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="deploy-job.yml">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -209,7 +210,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[PROS-29] adminka" />
     <MESSAGE value="[PROS-29] drop filter publishers" />
     <MESSAGE value="[PROS-29] grandFilter" />
     <MESSAGE value="[PROS-29] jaeger trace grandFilter" />
@@ -234,7 +234,8 @@
     <MESSAGE value="update deps" />
     <MESSAGE value="config" />
     <MESSAGE value="update Dockerfile" />
-    <option name="LAST_COMMIT_MESSAGE" value="update Dockerfile" />
+    <MESSAGE value="deploy-job.yml" />
+    <option name="LAST_COMMIT_MESSAGE" value="deploy-job.yml" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
