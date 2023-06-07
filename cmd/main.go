@@ -204,6 +204,7 @@ func adminkaStartup(
 			Name:     cfg.Adminka.Username,
 			Password: cfg.Adminka.Password,
 		}
+
 		logger.Info(fmt.Sprintf("[ADMINKA] Админка: {%s}, {%s}", adminMskKote.Name, adminMskKote.Password))
 
 		if err := adminSERVICE.Create(context.Background(), adminMskKote); err != nil {
