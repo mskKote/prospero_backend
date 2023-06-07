@@ -16,7 +16,5 @@ jobs:
     runs-on: self-hosted
     needs: prepare-environment
     steps:
-      - name: prod config
-        run: docker compose --env-file .env.production up
       - name: docker-compose
         run: docker-compose up -d --force-recreate --build prospero

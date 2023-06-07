@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="CI/CD test new handler #2">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-    </list>
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="config" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -212,8 +207,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[PROS-29] fix errors" />
-    <MESSAGE value="[PROS-29] pagination" />
     <MESSAGE value="[PROS-29] environments &amp; postgres connection" />
     <MESSAGE value="[PROS-29] adminka" />
     <MESSAGE value="[PROS-29] drop filter publishers" />
@@ -237,7 +230,9 @@
     <MESSAGE value="CI/CD №6 remove only app container" />
     <MESSAGE value="CI/CD test new handler" />
     <MESSAGE value="CI/CD test new handler #2" />
-    <option name="LAST_COMMIT_MESSAGE" value="CI/CD test new handler #2" />
+    <MESSAGE value="update deps" />
+    <MESSAGE value="config" />
+    <option name="LAST_COMMIT_MESSAGE" value="config" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
