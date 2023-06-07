@@ -18,3 +18,5 @@ jobs:
     steps:
       - name: docker-compose
         run: docker-compose up -d
+      - name: rerun prospero
+        run: docker-compose up -d --build prospero
