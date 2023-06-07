@@ -2,6 +2,8 @@
 
 ---
 
+[![Prospero deployed](https://github.com/mskKote/prospero_backend/actions/workflows/deploy-job.yml/badge.svg)](https://github.com/mskKote/prospero_backend/actions/workflows/deploy-job.yml)
+
 ## Запуск
 ```shell
 # graylog & grafana
