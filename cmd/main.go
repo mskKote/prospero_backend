@@ -243,6 +243,7 @@ func adminkaStartup(
 		adminkaApiV1 := adminkaGroup.Group("api/v1")
 		routes.RegisterSourcesRoutes(adminkaApiV1, adminkaUSECASE)
 		routes.RegisterPublishersRoutes(adminkaApiV1, adminkaUSECASE)
+		routes.RegisterServiceRoutes(adminkaApiV1, adminkaUSECASE)
 	}
 
 	r.NoRoute(auth.MiddlewareFunc(), security.NoRoute)

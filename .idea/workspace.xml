@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="CI/CD №5 remove only app container">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" afterDir="false" />
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="CI/CD №6 remove only app container">
+      <change afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/IAdminkaUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/IAdminkaUsecase.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +91,7 @@
       <recent name="C:\mskKote\HSE\prospero\backend\internal\domain\entity\publisher" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.docker-compose.yml.jaeger: Compose Deployment">
+  <component name="RunManager" selected="Go Build.go build github.com/mskKote/prospero_backend/cmd">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="backend" />
       <working_directory value="$PROJECT_DIR$" />
@@ -182,8 +186,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
         <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
+        <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.prospero: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.elasticsearch: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.postgres: Compose Deployment" />
@@ -209,7 +213,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[PROS-29] parse RSS every N time" />
     <MESSAGE value="[PROS-29] jwt auth for admin" />
     <MESSAGE value="[PROS-29] .env" />
     <MESSAGE value="[PROS-29] fix errors" />
@@ -234,7 +237,8 @@
     <MESSAGE value="CI/CD №3" />
     <MESSAGE value="CI/CD №4 badge" />
     <MESSAGE value="CI/CD №5 remove only app container" />
-    <option name="LAST_COMMIT_MESSAGE" value="CI/CD №5 remove only app container" />
+    <MESSAGE value="CI/CD №6 remove only app container" />
+    <option name="LAST_COMMIT_MESSAGE" value="CI/CD №6 remove only app container" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

@@ -7,6 +7,7 @@ import (
 	"github.com/mskKote/prospero_backend/internal/domain/service/articleService"
 	"github.com/mskKote/prospero_backend/internal/domain/service/publishersService"
 	"github.com/mskKote/prospero_backend/internal/domain/service/sourcesService"
+	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/lib"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	"github.com/mskKote/prospero_backend/pkg/tracing"
@@ -15,7 +16,10 @@ import (
 	"strconv"
 )
 
-var logger = logging.GetLogger()
+var (
+	logger = logging.GetLogger()
+	cfg    = config.GetConfig()
+)
 
 const pageSize int = 6
 
@@ -32,8 +36,6 @@ func New(
 	a *articleService.IArticleService) IAdminkaUsecase {
 	return &usecase{*s, *p, *a}
 }
-
-// ---------------------------------------------------- sources CRUD
 
 func (u *usecase) AddSourceAndPublisher(c *gin.Context) {
 	tracing.TraceHeader(c)
@@ -76,6 +78,8 @@ func (u *usecase) AddSourceAndPublisher(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "ok"})
 }
+
+// ---------------------------------------------------- sources CRUD
 
 func (u *usecase) CreateSourceRSS(c *gin.Context) {
 	tracing.TraceHeader(c)
@@ -283,8 +287,6 @@ func (u *usecase) CreatePublisher(c *gin.Context) {
 	}
 }
 
-// ---------------------------------------------------- publishers CRUD
-
 func (u *usecase) ReadPublishers(c *gin.Context) {
 	tracing.TraceHeader(c)
 	tracing.LogRequestTrace(c)
@@ -308,6 +310,8 @@ func (u *usecase) ReadPublishers(c *gin.Context) {
 		"data":    publishers,
 	})
 }
+
+// ---------------------------------------------------- publishers CRUD
 
 func (u *usecase) UpdatePublisher(c *gin.Context) {
 	tracing.TraceHeader(c)
@@ -357,4 +361,12 @@ func (u *usecase) Harvest(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "ok"})
+}
+
+// ---------------------------------------------------- Service
+
+func (u *usecase) ReadConfig(c *gin.Context) {
+	tracing.TraceHeader(c)
+	tracing.LogRequestTrace(c)
+	c.JSON(http.StatusOK, gin.H{"config": cfg})
 }
