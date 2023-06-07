@@ -6,7 +6,6 @@ import (
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/elastic/articlesSearchRepository"
 	publishersSearchRepository "github.com/mskKote/prospero_backend/internal/adapters/db/elastic/publisherSearchRepository"
@@ -154,12 +153,6 @@ func startup(cfg *config.Config) {
 	// --------------------------------------- IGNITION
 	if cfg.UseCronSourcesRSS {
 		go RSS.New(sourcesSERVICE, articlesSERVICE).Startup()
-	}
-
-	if cfg.IsDebug == false {
-		go func() {
-			log.Fatal(autotls.Run(r, "host-212-118-41-240.hosted-by-vdsina.ru"))
-		}()
 	}
 
 	if err := r.Run(":" + cfg.Port); err != nil {
