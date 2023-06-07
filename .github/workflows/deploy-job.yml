@@ -11,9 +11,7 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
       - name: Stop & Remove containers, networks
-        run: docker-compose rm -f prospero
-      - name: Remove unused data
-        run: docker system prune prospero_backend-prospero -f
+        run: docker-compose rm -f prospero -v
   deploy:
     runs-on: self-hosted
     needs: prepare-environment

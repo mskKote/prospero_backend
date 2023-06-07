@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="CI/CD №3">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="CI/CD №5 remove only app container">
       <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,8 +209,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[PROS-29] optional trace &amp; metrics" />
-    <MESSAGE value="[PROS-29] parse single RSS source" />
     <MESSAGE value="[PROS-29] parse RSS every N time" />
     <MESSAGE value="[PROS-29] jwt auth for admin" />
     <MESSAGE value="[PROS-29] .env" />
@@ -236,7 +232,9 @@
     <MESSAGE value="CI/CD" />
     <MESSAGE value="CI/CD №2" />
     <MESSAGE value="CI/CD №3" />
-    <option name="LAST_COMMIT_MESSAGE" value="CI/CD №3" />
+    <MESSAGE value="CI/CD №4 badge" />
+    <MESSAGE value="CI/CD №5 remove only app container" />
+    <option name="LAST_COMMIT_MESSAGE" value="CI/CD №5 remove only app container" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
