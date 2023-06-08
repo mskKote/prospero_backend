@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="config route" />
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="deploy-job.yml recreate container">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ea043deb-52a4-46fe-b648-67e2cd736c1b.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ea043deb-52a4-46fe-b648-67e2cd736c1b.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -202,7 +207,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[PROS-36] goroutines" />
     <MESSAGE value="[PROS-36] traces fix" />
     <MESSAGE value="[PROS-36] language &amp; category filters" />
     <MESSAGE value="deployment Render" />
@@ -227,7 +231,8 @@
     <MESSAGE value="Dockerfile" />
     <MESSAGE value="docker-compose.yml sleep" />
     <MESSAGE value="config route" />
-    <option name="LAST_COMMIT_MESSAGE" value="config route" />
+    <MESSAGE value="deploy-job.yml recreate container" />
+    <option name="LAST_COMMIT_MESSAGE" value="deploy-job.yml recreate container" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

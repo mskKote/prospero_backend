@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -33,7 +32,6 @@ import (
 	"go.uber.org/zap"
 	"io"
 	"log"
-	"net/http"
 	"os"
 	"time"
 )
@@ -217,8 +215,6 @@ func adminkaStartup(
 	auth := security.Startup(adminSERVICE)
 
 	adminkaGroup := r.Group("/adminka")
-	r.GET("/config", adminkaUSECASE.ReadConfig)
-
 	adminkaGroup.POST("/login", auth.LoginHandler)
 	adminkaGroup.OPTIONS("/login")
 	adminkaGroup.Use(auth.MiddlewareFunc())
@@ -226,27 +222,27 @@ func adminkaStartup(
 		adminkaGroup.GET("/refresh_token", auth.RefreshHandler)
 
 		// TEST STAND
-		adminkaGroup.GET("/hello", func(c *gin.Context) {
-			claims := jwt.ExtractClaims(c)
-			if user, ok := c.Get("id"); ok {
-				c.JSON(http.StatusOK, gin.H{
-					"userID":   claims["id"],
-					"userName": user.(*admin.Admin).Name,
-					"text":     "Hello World.",
-				})
-			} else {
-				c.JSON(http.StatusNotFound, gin.H{
-					"userID":   claims["id"],
-					"userName": "Not found",
-					"text":     "Bye World.",
-				})
-			}
-		})
+		//adminkaGroup.GET("/hello", func(c *gin.Context) {
+		//	claims := jwt.ExtractClaims(c)
+		//	if user, ok := c.Get("id"); ok {
+		//		c.JSON(http.StatusOK, gin.H{
+		//			"userID":   claims["id"],
+		//			"userName": user.(*admin.Admin).Name,
+		//			"text":     "Hello World.",
+		//		})
+		//	} else {
+		//		c.JSON(http.StatusNotFound, gin.H{
+		//			"userID":   claims["id"],
+		//			"userName": "Not found",
+		//			"text":     "Bye World.",
+		//		})
+		//	}
+		//})
 
 		adminkaApiV1 := adminkaGroup.Group("api/v1")
 		routes.RegisterSourcesRoutes(adminkaApiV1, adminkaUSECASE)
 		routes.RegisterPublishersRoutes(adminkaApiV1, adminkaUSECASE)
-		//routes.RegisterServiceRoutes(adminkaApiV1, adminkaUSECASE)
+		routes.RegisterServiceRoutes(adminkaApiV1, adminkaUSECASE)
 	}
 
 	r.NoRoute(auth.MiddlewareFunc(), security.NoRoute)

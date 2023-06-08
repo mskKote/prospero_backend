@@ -2,7 +2,9 @@ name: Deploy self-hosted (Prospero without infra)
 
 on:
   push:
-    branches: [ "main", "release" ]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   prepare-environment:
@@ -10,12 +12,14 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v3
-      - name: Stop & Remove containers, networks
-        run: docker-compose rm -a -f -v
+#      - name: Stop & Remove containers, networks
+#        run: docker-compose rm -a -f -v prospero
   deploy:
     runs-on: self-hosted
     needs: prepare-environment
     steps:
+      - name: up elasticsearch
+        run: docker-compose up -d elasticsearch
       - name: docker-compose
         run: docker-compose up -d
       - name: rerun prospero
