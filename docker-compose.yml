@@ -16,8 +16,8 @@ services:
     networks:
       - prospero
     depends_on:
-      elasticsearch:
-        condition: service_healthy
+#      elasticsearch:
+#        condition: service_healthy
       postgres:
         condition: service_healthy
 

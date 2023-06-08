@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="Dockerfile &amp; url">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-job.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ea043deb-52a4-46fe-b648-67e2cd736c1b.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ea043deb-52a4-46fe-b648-67e2cd736c1b.xml" afterDir="false" />
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="wait for ES">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,7 +204,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[PROS-36] language &amp; category filters" />
     <MESSAGE value="deployment Render" />
     <MESSAGE value="deployment with tls" />
     <MESSAGE value="deployment" />
@@ -233,7 +228,8 @@
     <MESSAGE value="config route" />
     <MESSAGE value="deploy-job.yml recreate container" />
     <MESSAGE value="Dockerfile &amp; url" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dockerfile &amp; url" />
+    <MESSAGE value="wait for ES" />
+    <option name="LAST_COMMIT_MESSAGE" value="wait for ES" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
