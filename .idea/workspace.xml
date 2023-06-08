@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="wait for ES">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="test no deps to ES">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -204,7 +204,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="deployment Render" />
     <MESSAGE value="deployment with tls" />
     <MESSAGE value="deployment" />
     <MESSAGE value="CI/CD" />
@@ -229,7 +228,8 @@
     <MESSAGE value="deploy-job.yml recreate container" />
     <MESSAGE value="Dockerfile &amp; url" />
     <MESSAGE value="wait for ES" />
-    <option name="LAST_COMMIT_MESSAGE" value="wait for ES" />
+    <MESSAGE value="test no deps to ES" />
+    <option name="LAST_COMMIT_MESSAGE" value="test no deps to ES" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
