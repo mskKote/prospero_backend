@@ -20,6 +20,9 @@ jobs:
     steps:
       - name: up elasticsearch
         run: docker-compose up -d elasticsearch
+      - name: Wait for elasticsearch 20 seconds
+        run: sleep 20s
+        shell: bash
       - name: docker-compose
         run: docker-compose up -d
       - name: rerun prospero
