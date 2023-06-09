@@ -35,6 +35,7 @@ services:
     networks:
       - prospero
     environment:
+      - "ES_JAVA_OPTS=-Xms2048m -Xmx3072m"
       - network.host=0.0.0.0
       - discovery.type=single-node
       - xpack.security.enabled=false
