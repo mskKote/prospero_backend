@@ -65,3 +65,12 @@ docker-compose up -d --no-deps --build prospero
 * [gofeed](https://github.com/mmcdole/gofeed) - парсер RSS
 * [gocron](https://github.com/go-co-op/gocron) - запуск раз в N времени 
 * [Планирование cron job](https://crontab.guru/#0_*_*_*_*) - правильно указать "N" для gocron
+
+---
+## Установка на машине
+
+docker
+https://docs.docker.com/engine/install/ubuntu/
+
+github actions runner
+https://habr.com/ru/articles/737148/
