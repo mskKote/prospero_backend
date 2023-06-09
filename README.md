@@ -7,10 +7,10 @@
 ## Запуск
 ```shell
 # graylog & grafana
-docker-compose up
+docker compose up
 
 # перезапуск prospero
-docker-compose up -d --no-deps --build prospero
+docker compose up -d --no-deps --build prospero
 ```
 
 ## Инфраструктура
@@ -69,8 +69,8 @@ docker-compose up -d --no-deps --build prospero
 ---
 ## Установка на машине
 
-docker
-https://docs.docker.com/engine/install/ubuntu/
+1. [docker](https://docs.docker.com/engine/install/ubuntu/)
 
-github actions runner
-https://habr.com/ru/articles/737148/
+2. [docker compose plugin](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04)
+
+4. [github actions runner](https://habr.com/ru/articles/737148/)

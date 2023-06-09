@@ -13,17 +13,17 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
 #      - name: Stop & Remove containers, networks
-#        run: docker-compose rm -a -f -v prospero
+#        run: docker compose rm -a -f -v prospero
   deploy:
     runs-on: self-hosted
     needs: prepare-environment
     steps:
       - name: up elasticsearch
-        run: docker-compose up -d elasticsearch
+        run: docker compose up -d elasticsearch
       - name: Wait for elasticsearch 20 seconds
         run: sleep 20s
         shell: bash
-      - name: docker-compose
-        run: docker-compose up -d
+      - name: docker compose
+        run: docker compose up -d
       - name: rerun prospero
-        run: docker-compose up -d --build prospero
+        run: docker compose up -d --build prospero

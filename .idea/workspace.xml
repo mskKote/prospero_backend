@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="hotfix ES stops">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ea043deb-52a4-46fe-b648-67e2cd736c1b.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ea043deb-52a4-46fe-b648-67e2cd736c1b.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="hotfix VM">
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -211,7 +209,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="CI/CD №4 badge" />
     <MESSAGE value="CI/CD №5 remove only app container" />
     <MESSAGE value="CI/CD №6 remove only app container" />
     <MESSAGE value="CI/CD test new handler" />
@@ -236,7 +233,8 @@
     <MESSAGE value="[PROS-40] no more duplicate articles" />
     <MESSAGE value="hotfix 500" />
     <MESSAGE value="hotfix ES stops" />
-    <option name="LAST_COMMIT_MESSAGE" value="hotfix ES stops" />
+    <MESSAGE value="hotfix VM" />
+    <option name="LAST_COMMIT_MESSAGE" value="hotfix VM" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
