@@ -11,10 +11,10 @@ type IArticleService interface {
 	FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequest, size int) ([]*article.EsArticleDBO, int64, error)
 
 	// ParseAllOnce проходит по всем источникам
-	ParseAllOnce(ctx context.Context) error
+	ParseAllOnce(ctx context.Context, full bool) error
 
 	// ParseRSS достаёт контент по источнику
-	ParseRSS(src string) *gofeed.Feed
+	ParseRSS(ctx context.Context, src string) *gofeed.Feed
 
 	FindAllLanguages(ctx context.Context) ([]*article.LanguageES, error)
 

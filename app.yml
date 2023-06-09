@@ -2,8 +2,8 @@ runtime: go120
 service: prospero_searcher
 port: 5000
 #cron_sources_rss: "*/1 * * * *"
-cron_sources_rss: "*/5 * * * *"
-use_cron_sources_rss: false
+cron_sources_rss: "*/20 * * * *"
+use_cron_sources_rss: true
 use_tracing_jaeger: true
 migrate_postgres: true
 migrate_elastic: true

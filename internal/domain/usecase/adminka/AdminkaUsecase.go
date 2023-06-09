@@ -345,7 +345,8 @@ func (u *usecase) DeletePublisher(c *gin.Context) {
 // ---------------------------------------------------- RSS
 
 func (u *usecase) Harvest(c *gin.Context) {
-	if err := u.articles.ParseAllOnce(c); err != nil {
+	if err := u.articles.ParseAllOnce(c, true); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось прочитать источники")
 		return
 	}

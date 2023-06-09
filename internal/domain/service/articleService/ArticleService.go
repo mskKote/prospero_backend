@@ -32,7 +32,9 @@ type service struct {
 	elastic articlesSearchRepository.IRepository
 }
 
-func (s *service) ParseAllOnce(ctx context.Context) error {
+// ------------------------------------------------------------------- RSS parsing
+
+func (s *service) ParseAllOnce(ctx context.Context, full bool) error {
 	start := time.Now()
 	count, err := s.sources.Count(ctx)
 	if err != nil {
@@ -61,12 +63,12 @@ func (s *service) ParseAllOnce(ctx context.Context) error {
 			go func(_srcI int, _src *source.RSS) {
 				logger.Info(fmt.Sprintf("Парсим источник #%d: %s", i*batch+_srcI+1, _src.RssURL))
 
-				feed := s.ParseRSS(_src.RssURL)
+				feed := s.ParseRSS(ctx, _src.RssURL)
 				//u.logFeed(feed)
-				feedPotential := s.analyseFeed(feed)
+				//feedPotential := s.analyseFeed(feed)
 				// сохранить новости в ES
-				s.indexFeed(ctx, _src.Publisher.ToDTO(), feed)
-				partPotential <- feedPotential
+				s.indexFeed(ctx, _src.Publisher.ToDTO(), feed, full)
+				partPotential <- 0
 			}(srcI, src)
 		}
 		// Ждём чтение партии
@@ -119,11 +121,24 @@ func (s *service) analyseFeed(feed *gofeed.Feed) int {
 	return potential
 }
 
-func (s *service) indexFeed(ctx context.Context, p *publisher.DTO, feed *gofeed.Feed) {
+func (s *service) indexFeed(ctx context.Context, p *publisher.DTO, feed *gofeed.Feed, full bool) {
 	itemsChan := make(chan bool)
 
 	for _, item := range feed.Items {
 		go func(_item *gofeed.Item) {
+			// Do not save news without time
+			if _item.PublishedParsed == nil {
+				itemsChan <- true
+				return
+			}
+
+			// Сохраняю новости только за последние N времени
+			// TODO: remove hardcode 20 minutes
+			if full == false && time.Since(*_item.PublishedParsed) > 20*time.Minute {
+				itemsChan <- true
+				return
+			}
+
 			var people []article.PersonES
 			for _, author := range _item.Authors {
 				people = append(people, article.PersonES{FullName: author.Name})
@@ -173,13 +188,15 @@ func (s *service) indexFeed(ctx context.Context, p *publisher.DTO, feed *gofeed.
 	}
 }
 
-func (s *service) ParseRSS(src string) *gofeed.Feed {
-	feed, err := parser.ParseURL(src)
+func (s *service) ParseRSS(ctx context.Context, src string) *gofeed.Feed {
+	feed, err := parser.ParseURLWithContext(src, ctx)
 	if err != nil {
 		logger.Error("Ошибка парса", zap.Error(err))
 	}
 	return feed
 }
+
+// ------------------------------------------------------------------- Search hints
 
 func (s *service) FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequest, size int) ([]*article.EsArticleDBO, int64, error) {
 	tracer := tracing.TracerFromContext(ctx)
