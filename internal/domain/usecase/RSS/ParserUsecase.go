@@ -42,16 +42,16 @@ func (u *usecase) Startup() {
 		logger.Fatal("Не стартовали CRON RSS", zap.Error(err))
 	}
 
-	// При миграции всё удаляется, достаю данные
-	if cfg.MigrateElastic {
-		logger.Info("[MIGRATION] Закинуть данные в ELASTIC сразу")
-		u.ParseJob()
-	}
+	// При миграции всё удаляется → достаю данные
+	//if cfg.MigrateElastic {
+	//	logger.Info("[MIGRATION] Закинуть данные в ELASTIC сразу")
+	//	u.ParseJob()
+	//}
 
 	s.StartAsync()
 }
 
 func (u *usecase) ParseJob() {
 	ctx := context.Background()
-	_ = u.articles.ParseAllOnce(ctx)
+	_ = u.articles.ParseAllOnce(ctx, false)
 }
