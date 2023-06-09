@@ -4,8 +4,15 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="test no deps to ES">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="gitignore .idea">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/logging/ginMiddleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/logging/ginMiddleware.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/logging/logrus.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/tracing/tracing.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/tracing/tracing.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +30,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="release/PROS-36" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -43,36 +50,36 @@
     <option name="showLibraryContents" value="true" />
     <option name="sortByType" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/mskKote/HSE/prospero/backend/internal/domain/entity/article&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\GoLand 2022.3.3\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultGoTemplateProperty": "Go File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "release/PROS-40",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/mskKote/HSE/prospero/backend/internal/domain/entity/article",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\GoLand 2022.3.3\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;redis&quot;,
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "redis",
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\mskKote\HSE\prospero\backend\internal\domain\entity\article" />
@@ -87,7 +94,7 @@
       <recent name="C:\mskKote\HSE\prospero\backend\internal\domain\entity\publisher" />
     </key>
   </component>
-  <component name="RunManager" selected="Docker.docker-compose.yml.prospero: Compose Deployment">
+  <component name="RunManager" selected="Go Build.go build github.com/mskKote/prospero_backend/cmd">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="backend" />
       <working_directory value="$PROJECT_DIR$" />
@@ -177,9 +184,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
         <item itemvalue="Docker.docker-compose.yml.prospero: Compose Deployment" />
         <item itemvalue="Docker.Dockerfile" />
-        <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
         <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.elasticsearch: Compose Deployment" />
       </list>
@@ -204,7 +211,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="deployment with tls" />
     <MESSAGE value="deployment" />
     <MESSAGE value="CI/CD" />
     <MESSAGE value="CI/CD №2" />
@@ -229,7 +235,8 @@
     <MESSAGE value="Dockerfile &amp; url" />
     <MESSAGE value="wait for ES" />
     <MESSAGE value="test no deps to ES" />
-    <option name="LAST_COMMIT_MESSAGE" value="test no deps to ES" />
+    <MESSAGE value="gitignore .idea" />
+    <option name="LAST_COMMIT_MESSAGE" value="gitignore .idea" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

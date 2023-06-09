@@ -184,7 +184,6 @@ func (s *service) ParseRSS(src string) *gofeed.Feed {
 func (s *service) FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequest, size int) ([]*article.EsArticleDBO, int64, error) {
 	tracer := tracing.TracerFromContext(ctx)
 	ctxWithSpan, span := tracer.Start(ctx, "ElasticSearch")
-	logger.InfoContext(ctxWithSpan, "Создали Span")
 	span.SetAttributes(attribute.String("[articleSERVICE]", "Идём в ElasticSearch"))
 	defer span.End()
 
@@ -194,21 +193,19 @@ func (s *service) FindWithGrandFilter(ctx context.Context, p dto.GrandFilterRequ
 func (s *service) FindAllLanguages(ctx context.Context) ([]*article.LanguageES, error) {
 	tracer := tracing.TracerFromContext(ctx)
 	ctxWithSpan, span := tracer.Start(ctx, "ElasticSearch")
-	logger.InfoContext(ctxWithSpan, "Создали Span")
 	span.SetAttributes(attribute.String("[articleSERVICE]", "Идём в ElasticSearch"))
 	defer span.End()
 
-	return s.elastic.FindLanguages(ctx)
+	return s.elastic.FindLanguages(ctxWithSpan)
 }
 
 func (s *service) FindCategory(ctx context.Context, cat string) ([]*article.CategoryES, error) {
 	tracer := tracing.TracerFromContext(ctx)
 	ctxWithSpan, span := tracer.Start(ctx, "ElasticSearch")
-	logger.InfoContext(ctxWithSpan, "Создали Span")
 	span.SetAttributes(attribute.String("[articleSERVICE]", "Идём в ElasticSearch"))
 	defer span.End()
 
-	return s.elastic.FindCategory(ctx, cat)
+	return s.elastic.FindCategory(ctxWithSpan, cat)
 }
 
 func (s *service) FindPeople(ctx context.Context, name string) ([]*article.PersonES, error) {

@@ -63,7 +63,7 @@ func ZapMiddlewareLogger(router *gin.Engine) {
 		TimeFormat: time.RFC3339,
 		UTC:        true,
 		SkipPaths:  nil,
-		TraceID:    true,
+		TraceID:    false,
 		// extra
 		Context: nil,
 	}))
