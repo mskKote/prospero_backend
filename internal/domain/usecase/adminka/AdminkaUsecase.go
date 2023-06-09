@@ -10,7 +10,6 @@ import (
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/lib"
 	"github.com/mskKote/prospero_backend/pkg/logging"
-	"github.com/mskKote/prospero_backend/pkg/tracing"
 	"go.uber.org/zap"
 	"net/http"
 	"strconv"
@@ -38,11 +37,9 @@ func New(
 }
 
 func (u *usecase) AddSourceAndPublisher(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	sp := &source.AddSourceAndPublisherDTO{}
 	if err := c.ShouldBind(&sp); err != nil {
+		_ = c.Error(err)
 		logger.Error("Ошибка при добавлении", zap.Error(err))
 		lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
 		return
@@ -56,22 +53,20 @@ func (u *usecase) AddSourceAndPublisher(c *gin.Context) {
 		Longitude: sp.Longitude,
 		Latitude:  sp.Latitude,
 	}
-
-	var publisherId string
-	if created, err := u.publishers.Create(c, p); err != nil {
+	created, err := u.publishers.Create(c, p)
+	if err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Ошибка при добавлении источника")
 		return
-	} else {
-		publisherId = created.PublisherID
 	}
 
 	// ADD SOURCE
 	s := &source.AddSourceDTO{
 		RssURL:      sp.RssUrl,
-		PublisherID: publisherId,
+		PublisherID: created.PublisherID,
 	}
-
 	if _, err := u.sources.AddSource(c, *s); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось добавить источник")
 		return
 	}
@@ -82,36 +77,34 @@ func (u *usecase) AddSourceAndPublisher(c *gin.Context) {
 // ---------------------------------------------------- sources CRUD
 
 func (u *usecase) CreateSourceRSS(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	s := source.AddSourceDTO{}
 	if err := c.Bind(&s); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
 		return
 	}
 
-	if src, err := u.sources.AddSource(c, s); err != nil {
+	src, err := u.sources.AddSource(c, s)
+	if err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось добавить источник")
 		return
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "ok",
-			"data":    src,
-		})
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "ok",
+		"data":    src,
+	})
 }
 
 func (u *usecase) ReadSourcesRSS(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	var src []*source.DTO
 	var err error
 
 	// Total
 	var total int64
 	if count, err := u.sources.Count(c); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось посчитать количество элементов "+c.Query("search"))
 		return
 	} else {
@@ -121,11 +114,13 @@ func (u *usecase) ReadSourcesRSS(c *gin.Context) {
 	pageQuery := c.DefaultQuery("page", "0")
 	page, err := strconv.Atoi(pageQuery)
 	if err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Неправильные параметры запроса")
 		return
 	}
 
 	if int(total) < pageSize*page {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Страницы "+c.Query("page")+" нет")
 		return
 	}
@@ -137,6 +132,7 @@ func (u *usecase) ReadSourcesRSS(c *gin.Context) {
 	}
 
 	if err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось найти RSS источники "+c.Query("search"))
 		return
 	}
@@ -148,15 +144,13 @@ func (u *usecase) ReadSourcesRSS(c *gin.Context) {
 }
 
 func (u *usecase) ReadSourcesRSSWithPublishers(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	var src []*source.DTO
 	var err error
 
 	// Total
 	var total int64
 	if count, err := u.sources.Count(c); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось посчитать количество элементов "+c.Query("search"))
 		return
 	} else {
@@ -166,6 +160,7 @@ func (u *usecase) ReadSourcesRSSWithPublishers(c *gin.Context) {
 	pageQuery := c.DefaultQuery("page", "1")
 	page, err := strconv.Atoi(pageQuery)
 	if err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Неправильные параметры запроса")
 		return
 	}
@@ -184,6 +179,7 @@ func (u *usecase) ReadSourcesRSSWithPublishers(c *gin.Context) {
 	}
 
 	if err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось найти RSS источники "+c.Query("search"))
 		return
 	}
@@ -197,6 +193,7 @@ func (u *usecase) ReadSourcesRSSWithPublishers(c *gin.Context) {
 	}
 
 	if publishers, err := u.publishers.FindPublishersByIDs(c, srcIDs); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не нашли publishers")
 		return
 	} else {
@@ -228,37 +225,36 @@ func (u *usecase) ReadSourcesRSSWithPublishers(c *gin.Context) {
 }
 
 func (u *usecase) UpdateSourceRSS(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	dto := &source.DTO{}
 	if err := c.Bind(&dto); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
 		return
 	}
 
-	if data, err := u.sources.Update(c, dto); err != nil {
+	data, err := u.sources.Update(c, dto)
+	if err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось обновить RSS источник")
 		return
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "ok",
-			"data":    data,
-		})
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "ok",
+		"data":    data,
+	})
 }
 
 func (u *usecase) DeleteSourceRSS(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	dto := source.DeleteSourceDTO{}
 	if err := c.Bind(&dto); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
 		return
 	}
 
 	if err := u.sources.Delete(c, dto); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось удалить RSS источник")
 		return
 	}
@@ -267,30 +263,28 @@ func (u *usecase) DeleteSourceRSS(c *gin.Context) {
 }
 
 func (u *usecase) CreatePublisher(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	s := &publisher.AddPublisherDTO{}
 	if err := c.Bind(&s); err != nil {
+		_ = c.Error(err)
 		logger.Error("Ошибка при добавлении источника", zap.Error(err))
 		lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
 		return
 	}
 
-	if data, err := u.publishers.Create(c, s); err != nil {
+	data, err := u.publishers.Create(c, s)
+	if err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Ошибка при добавлении источника")
 		return
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "ok",
-			"data":    data})
 	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "ok",
+		"data":    data,
+	})
 }
 
 func (u *usecase) ReadPublishers(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	var publishers []*publisher.DTO
 	var err error
 
@@ -301,6 +295,7 @@ func (u *usecase) ReadPublishers(c *gin.Context) {
 	}
 
 	if err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось найти RSS источники "+c.Query("search"))
 		return
 	}
@@ -314,16 +309,15 @@ func (u *usecase) ReadPublishers(c *gin.Context) {
 // ---------------------------------------------------- publishers CRUD
 
 func (u *usecase) UpdatePublisher(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	dto := &publisher.DTO{}
 	if err := c.Bind(&dto); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
 		return
 	}
 
 	if err := u.publishers.Update(c, dto); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось обновить")
 		return
 	}
@@ -332,16 +326,15 @@ func (u *usecase) UpdatePublisher(c *gin.Context) {
 }
 
 func (u *usecase) DeletePublisher(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	dto := &publisher.DeletePublisherDTO{}
 	if err := c.Bind(&dto); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
 		return
 	}
 
 	if err := u.publishers.Delete(c, dto); err != nil {
+		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Не получилось удалить")
 		return
 	}
@@ -352,9 +345,6 @@ func (u *usecase) DeletePublisher(c *gin.Context) {
 // ---------------------------------------------------- RSS
 
 func (u *usecase) Harvest(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
-
 	if err := u.articles.ParseAllOnce(c); err != nil {
 		lib.ResponseBadRequest(c, err, "Не получилось прочитать источники")
 		return
@@ -366,7 +356,5 @@ func (u *usecase) Harvest(c *gin.Context) {
 // ---------------------------------------------------- Service
 
 func (u *usecase) ReadConfig(c *gin.Context) {
-	tracing.TraceHeader(c)
-	tracing.LogRequestTrace(c)
 	c.JSON(http.StatusOK, gin.H{"config": cfg})
 }

@@ -105,10 +105,6 @@ func startup(cfg *config.Config) {
 		logger.Info("Используем DefaultGin")
 		r.Use(gin.Logger())
 	}
-	//if cfg.Logger.ToGraylog { // logrus & graylog
-	//	logger.Info("Используем Graylog")
-	//	r.Use(logging.GraylogMiddlewareLogger())
-	//}
 	if cfg.Logger.UseZap {
 		logger.Info("Используем Zap")
 		logging.ZapMiddlewareLogger(r)
