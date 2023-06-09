@@ -128,14 +128,14 @@ func (s *service) indexFeed(ctx context.Context, p *publisher.DTO, feed *gofeed.
 		go func(_item *gofeed.Item) {
 			// Do not save news without time
 			if _item.PublishedParsed == nil {
-				itemsChan <- true
+				itemsChan <- false
 				return
 			}
 
 			// Сохраняю новости только за последние N времени
 			// TODO: remove hardcode 20 minutes
 			if full == false && time.Since(*_item.PublishedParsed) > 20*time.Minute {
-				itemsChan <- true
+				itemsChan <- false
 				return
 			}
 
@@ -170,6 +170,8 @@ func (s *service) indexFeed(ctx context.Context, p *publisher.DTO, feed *gofeed.
 			}
 			if ok := s.elastic.IndexArticle(ctx, articleDBO); !ok {
 				logger.ErrorContext(ctx, "Ошибка добавления статьи")
+				itemsChan <- false
+				return
 			}
 
 			for _, category := range _item.Categories {

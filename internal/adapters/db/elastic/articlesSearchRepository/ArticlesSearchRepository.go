@@ -318,11 +318,12 @@ func (r *repository) IndexArticle(ctx context.Context, a *article.EsArticleDBO) 
 
 	if err != nil {
 		logger.Error(fmt.Sprintf("Не записали данные в %s", ArticleIndex), zap.Error(err))
-	} else {
-		logger.Info(
-			fmt.Sprintf("Добавили в ES[%s] статью [%s] с id=[%s] от [%s]",
-				ArticleIndex, a.Name, res.Id_, a.Publisher.Name))
+		return false
 	}
+
+	logger.Info(
+		fmt.Sprintf("Добавили в ES[%s] статью [%s] с id=[%s] от [%s]",
+			ArticleIndex, a.Name, res.Id_, a.Publisher.Name))
 
 	return res.Result == result.Created
 }
