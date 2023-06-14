@@ -9,7 +9,7 @@ COPY . .
 RUN GOOS=linux GOARCH=amd64 go build -x -o main ./cmd/main.go
 
 # run stage
-FROM alpine:3.17
+FROM alpine:3.18
 WORKDIR /app
 COPY --from=builder /app/main .
 COPY --from=builder /app/app.yml .
