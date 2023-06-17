@@ -6,7 +6,7 @@ COPY go.sum .
 RUN go mod download
 
 COPY . .
-RUN GOOS=linux GOARCH=amd64 go build -x -o main ./cmd/main.go
+RUN GOOS=linux GOARCH=amd64 go build -o main ./cmd/main.go
 
 # run stage
 FROM alpine:3.18

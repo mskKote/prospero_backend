@@ -73,4 +73,6 @@ docker compose up -d --no-deps --build prospero
 
 2. [docker compose plugin](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04)
 
-4. [github actions runner](https://habr.com/ru/articles/737148/)
+3. [SSH github](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+
+4. [GitHub actions runner](https://habr.com/ru/articles/737148/)

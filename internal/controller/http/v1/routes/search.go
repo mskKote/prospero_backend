@@ -24,9 +24,9 @@ type ISearchUsecase interface {
 
 func RegisterSearchRoutes(g *gin.RouterGroup, s ISearchUsecase) {
 	g.POST(searchURL, s.GrandFilter)
-	g.GET(searchPublisherURL, s.SearchPublisherWithHints)
-	g.GET(searchDefaultPublisherURL, s.SearchDefaultPublisherWithHints)
-	g.GET(searchLanguagesURL, s.SearchLanguages)
-	g.GET(searchCategoriesWithHintsURL, s.SearchCategoriesWithHints)
-	g.GET(searchPeopleWithHintsURL, s.SearchPeopleWithHints)
+	g.POST(searchPublisherURL, s.SearchPublisherWithHints)
+	g.POST(searchDefaultPublisherURL, s.SearchDefaultPublisherWithHints)
+	g.POST(searchLanguagesURL, s.SearchLanguages)
+	g.POST(searchCategoriesWithHintsURL, s.SearchCategoriesWithHints)
+	g.POST(searchPeopleWithHintsURL, s.SearchPeopleWithHints)
 }

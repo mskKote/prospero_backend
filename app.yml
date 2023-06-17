@@ -5,8 +5,8 @@ port: 5000
 cron_sources_rss: "*/20 * * * *"
 use_cron_sources_rss: true
 use_tracing_jaeger: true
-migrate_postgres: true
-migrate_elastic: true
+migrate_postgres: false
+migrate_elastic: false
 metrics: true
 logger:
     to_file: true

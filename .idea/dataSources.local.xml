@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="GO-231.9011.34">
-    <data-source name="postgres@localhost" uuid="a2f7474d-724d-49fd-8e03-5da4029ac8cc">
+    <data-source name="postgres@host-212-118-41-240.hosted-by-vdsina.ru" uuid="ea043deb-52a4-46fe-b648-67e2cd736c1b">
       <database-info product="PostgreSQL" version="15.3" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.6.0" dbms="POSTGRES" exact-version="15.3" exact-driver-version="42.6">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
@@ -16,13 +16,13 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
-    <data-source name="postgres@host-212-118-41-240.hosted-by-vdsina.ru" uuid="ea043deb-52a4-46fe-b648-67e2cd736c1b">
+    <data-source name="postgres@localhost" uuid="59feabe3-73bc-4a55-a12b-28edaa43f191">
       <database-info product="PostgreSQL" version="15.3" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.6.0" dbms="POSTGRES" exact-version="15.3" exact-driver-version="42.6">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
-      <user-name>postgres</user-name>
+      <user-name>mskKote</user-name>
       <schema-mapping>
         <introspection-scope>
           <node kind="database" qname="@">
