@@ -14,7 +14,7 @@ type IArticleService interface {
 	ParseAllOnce(ctx context.Context, full bool) error
 
 	// ParseRSS достаёт контент по источнику
-	ParseRSS(ctx context.Context, src string) *gofeed.Feed
+	ParseRSS(ctx context.Context, src string) (*gofeed.Feed, error)
 
 	FindAllLanguages(ctx context.Context) ([]*article.LanguageES, error)
 

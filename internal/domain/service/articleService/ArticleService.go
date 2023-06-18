@@ -63,7 +63,12 @@ func (s *service) ParseAllOnce(ctx context.Context, full bool) error {
 			go func(_srcI int, _src *source.RSS) {
 				logger.Info(fmt.Sprintf("Парсим источник #%d: %s", i*batch+_srcI+1, _src.RssURL))
 
-				feed := s.ParseRSS(ctx, _src.RssURL)
+				feed, feedErr := s.ParseRSS(ctx, _src.RssURL)
+				if feedErr != nil {
+					logger.ErrorContext(ctx, fmt.Sprintf("Не парсили источник #%d: %s", i*batch+_srcI+1, _src.RssURL))
+					partPotential <- 0
+					return
+				}
 				//u.logFeed(feed)
 				//feedPotential := s.analyseFeed(feed)
 				// сохранить новости в ES
@@ -190,12 +195,13 @@ func (s *service) indexFeed(ctx context.Context, p *publisher.DTO, feed *gofeed.
 	}
 }
 
-func (s *service) ParseRSS(ctx context.Context, src string) *gofeed.Feed {
+func (s *service) ParseRSS(ctx context.Context, src string) (*gofeed.Feed, error) {
 	feed, err := parser.ParseURLWithContext(src, ctx)
 	if err != nil {
 		logger.Error("Ошибка парса", zap.Error(err))
+		return nil, err
 	}
-	return feed
+	return feed, nil
 }
 
 // ------------------------------------------------------------------- Search hints
