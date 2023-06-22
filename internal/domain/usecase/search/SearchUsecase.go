@@ -1,6 +1,8 @@
 package search
 
 import (
+	"bytes"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/dto"
 	"github.com/mskKote/prospero_backend/internal/domain/service/articleService"
@@ -27,13 +29,28 @@ func New(p *publishersService.IPublishersService, a *articleService.IArticleServ
 func (u *usecase) GrandFilter(c *gin.Context) {
 	ctx := c.Request.Context()
 
+	buf := new(bytes.Buffer)
+	_, err := buf.ReadFrom(c.Request.Body)
+	if err != nil {
+		logger.Error("Ошибка поиска", zap.Error(err))
+		_ = c.Error(err)
+		lib.ResponseBadRequest(c, err, "У запроса нет тела")
+		return
+	}
+
 	req := dto.GrandFilterRequest{}
-	if err := c.ShouldBind(&req); err != nil {
+	if err := json.Unmarshal(buf.Bytes(), &req); err != nil {
 		logger.Error("Ошибка поиска", zap.Error(err))
 		_ = c.Error(err)
 		lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
 		return
 	}
+	//if err := c.ShouldBind(&req); err != nil {
+	//	logger.Error("Ошибка поиска", zap.Error(err))
+	//	_ = c.Error(err)
+	//	lib.ResponseBadRequest(c, err, "Неправильное тело запроса")
+	//	return
+	//}
 
 	sizeQuery := c.Query("size")
 	size, err := strconv.Atoi(sizeQuery)

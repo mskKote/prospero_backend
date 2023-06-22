@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="Ручки">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="[hotfix] Обработка ошибки">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/articleService/ArticleService.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/service/articleService/IArticleService.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/service/articleService/IArticleService.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +130,7 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.elasticsearch: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="VDSina">
+    <configuration name="docker-compose.yml.elasticsearch: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="services">
@@ -143,7 +143,20 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.jaeger: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="VDSina">
+    <configuration name="docker-compose.yml.grafana: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="services">
+            <list>
+              <option value="grafana" />
+            </list>
+          </option>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml.jaeger: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
       <deployment type="docker-compose.yml">
         <settings>
           <option name="services">
@@ -169,26 +182,13 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yml.prospero: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="services">
-            <list>
-              <option value="prospero" />
-            </list>
-          </option>
-          <option name="sourceFilePath" value="docker-compose.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
-        <item itemvalue="Docker.docker-compose.yml.prospero: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.postgres: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml.postgres: Compose Deployment" />
-        <item itemvalue="Docker.docker-compose.yml.prospero: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.elasticsearch: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml.grafana: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -211,7 +211,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="CI/CD test new handler #2" />
     <MESSAGE value="update deps" />
     <MESSAGE value="config" />
     <MESSAGE value="update Dockerfile" />
@@ -236,7 +235,8 @@
     <MESSAGE value="hotfix VM #2" />
     <MESSAGE value="hotfix VM #3" />
     <MESSAGE value="Ручки" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ручки" />
+    <MESSAGE value="[hotfix] Обработка ошибки" />
+    <option name="LAST_COMMIT_MESSAGE" value="[hotfix] Обработка ошибки" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
@@ -245,9 +245,14 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go</url>
-          <line>319</line>
-          <option name="timeStamp" value="1" />
+          <url>file://$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go</url>
+          <line>56</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go</url>
+          <line>49</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
