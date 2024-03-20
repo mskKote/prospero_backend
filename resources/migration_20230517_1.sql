@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS public.admins CASCADE;
 DROP TABLE IF EXISTS public.publishers CASCADE;
 DROP TABLE IF EXISTS public.sources_rss CASCADE;
+CREATE USER postgres SUPERUSER;
 
 -- adminka users
 CREATE TABLE public.admins
@@ -46,7 +47,9 @@ VALUES
     ('lenta.ru', 'Russia', 'Moscow', point(55.698645, 37.624570)),
     ('Wall Street Journal', 'USA', 'New York', point(40.749995, -73.983758)),
     ('France 24', 'France', 'Paris', point(48.830639, 2.264886)),
-    ('CNN', 'USA', 'Atlanta', point(33.758040, -84.394692));
+    ('CNN', 'USA', 'Atlanta', point(33.758040, -84.394692)),
+    ('meduza', 'Latvia', 'Riga', point(56.958088, 24.111851));
+
 
 INSERT INTO public.sources_rss(publisher_id, rss_url, add_date)
 VALUES ((SELECT publisher_id FROM public.publishers WHERE name = 'The New York Times'), 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',  '2023-05-1 19:30:06.887661 +00:00' :: timestamptz),
@@ -58,7 +61,8 @@ VALUES ((SELECT publisher_id FROM public.publishers WHERE name = 'The New York T
        ((SELECT publisher_id FROM public.publishers WHERE name = 'lenta.ru'), 'https://lenta.ru/rss/news', '2023-05-7 19:30:06.887661 +00:00' :: timestamptz),
        ((SELECT publisher_id FROM public.publishers WHERE name = 'Wall Street Journal'), 'https://feeds.a.dj.com/rss/RSSWorldNews.xml', '2023-05-8 19:30:06.887661 +00:00' :: timestamptz),
        ((SELECT publisher_id FROM public.publishers WHERE name = 'France 24'), 'http://america.aljazeera.com/content/ajam/articles.rss', '2023-05-9 19:30:06.887661 +00:00' :: timestamptz),
-       ((SELECT publisher_id FROM public.publishers WHERE name = 'CNN'), 'http://rss.cnn.com/rss/edition_world.rss', '2023-05-10 19:30:06.887661 +00:00' :: timestamptz);
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'CNN'), 'http://rss.cnn.com/rss/edition_world.rss', '2023-05-10 19:30:06.887661 +00:00' :: timestamptz),
+       ((SELECT publisher_id FROM public.publishers WHERE name = 'meduza'), 'https://meduza.io/rss/news', '2023-05-7 19:30:06.887661 +00:00' :: timestamptz);
 
 -- search
 

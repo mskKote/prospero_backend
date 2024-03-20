@@ -11,6 +11,9 @@ docker compose up
 
 # перезапуск prospero
 docker compose up -d --no-deps --build prospero
+
+# разработка
+docker compose watch
 ```
 
 ## Инфраструктура

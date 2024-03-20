@@ -4,6 +4,10 @@ services:
   # Prospero
   prospero:
     build: .
+    develop:
+      watch:
+        - action: rebuild
+          path: .
     volumes:
       - ./logs/:/logs/
       - prospero:/app/logs

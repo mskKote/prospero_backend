@@ -143,6 +143,7 @@ func startup(cfg *config.Config) {
 	// --------------------------------------- ROUTES
 	prosperoRoutes(r, &publishersSERVICE, &articlesSERVICE)
 	adminkaStartup(r, pgClient, &sourcesSERVICE, &publishersSERVICE, &articlesSERVICE)
+	logger.Info(fmt.Sprintf("adminkaStartup: %t", cfg.MigratePostgres))
 
 	// --------------------------------------- IGNITION
 	if cfg.UseCronSourcesRSS {
