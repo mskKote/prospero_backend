@@ -16,5 +16,5 @@ COPY --from=builder /app/app.yml .
 COPY --from=builder /app/.env .env
 COPY --from=builder /app/resources/migration_*.sql ./resources/
 
-EXPOSE 5000
+EXPOSE 80
 CMD ["/app/main"]

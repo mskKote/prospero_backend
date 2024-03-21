@@ -12,7 +12,7 @@ import (
 type appConfig struct {
 	Runtime           string `yaml:"runtime"`
 	Service           string `yaml:"service" env-required:"true"`
-	Port              string `yaml:"port" env-default:"5000"`
+	Port              string `yaml:"port" env-default:"80"`
 	CronSourcesRSS    string `yaml:"cron_sources_rss"`
 	UseCronSourcesRSS bool   `yaml:"use_cron_sources_rss"`
 	MigratePostgres   bool   `yaml:"migrate_postgres"`
