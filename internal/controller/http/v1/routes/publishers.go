@@ -9,14 +9,14 @@ const (
 	deletePublisherURL = "/removePublisher"
 )
 
-type IPublishersUsecase interface {
+type IPublishersUseCase interface {
 	CreatePublisher(c *gin.Context)
 	ReadPublishers(c *gin.Context)
 	UpdatePublisher(c *gin.Context)
 	DeletePublisher(c *gin.Context)
 }
 
-func RegisterPublishersRoutes(g *gin.RouterGroup, p IPublishersUsecase) {
+func RegisterPublishersRoutes(g *gin.RouterGroup, p IPublishersUseCase) {
 	g.POST(createPublisherURL, p.CreatePublisher)
 	g.GET(readPublishersURL, p.ReadPublishers)
 	g.PUT(updatePublisherURL, p.UpdatePublisher)

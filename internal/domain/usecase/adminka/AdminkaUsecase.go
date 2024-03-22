@@ -13,6 +13,7 @@ import (
 	"go.uber.org/zap"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 var (
@@ -32,7 +33,7 @@ type usecase struct {
 func New(
 	s *sourcesService.ISourceService,
 	p *publishersService.IPublishersService,
-	a *articleService.IArticleService) IAdminkaUsecase {
+	a *articleService.IArticleService) IAdminkaUseCase {
 	return &usecase{*s, *p, *a}
 }
 
@@ -358,4 +359,11 @@ func (u *usecase) Harvest(c *gin.Context) {
 
 func (u *usecase) ReadConfig(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"config": cfg})
+}
+
+func (u *usecase) HealthCheck(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message":   "OK",
+		"timestamp": time.Now().UnixNano() / int64(time.Millisecond),
+	})
 }

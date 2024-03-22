@@ -12,7 +12,7 @@ const (
 	addSourceAndPublisher  = "/addSourceAndPublisher"
 )
 
-type ISourcesUsecase interface {
+type ISourcesUseCase interface {
 	CreateSourceRSS(c *gin.Context)
 	ReadSourcesRSS(c *gin.Context)
 	ReadSourcesRSSWithPublishers(c *gin.Context)
@@ -22,7 +22,7 @@ type ISourcesUsecase interface {
 	AddSourceAndPublisher(c *gin.Context)
 }
 
-func RegisterSourcesRoutes(g *gin.RouterGroup, sources ISourcesUsecase) {
+func RegisterSourcesRoutes(g *gin.RouterGroup, sources ISourcesUseCase) {
 	g.POST(addSourceAndPublisher, sources.AddSourceAndPublisher)
 	g.POST(createSourceURL, sources.CreateSourceRSS)
 	g.POST(harvest, sources.Harvest)

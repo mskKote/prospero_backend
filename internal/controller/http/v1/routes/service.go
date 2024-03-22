@@ -5,13 +5,16 @@ import (
 )
 
 const (
-	configURL = "/config"
+	configURL      = "/config"
+	healthcheckURL = "/healthcheck"
 )
 
-type IServiceUsecase interface {
+type IServiceUseCase interface {
 	ReadConfig(c *gin.Context)
+	HealthCheck(c *gin.Context)
 }
 
-func RegisterServiceRoutes(g *gin.RouterGroup, s IServiceUsecase) {
+func RegisterServiceRoutes(g *gin.RouterGroup, s IServiceUseCase) {
 	g.GET(configURL, s.ReadConfig)
+	g.GET(healthcheckURL, s.HealthCheck)
 }

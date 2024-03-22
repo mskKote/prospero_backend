@@ -4,8 +4,16 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="infra: deployment setup">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="infra: change port 5000-&gt;80 for good deployment">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/publishers.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/publishers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/search.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/sources.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/sources.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/IAdminkaUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/IAdminkaUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/ISearchUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/ISearchUsecase.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +235,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="config" />
     <MESSAGE value="update Dockerfile" />
     <MESSAGE value="deploy-job.yml" />
     <MESSAGE value="deploy-job.yml №2" />
@@ -252,7 +259,8 @@
     <MESSAGE value="Ручки" />
     <MESSAGE value="[hotfix] Обработка ошибки" />
     <MESSAGE value="infra: deployment setup" />
-    <option name="LAST_COMMIT_MESSAGE" value="infra: deployment setup" />
+    <MESSAGE value="infra: change port 5000-&gt;80 for good deployment" />
+    <option name="LAST_COMMIT_MESSAGE" value="infra: change port 5000-&gt;80 for good deployment" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

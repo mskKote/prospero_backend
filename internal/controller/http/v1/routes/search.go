@@ -13,7 +13,7 @@ const (
 	searchPeopleWithHintsURL     = "/searchPeopleWithHints"
 )
 
-type ISearchUsecase interface {
+type ISearchUseCase interface {
 	GrandFilter(g *gin.Context)
 	SearchPublisherWithHints(c *gin.Context)
 	SearchDefaultPublisherWithHints(c *gin.Context)
@@ -22,7 +22,7 @@ type ISearchUsecase interface {
 	SearchPeopleWithHints(c *gin.Context)
 }
 
-func RegisterSearchRoutes(g *gin.RouterGroup, s ISearchUsecase) {
+func RegisterSearchRoutes(g *gin.RouterGroup, s ISearchUseCase) {
 	g.POST(searchURL, s.GrandFilter)
 	g.POST(searchPublisherURL, s.SearchPublisherWithHints)
 	g.POST(searchDefaultPublisherURL, s.SearchDefaultPublisherWithHints)

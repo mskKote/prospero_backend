@@ -13,13 +13,18 @@ services:
       - prospero:/app/logs
     env_file:
       - .env.production
+    healthcheck:
+      test: [ "CMD", "curl", "-s", "-f", "http://localhost:9200/healthcheck" ]
+      interval: 3s
+      timeout: 3s
+      retries: 20
     ports:
       - "80:80"
     networks:
       - prospero
     depends_on:
-#      elasticsearch:
-#        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
       postgres:
         condition: service_healthy
 
