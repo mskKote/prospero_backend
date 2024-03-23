@@ -1,7 +1,14 @@
 DROP TABLE IF EXISTS public.admins CASCADE;
 DROP TABLE IF EXISTS public.publishers CASCADE;
 DROP TABLE IF EXISTS public.sources_rss CASCADE;
-CREATE USER postgres SUPERUSER;
+DO
+$$
+    BEGIN
+        IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'postgres') THEN
+            CREATE USER postgres SUPERUSER;
+        END IF;
+    END
+$$;
 
 -- adminka users
 CREATE TABLE public.admins

@@ -16,5 +16,5 @@ type IServiceUseCase interface {
 
 func RegisterServiceRoutes(g *gin.RouterGroup, s IServiceUseCase) {
 	g.GET(configURL, s.ReadConfig)
-	g.GET(healthcheckURL, s.HealthCheck)
+	g.Any(healthcheckURL, s.HealthCheck)
 }

@@ -7,18 +7,15 @@ import (
 	"github.com/mskKote/prospero_backend/internal/domain/service/articleService"
 	"github.com/mskKote/prospero_backend/internal/domain/service/publishersService"
 	"github.com/mskKote/prospero_backend/internal/domain/service/sourcesService"
-	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/lib"
 	"github.com/mskKote/prospero_backend/pkg/logging"
 	"go.uber.org/zap"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 var (
 	logger = logging.GetLogger()
-	cfg    = config.GetConfig()
 )
 
 const pageSize int = 6
@@ -353,17 +350,4 @@ func (u *usecase) Harvest(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "ok"})
-}
-
-// ---------------------------------------------------- Service
-
-func (u *usecase) ReadConfig(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"config": cfg})
-}
-
-func (u *usecase) HealthCheck(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message":   "OK",
-		"timestamp": time.Now().UnixNano() / int64(time.Millisecond),
-	})
 }

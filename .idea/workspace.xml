@@ -4,16 +4,19 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="infra: change port 5000-&gt;80 for good deployment">
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="chore: refactor &amp; healthcheck route">
+      <change afterPath="$PROJECT_DIR$/internal/domain/usecase/service/IServiceUseCase.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/domain/usecase/service/ServiceUseCase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/publishers.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/publishers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/search.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/sources.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/sources.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/IAdminkaUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/IAdminkaUsecase.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/ISearchUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/ISearchUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/migration_20230517_1.sql" beforeDir="false" afterPath="$PROJECT_DIR$/resources/migration_20230517_1.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,7 +215,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-gosdk-2946fb9b3188-155fe4b6e3a0-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-233.14808.20" />
+        <option value="bundled-gosdk-2946fb9b3188-155fe4b6e3a0-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-233.15026.17" />
       </set>
     </attachedChunks>
   </component>
@@ -222,6 +225,7 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
+    <option featureType="com.intellij.fileTypeFactory" implementationName=".env" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -235,7 +239,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update Dockerfile" />
     <MESSAGE value="deploy-job.yml" />
     <MESSAGE value="deploy-job.yml №2" />
     <MESSAGE value="deploy-job.yml №3" />
@@ -260,25 +263,10 @@
     <MESSAGE value="[hotfix] Обработка ошибки" />
     <MESSAGE value="infra: deployment setup" />
     <MESSAGE value="infra: change port 5000-&gt;80 for good deployment" />
-    <option name="LAST_COMMIT_MESSAGE" value="infra: change port 5000-&gt;80 for good deployment" />
+    <MESSAGE value="chore: refactor &amp; healthcheck route" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: refactor &amp; healthcheck route" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go</url>
-          <line>56</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go</url>
-          <line>49</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

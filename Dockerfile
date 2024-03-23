@@ -6,7 +6,7 @@ COPY go.sum .
 RUN go mod download
 
 COPY . .
-RUN GOOS=linux GOARCH=amd64 go build -o main ./cmd/main.go
+RUN GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o main ./cmd/main.go
 
 # run stage
 FROM alpine:3.18
@@ -16,5 +16,9 @@ COPY --from=builder /app/app.yml .
 COPY --from=builder /app/.env .env
 COPY --from=builder /app/resources/migration_*.sql ./resources/
 
+
 EXPOSE 80
 CMD ["/app/main"]
+
+HEALTHCHECK --interval=3s --timeout=3s --start-period=1s --retries=3 \
+  CMD wget -q --spider http://localhost:80/service/healthcheck || exit 1

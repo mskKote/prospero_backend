@@ -21,6 +21,7 @@ import (
 	"github.com/mskKote/prospero_backend/internal/domain/usecase/RSS"
 	"github.com/mskKote/prospero_backend/internal/domain/usecase/adminka"
 	"github.com/mskKote/prospero_backend/internal/domain/usecase/search"
+	"github.com/mskKote/prospero_backend/internal/domain/usecase/service"
 	"github.com/mskKote/prospero_backend/pkg/client/elastic"
 	"github.com/mskKote/prospero_backend/pkg/client/postgres"
 	"github.com/mskKote/prospero_backend/pkg/config"
@@ -143,6 +144,8 @@ func startup(cfg *config.Config) {
 	// --------------------------------------- ROUTES
 	prosperoRoutes(r, &publishersSERVICE, &articlesSERVICE)
 	adminkaStartup(r, pgClient, &sourcesSERVICE, &publishersSERVICE, &articlesSERVICE)
+	serviceRoutes(r)
+
 	logger.Info(fmt.Sprintf("adminkaStartup: %t", cfg.MigratePostgres))
 
 	// --------------------------------------- IGNITION
@@ -217,29 +220,9 @@ func adminkaStartup(
 	adminkaGroup.Use(auth.MiddlewareFunc())
 	{
 		adminkaGroup.GET("/refresh_token", auth.RefreshHandler)
-
-		// TEST STAND
-		//adminkaGroup.GET("/hello", func(c *gin.Context) {
-		//	claims := jwt.ExtractClaims(c)
-		//	if user, ok := c.Get("id"); ok {
-		//		c.JSON(http.StatusOK, gin.H{
-		//			"userID":   claims["id"],
-		//			"userName": user.(*admin.Admin).Name,
-		//			"text":     "Hello World.",
-		//		})
-		//	} else {
-		//		c.JSON(http.StatusNotFound, gin.H{
-		//			"userID":   claims["id"],
-		//			"userName": "Not found",
-		//			"text":     "Bye World.",
-		//		})
-		//	}
-		//})
-
 		adminkaApiV1 := adminkaGroup.Group("api/v1")
 		routes.RegisterSourcesRoutes(adminkaApiV1, adminkaUSECASE)
 		routes.RegisterPublishersRoutes(adminkaApiV1, adminkaUSECASE)
-		routes.RegisterServiceRoutes(adminkaApiV1, adminkaUSECASE)
 	}
 
 	r.NoRoute(auth.MiddlewareFunc(), security.NoRoute)
@@ -255,5 +238,15 @@ func prosperoRoutes(
 	apiV1 := r.Group("/api/v1")
 	{
 		routes.RegisterSearchRoutes(apiV1, searchUSECASE)
+	}
+}
+
+func serviceRoutes(
+	r *gin.Engine) {
+
+	serviceSERVICE := service.New()
+	serviceGroup := r.Group("/service")
+	{
+		routes.RegisterServiceRoutes(serviceGroup, serviceSERVICE)
 	}
 }
