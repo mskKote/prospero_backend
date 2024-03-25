@@ -6,6 +6,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	_ "github.com/mskKote/prospero_backend/docs"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/elastic/articlesSearchRepository"
 	publishersSearchRepository "github.com/mskKote/prospero_backend/internal/adapters/db/elastic/publisherSearchRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/adminsRepository"
@@ -29,6 +30,8 @@ import (
 	pkgMetrics "github.com/mskKote/prospero_backend/pkg/metrics"
 	"github.com/mskKote/prospero_backend/pkg/security"
 	"github.com/mskKote/prospero_backend/pkg/tracing"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.uber.org/zap"
 	"io"
@@ -42,6 +45,14 @@ var (
 	logger = logging.GetLogger()
 )
 
+// @title			Prospero
+// @version		1.0
+// @description	News aggregator API
+// @contact.name	Vitalii Popov
+// @contact.url	https://www.linkedin.com/in/mskkote/
+// @contact.email	msk.vitaly@gmail.com
+// @host			localhost:80
+// @BasePath		/
 func main() {
 	startup(cfg)
 }
@@ -142,6 +153,7 @@ func startup(cfg *config.Config) {
 	}
 
 	// --------------------------------------- ROUTES
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	prosperoRoutes(r, &publishersSERVICE, &articlesSERVICE)
 	adminkaStartup(r, pgClient, &sourcesSERVICE, &publishersSERVICE, &articlesSERVICE)
 	serviceRoutes(r)

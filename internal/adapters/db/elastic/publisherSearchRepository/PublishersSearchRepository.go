@@ -60,6 +60,7 @@ func (r *repository) Setup(ctx context.Context) {
 		{Name: "Wall Street Journal"},
 		{Name: "France 24"},
 		{Name: "CNN"},
+		{Name: "Meduza"},
 	}
 	for _, p := range publishers {
 		if ok := r.IndexPublisher(ctx, &p); !ok {
@@ -102,6 +103,7 @@ func (r *repository) Create(ctx context.Context) error {
 		TokenChars: []tokenchar.TokenChar{tokenchar.Letter, tokenchar.Digit, tokenchar.Whitespace},
 		Type:       "ngram",
 	}
+	//logger.Info(types.NewLowercaseTokenFilter().Type) // -> "lowercase"
 	res, err := r.client.Indices.Create(Index).
 		Request(&create.Request{
 			Settings: &types.IndexSettings{
@@ -112,12 +114,12 @@ func (r *repository) Create(ctx context.Context) error {
 					Analyzer: map[string]types.Analyzer{
 						"publisher_analyzer": types.CustomAnalyzer{
 							Tokenizer: "publisher_tokenizer",
-							Filter:    []string{types.NewLowercaseTokenFilter().Type},
+							Filter:    []string{"lowercase"},
 						},
 						"publisher_search_analyzer": types.CustomAnalyzer{
 							Tokenizer: "keyword",
 							Type:      "custom",
-							Filter:    []string{types.NewLowercaseTokenFilter().Type},
+							Filter:    []string{"lowercase"},
 						},
 					},
 				},

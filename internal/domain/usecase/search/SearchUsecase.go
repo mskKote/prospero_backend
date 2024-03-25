@@ -26,6 +26,21 @@ func New(p *publishersService.IPublishersService, a *articleService.IArticleServ
 	return &usecase{*p, *a}
 }
 
+// GrandFilter godoc
+//
+//	@Summary		Perform grand filter search
+//	@Description	Perform a grand filter search based on provided parameters
+//	@Tags			search
+//	@Produce		json
+//	@Param			filterStrings		body	[]dto.SearchString		true	"Array of search strings with && as the joining operator"
+//	@Param			filterPeople		body	[]dto.SearchPeople		true	"Array of search people"
+//	@Param			filterPublishers	body	[]dto.SearchPublishers	true	"Array of search publishers"
+//	@Param			filterCountry		body	[]dto.SearchCountry		true	"Array of search countries"
+//	@Param			filterCategories	body	[]dto.SearchCategory	true	"Array of search categories"
+//	@Param			filterLanguages		body	[]dto.SearchLanguage	true	"Array of search languages"
+//	@Param			filterTime			body	dto.SearchTime			true	"Time filter"
+//	@Success		200
+//	@Router			/grandFilter [post]
 func (u *usecase) GrandFilter(c *gin.Context) {
 	ctx := c.Request.Context()
 
@@ -72,6 +87,14 @@ func (u *usecase) GrandFilter(c *gin.Context) {
 	})
 }
 
+// SearchDefaultPublisherWithHints  godoc
+//
+//	@Summary		Search publishers with hints using default search
+//	@Description	Search publishers with hints using default search
+//	@Tags			search
+//	@Produce		json
+//	@Success		200
+//	@Router			/searchPublisherWithHints/ [post]
 func (u *usecase) SearchDefaultPublisherWithHints(c *gin.Context) {
 	// Строка поиска
 	publishers, err := u.publishers.FindPublishersByNameViaES(c, "")
@@ -87,6 +110,15 @@ func (u *usecase) SearchDefaultPublisherWithHints(c *gin.Context) {
 	})
 }
 
+// SearchPublisherWithHints godoc
+//
+//	@Summary		Search publishers with hints
+//	@Description	Search publishers with hints based on provided search string
+//	@Tags			search
+//	@Produce		json
+//	@Param			search	path	string	true	"Search string"
+//	@Success		200
+//	@Router			/searchPublisherWithHints/{search} [post]
 func (u *usecase) SearchPublisherWithHints(c *gin.Context) {
 	// Строка поиска
 	search := c.Param("search")
@@ -104,6 +136,14 @@ func (u *usecase) SearchPublisherWithHints(c *gin.Context) {
 	})
 }
 
+// SearchLanguages godoc
+//
+//	@Summary		Search languages
+//	@Description	Search languages
+//	@Tags			search
+//	@Produce		json
+//	@Success		200	{array}	string
+//	@Router			/searchLanguages [post]
 func (u *usecase) SearchLanguages(c *gin.Context) {
 	ctx := c.Request.Context()
 
@@ -120,6 +160,14 @@ func (u *usecase) SearchLanguages(c *gin.Context) {
 	})
 }
 
+// SearchCategoriesWithHints godoc
+//
+//	@Summary		Search categories with hints
+//	@Description	Search categories with hints
+//	@Tags			search
+//	@Produce		json
+//	@Success		200
+//	@Router			/searchCategoryWithHints [post]
 func (u *usecase) SearchCategoriesWithHints(c *gin.Context) {
 	ctx := c.Request.Context()
 
@@ -139,6 +187,14 @@ func (u *usecase) SearchCategoriesWithHints(c *gin.Context) {
 	})
 }
 
+// SearchPeopleWithHints godoc
+//
+//	@Summary		Search people with hints
+//	@Description	Search people with hints
+//	@Tags			search
+//	@Produce		json
+//	@Success		200
+//	@Router			/searchPeopleWithHints [post]
 func (u *usecase) SearchPeopleWithHints(c *gin.Context) {
 	ctx := c.Request.Context()
 

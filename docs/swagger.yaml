@@ -1,0 +1,568 @@
+basePath: /
+definitions:
+  config.Config:
+    properties:
+      adminka:
+        properties:
+          password:
+            type: string
+          username:
+            type: string
+        type: object
+      cronSourcesRSS:
+        type: string
+      elastic:
+        properties:
+          host:
+            type: string
+          port:
+            type: string
+        type: object
+      environment:
+        type: string
+      isDebug:
+        type: boolean
+      logger:
+        properties:
+          toConsole:
+            type: boolean
+          toELK:
+            type: boolean
+          toFile:
+            type: boolean
+          useDefaultGin:
+            type: boolean
+          useZap:
+            type: boolean
+        type: object
+      metrics:
+        type: boolean
+      migrateElastic:
+        type: boolean
+      migratePostgres:
+        type: boolean
+      port:
+        type: string
+      postgres:
+        properties:
+          database:
+            type: string
+          host:
+            type: string
+          password:
+            type: string
+          port:
+            type: string
+          username:
+            type: string
+        type: object
+      runtime:
+        type: string
+      secretKeyJWT:
+        type: string
+      service:
+        type: string
+      tracing:
+        properties:
+          host:
+            type: string
+          port:
+            type: string
+        type: object
+      useCronSourcesRSS:
+        type: boolean
+      useTracingJaeger:
+        type: boolean
+    type: object
+  dto.SearchCategory:
+    properties:
+      name:
+        type: string
+    type: object
+  dto.SearchCountry:
+    properties:
+      country:
+        description: название страны
+        type: string
+    type: object
+  dto.SearchLanguage:
+    properties:
+      name:
+        type: string
+    type: object
+  dto.SearchPeople:
+    properties:
+      fullName:
+        description: имя
+        type: string
+    type: object
+  dto.SearchPublishers:
+    properties:
+      name:
+        description: название издания
+        type: string
+    type: object
+  dto.SearchString:
+    properties:
+      isExact:
+        type: boolean
+      search:
+        type: string
+    type: object
+  dto.SearchTime:
+    properties:
+      end:
+        description: Окончание временного диапазона
+        type: string
+      start:
+        description: Начало временного диапазона
+        type: string
+    type: object
+  publisher.AddPublisherDTO:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+    type: object
+  publisher.DTO:
+    properties:
+      add_date:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      publisher_id:
+        type: string
+    type: object
+  publisher.DeletePublisherDTO:
+    properties:
+      publisher_id:
+        type: string
+    type: object
+  source.AddSourceAndPublisherDTO:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      name:
+        type: string
+      rss_Url:
+        type: string
+    type: object
+  source.AddSourceDTO:
+    properties:
+      publisher_id:
+        type: string
+      rss_url:
+        type: string
+    type: object
+  source.DTO:
+    properties:
+      add_date:
+        type: string
+      publisher_id:
+        type: string
+      rss_id:
+        type: string
+      rss_url:
+        type: string
+    type: object
+  source.DeleteSourceDTO:
+    properties:
+      rss_id:
+        type: string
+    type: object
+host: localhost:80
+info:
+  contact:
+    email: msk.vitaly@gmail.com
+    name: Vitalii Popov
+    url: https://www.linkedin.com/in/mskkote/
+  description: News aggregator API
+  title: Prospero
+  version: "1.0"
+paths:
+  /RSS/addSource:
+    post:
+      consumes:
+      - application/json
+      description: Create a new RSS source
+      parameters:
+      - description: Add Source DTO
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/source.AddSourceDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create new RSS source
+      tags:
+      - sources
+  /RSS/getEnrichedSources:
+    get:
+      description: Read RSS sources with associated publishers
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Search query
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Read RSS sources with publishers
+      tags:
+      - sources
+  /RSS/getSources:
+    get:
+      description: Read RSS sources with optional search and pagination
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Search query
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Read RSS sources
+      tags:
+      - sources
+  /RSS/harvest:
+    post:
+      description: Harvest RSS feeds and parse articles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Harvest RSS
+      tags:
+      - sources
+  /RSS/removeSource:
+    delete:
+      consumes:
+      - application/json
+      description: Delete RSS source by ID
+      parameters:
+      - description: Delete Source DTO
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/source.DeleteSourceDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete RSS source
+      tags:
+      - sources
+  /RSS/updateSource:
+    put:
+      consumes:
+      - application/json
+      description: Update existing RSS source
+      parameters:
+      - description: Update Source DTO
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/source.DTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update RSS source
+      tags:
+      - sources
+  /addPublisher:
+    post:
+      consumes:
+      - application/json
+      description: Create a new publisher
+      parameters:
+      - description: Add Publisher DTO
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/publisher.AddPublisherDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create new publisher
+      tags:
+      - publishers
+  /addSourceAndPublisher:
+    post:
+      consumes:
+      - application/json
+      description: Add a new source along with its corresponding publisher
+      parameters:
+      - description: Add Source and Publisher DTO
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/source.AddSourceAndPublisherDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Add Source and Publisher
+      tags:
+      - sources
+  /getPublishers:
+    get:
+      description: Read publishers with optional search
+      parameters:
+      - description: Search query
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Read publishers
+      tags:
+      - publishers
+  /grandFilter:
+    post:
+      description: Perform a grand filter search based on provided parameters
+      parameters:
+      - description: Array of search strings with && as the joining operator
+        in: body
+        name: filterStrings
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dto.SearchString'
+          type: array
+      - description: Array of search people
+        in: body
+        name: filterPeople
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dto.SearchPeople'
+          type: array
+      - description: Array of search publishers
+        in: body
+        name: filterPublishers
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dto.SearchPublishers'
+          type: array
+      - description: Array of search countries
+        in: body
+        name: filterCountry
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dto.SearchCountry'
+          type: array
+      - description: Array of search categories
+        in: body
+        name: filterCategories
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dto.SearchCategory'
+          type: array
+      - description: Array of search languages
+        in: body
+        name: filterLanguages
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/dto.SearchLanguage'
+          type: array
+      - description: Time filter
+        in: body
+        name: filterTime
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SearchTime'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Perform grand filter search
+      tags:
+      - search
+  /removePublisher:
+    delete:
+      consumes:
+      - application/json
+      description: Delete publisher by ID
+      parameters:
+      - description: Delete Publisher DTO
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/publisher.DeletePublisherDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Delete publisher
+      tags:
+      - publishers
+  /searchCategoryWithHints:
+    post:
+      description: Search categories with hints
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Search categories with hints
+      tags:
+      - search
+  /searchLanguages:
+    post:
+      description: Search languages
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+      summary: Search languages
+      tags:
+      - search
+  /searchPeopleWithHints:
+    post:
+      description: Search people with hints
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Search people with hints
+      tags:
+      - search
+  /searchPublisherWithHints/:
+    post:
+      description: Search publishers with hints using default search
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Search publishers with hints using default search
+      tags:
+      - search
+  /searchPublisherWithHints/{search}:
+    post:
+      description: Search publishers with hints based on provided search string
+      parameters:
+      - description: Search string
+        in: path
+        name: search
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Search publishers with hints
+      tags:
+      - search
+  /service/config:
+    get:
+      consumes:
+      - application/json
+      description: Full service config (env + app.yml)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/config.Config'
+      summary: Get service config
+      tags:
+      - service
+  /service/healthcheck:
+    get:
+      description: Check if the service is healthy
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Perform health check
+      tags:
+      - service
+  /updatePublisher:
+    put:
+      consumes:
+      - application/json
+      description: Update publisher information
+      parameters:
+      - description: Publisher DTO
+        in: body
+        name: dto
+        required: true
+        schema:
+          $ref: '#/definitions/publisher.DTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update publisher
+      tags:
+      - publishers
+swagger: "2.0"

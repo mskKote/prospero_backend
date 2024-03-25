@@ -34,6 +34,16 @@ func New(
 	return &usecase{*s, *p, *a}
 }
 
+// AddSourceAndPublisher godoc
+//
+//	@Summary		Add Source and Publisher
+//	@Description	Add a new source along with its corresponding publisher
+//	@Tags			sources
+//	@Accept			json
+//	@Produce		json
+//	@Param			dto	body	source.AddSourceAndPublisherDTO	true	"Add Source and Publisher DTO"
+//	@Success		200
+//	@Router			/addSourceAndPublisher [post]
 func (u *usecase) AddSourceAndPublisher(c *gin.Context) {
 	sp := &source.AddSourceAndPublisherDTO{}
 	if err := c.ShouldBind(&sp); err != nil {
@@ -74,6 +84,16 @@ func (u *usecase) AddSourceAndPublisher(c *gin.Context) {
 
 // ---------------------------------------------------- sources CRUD
 
+// CreateSourceRSS godoc
+//
+//	@Summary		Create new RSS source
+//	@Description	Create a new RSS source
+//	@Tags			sources
+//	@Accept			json
+//	@Produce		json
+//	@Param			dto	body	source.AddSourceDTO	true	"Add Source DTO"
+//	@Success		200
+//	@Router			/RSS/addSource [post]
 func (u *usecase) CreateSourceRSS(c *gin.Context) {
 	s := source.AddSourceDTO{}
 	if err := c.Bind(&s); err != nil {
@@ -95,6 +115,16 @@ func (u *usecase) CreateSourceRSS(c *gin.Context) {
 	})
 }
 
+// ReadSourcesRSS godoc
+//
+//	@Summary		Read RSS sources
+//	@Description	Read RSS sources with optional search and pagination
+//	@Tags			sources
+//	@Produce		json
+//	@Param			page	query	int		false	"Page number"
+//	@Param			search	query	string	false	"Search query"
+//	@Success		200
+//	@Router			/RSS/getSources [get]
 func (u *usecase) ReadSourcesRSS(c *gin.Context) {
 	var src []*source.DTO
 	var err error
@@ -141,6 +171,16 @@ func (u *usecase) ReadSourcesRSS(c *gin.Context) {
 	})
 }
 
+// ReadSourcesRSSWithPublishers godoc
+//
+//	@Summary		Read RSS sources with publishers
+//	@Description	Read RSS sources with associated publishers
+//	@Tags			sources
+//	@Produce		json
+//	@Param			page	query	int		false	"Page number"
+//	@Param			search	query	string	false	"Search query"
+//	@Success		200
+//	@Router			/RSS/getEnrichedSources [get]
 func (u *usecase) ReadSourcesRSSWithPublishers(c *gin.Context) {
 	var src []*source.DTO
 	var err error
@@ -222,6 +262,16 @@ func (u *usecase) ReadSourcesRSSWithPublishers(c *gin.Context) {
 	})
 }
 
+// UpdateSourceRSS godoc
+//
+//	@Summary		Update RSS source
+//	@Description	Update existing RSS source
+//	@Tags			sources
+//	@Accept			json
+//	@Produce		json
+//	@Param			dto	body	source.DTO	true	"Update Source DTO"
+//	@Success		200
+//	@Router			/RSS/updateSource [put]
 func (u *usecase) UpdateSourceRSS(c *gin.Context) {
 	dto := &source.DTO{}
 	if err := c.Bind(&dto); err != nil {
@@ -243,6 +293,16 @@ func (u *usecase) UpdateSourceRSS(c *gin.Context) {
 	})
 }
 
+// DeleteSourceRSS godoc
+//
+//	@Summary		Delete RSS source
+//	@Description	Delete RSS source by ID
+//	@Tags			sources
+//	@Accept			json
+//	@Produce		json
+//	@Param			dto	body	source.DeleteSourceDTO	true	"Delete Source DTO"
+//	@Success		200
+//	@Router			/RSS/removeSource [delete]
 func (u *usecase) DeleteSourceRSS(c *gin.Context) {
 	dto := source.DeleteSourceDTO{}
 	if err := c.Bind(&dto); err != nil {
@@ -260,6 +320,18 @@ func (u *usecase) DeleteSourceRSS(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "ok"})
 }
 
+// ---------------------------------------------------- publishers CRUD
+
+// CreatePublisher godoc
+//
+//	@Summary		Create new publisher
+//	@Description	Create a new publisher
+//	@Tags			publishers
+//	@Accept			json
+//	@Produce		json
+//	@Param			dto	body	publisher.AddPublisherDTO	true	"Add Publisher DTO"
+//	@Success		200
+//	@Router			/addPublisher [post]
 func (u *usecase) CreatePublisher(c *gin.Context) {
 	s := &publisher.AddPublisherDTO{}
 	if err := c.Bind(&s); err != nil {
@@ -282,6 +354,15 @@ func (u *usecase) CreatePublisher(c *gin.Context) {
 	})
 }
 
+// ReadPublishers godoc
+//
+//	@Summary		Read publishers
+//	@Description	Read publishers with optional search
+//	@Tags			publishers
+//	@Produce		json
+//	@Param			search	query	string	false	"Search query"
+//	@Success		200
+//	@Router			/getPublishers [get]
 func (u *usecase) ReadPublishers(c *gin.Context) {
 	var publishers []*publisher.DTO
 	var err error
@@ -304,8 +385,16 @@ func (u *usecase) ReadPublishers(c *gin.Context) {
 	})
 }
 
-// ---------------------------------------------------- publishers CRUD
-
+// UpdatePublisher godoc
+//
+//	@Summary		Update publisher
+//	@Description	Update publisher information
+//	@Tags			publishers
+//	@Accept			json
+//	@Produce		json
+//	@Param			dto	body	publisher.DTO	true	"Publisher DTO"
+//	@Success		200
+//	@Router			/updatePublisher [put]
 func (u *usecase) UpdatePublisher(c *gin.Context) {
 	dto := &publisher.DTO{}
 	if err := c.Bind(&dto); err != nil {
@@ -323,6 +412,16 @@ func (u *usecase) UpdatePublisher(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "ok"})
 }
 
+// DeletePublisher godoc
+//
+//	@Summary		Delete publisher
+//	@Description	Delete publisher by ID
+//	@Tags			publishers
+//	@Accept			json
+//	@Produce		json
+//	@Param			dto	body	publisher.DeletePublisherDTO	true	"Delete Publisher DTO"
+//	@Success		200
+//	@Router			/removePublisher [delete]
 func (u *usecase) DeletePublisher(c *gin.Context) {
 	dto := &publisher.DeletePublisherDTO{}
 	if err := c.Bind(&dto); err != nil {
@@ -342,6 +441,14 @@ func (u *usecase) DeletePublisher(c *gin.Context) {
 
 // ---------------------------------------------------- RSS
 
+// Harvest godoc
+//
+//	@Summary		Harvest RSS
+//	@Description	Harvest RSS feeds and parse articles
+//	@Tags			sources
+//	@Produce		json
+//	@Success		200
+//	@Router			/RSS/harvest [post]
 func (u *usecase) Harvest(c *gin.Context) {
 	if err := u.articles.ParseAllOnce(c, true); err != nil {
 		_ = c.Error(err)

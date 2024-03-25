@@ -23,7 +23,8 @@ docker compose watch
 [Kibana](http://127.0.0.1:5601/) | 
 [Prometheus](http://localhost:9090/) | 
 [Grafana](http://localhost:3000/) | 
-[Jaeger](http://localhost:16686/)
+[Jaeger](http://localhost:16686/) |
+[Swagger](http://localhost:80/swagger/index.html)
 
 [//]: # (```shell)
 
@@ -34,6 +35,10 @@ docker compose watch
 [//]: # (" }' | nc -w0 -u localhost 12201)
 
 [//]: # (```)
+
+```shell
+swag fmt && swag init -g ./cmd/main.go -o ./docs
+```
 
 ---
 ## Архитектура

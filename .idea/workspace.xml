@@ -4,19 +4,21 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="chore: refactor &amp; healthcheck route">
-      <change afterPath="$PROJECT_DIR$/internal/domain/usecase/service/IServiceUseCase.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/domain/usecase/service/ServiceUseCase.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="0a692853-6731-45c0-b492-0afd993f5a59" name="Changes" comment="chore: upgrade &amp; swagger">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.yml" beforeDir="false" afterPath="$PROJECT_DIR$/app.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/articlesSearchRepository/ArticlesSearchRepository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/PublishersSearchRepository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/db/elastic/publisherSearchRepository/PublishersSearchRepository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/controller/http/v1/routes/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controller/http/v1/routes/service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/AdminkaUsecase.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/adminka/IAdminkaUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/adminka/IAdminkaUsecase.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/migration_20230517_1.sql" beforeDir="false" afterPath="$PROJECT_DIR$/resources/migration_20230517_1.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/search/SearchUsecase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/usecase/service/ServiceUseCase.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/usecase/service/ServiceUseCase.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/logging/ginMiddleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/logging/ginMiddleware.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,6 +78,8 @@
   &quot;keyToString&quot;: {
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;Go Build.go build github.com/mskKote/prospero_backend.executor&quot;: &quot;Run&quot;,
+    &quot;Go Build.go build github.com/mskKote/prospero_backend/cmd.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
@@ -84,6 +88,7 @@
     &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;configurable.GoLibrariesConfigurable.is.expanded&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
@@ -93,7 +98,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;go.vgo&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\GoLand 2022.3.3\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -110,14 +115,14 @@
       <recent name="C:\mskKote\HSE\prospero\backend" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/cmd" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="C:\mskKote\HSE\prospero\backend\pkg\lib" />
       <recent name="C:\mskKote\HSE\prospero\backend\resources" />
       <recent name="C:\mskKote\HSE\prospero\backend\internal\adapters\db\postgres\sourcesRSS" />
-      <recent name="C:\mskKote\HSE\prospero\backend\internal\domain\entity\source" />
-      <recent name="C:\mskKote\HSE\prospero\backend\internal\domain\entity\publisher" />
     </key>
   </component>
-  <component name="RunManager" selected="Database Script.migration_20230517_1.sql">
+  <component name="RunManager" selected="Go Build.go build github.com/mskKote/prospero_backend/cmd">
     <configuration name="migration_20230517_1.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
       <script-file value="$PROJECT_DIR$/resources/migration_20230517_1.sql" />
       <script-mode>FILE</script-mode>
@@ -202,10 +207,17 @@
       </deployment>
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Database Script.migration_20230517_1.sql" />
+      <item itemvalue="Docker.docker-compose.yml.elasticsearch: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
+      <item itemvalue="Docker.docker-compose.yml.postgres: Compose Deployment" />
+      <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Database Script.migration_20230517_1.sql" />
         <item itemvalue="Go Build.go build github.com/mskKote/prospero_backend/cmd" />
+        <item itemvalue="Database Script.migration_20230517_1.sql" />
         <item itemvalue="Docker.docker-compose.yml.jaeger: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.postgres: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml.elasticsearch: Compose Deployment" />
@@ -239,7 +251,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="deploy-job.yml" />
     <MESSAGE value="deploy-job.yml №2" />
     <MESSAGE value="deploy-job.yml №3" />
     <MESSAGE value="deploy-job.yml №4" />
@@ -264,7 +275,8 @@
     <MESSAGE value="infra: deployment setup" />
     <MESSAGE value="infra: change port 5000-&gt;80 for good deployment" />
     <MESSAGE value="chore: refactor &amp; healthcheck route" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: refactor &amp; healthcheck route" />
+    <MESSAGE value="chore: docker healthcheck" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: docker healthcheck" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

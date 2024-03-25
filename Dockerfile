@@ -1,5 +1,5 @@
 # build stage
-FROM golang:1.20.5-alpine3.18 AS builder
+FROM golang:1.22.1-alpine3.19 AS builder
 WORKDIR /app
 COPY go.mod .
 COPY go.sum .
@@ -9,13 +9,12 @@ COPY . .
 RUN GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o main ./cmd/main.go
 
 # run stage
-FROM alpine:3.18
+FROM alpine:3.19
 WORKDIR /app
 COPY --from=builder /app/main .
 COPY --from=builder /app/app.yml .
 COPY --from=builder /app/.env .env
 COPY --from=builder /app/resources/migration_*.sql ./resources/
-
 
 EXPOSE 80
 CMD ["/app/main"]

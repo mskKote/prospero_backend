@@ -156,7 +156,7 @@ func (r *repository) Create(ctx context.Context) error {
 					Analyzer: map[string]types.Analyzer{
 						"article_analyzer": types.CustomAnalyzer{
 							Tokenizer: "article_tokenizer",
-							Filter:    []string{types.NewLowercaseTokenFilter().Type},
+							Filter:    []string{"lowercase"},
 						},
 						"article_search_analyzer": types.NewWhitespaceAnalyzer(),
 					},
@@ -231,7 +231,7 @@ func (r *repository) Create(ctx context.Context) error {
 					Analyzer: map[string]types.Analyzer{
 						"category_analyzer": types.CustomAnalyzer{
 							Tokenizer: "category_tokenizer",
-							Filter:    []string{types.NewLowercaseTokenFilter().Type},
+							Filter:    []string{"lowercase"},
 						},
 						"category_search_analyzer": types.NewKeywordAnalyzer(),
 					},
@@ -281,7 +281,7 @@ func (r *repository) Create(ctx context.Context) error {
 					Analyzer: map[string]types.Analyzer{
 						"people_analyzer": types.CustomAnalyzer{
 							Tokenizer: "people_tokenizer",
-							Filter:    []string{types.NewLowercaseTokenFilter().Type},
+							Filter:    []string{"lowercase"},
 						},
 						"people_search_analyzer": types.NewKeywordAnalyzer(),
 					},
