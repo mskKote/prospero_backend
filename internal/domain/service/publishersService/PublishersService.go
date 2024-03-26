@@ -3,7 +3,7 @@ package publishersService
 import (
 	"context"
 	"github.com/jackc/pgx/v5/pgtype"
-	publishersSearchRepository "github.com/mskKote/prospero_backend/internal/adapters/db/elastic/publisherSearchRepository"
+	"github.com/mskKote/prospero_backend/internal/adapters/db/elastic/v8/publisherSearchRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/publishersRepository"
 	"github.com/mskKote/prospero_backend/internal/domain/entity/publisher"
 	"github.com/mskKote/prospero_backend/pkg/lib"

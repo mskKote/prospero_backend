@@ -33,7 +33,7 @@ func NewClient(ctx context.Context, maxAttempts int) (pool *pgxpool.Pool, err er
 		cfg.Postgres.Host,
 		cfg.Postgres.Port,
 		cfg.Postgres.Database)
-	logger.InfoContext(ctx, dsn)
+	//logger.InfoContext(ctx, dsn)
 
 	err = lib.DoWithTries(func() error {
 		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)

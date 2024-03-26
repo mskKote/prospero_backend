@@ -2,7 +2,6 @@ package elastic
 
 import (
 	"context"
-	"fmt"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/mskKote/prospero_backend/pkg/config"
 	"github.com/mskKote/prospero_backend/pkg/logging"
@@ -16,12 +15,11 @@ var (
 )
 
 func NewClient(ctx context.Context) (es *elasticsearch.TypedClient, err error) {
-	conStr := fmt.Sprintf("http://%s:%s", cfg.Elastic.Host, cfg.Elastic.Port)
-	logger.InfoContext(ctx, conStr)
+	logger.InfoContext(ctx, cfg.Elastic.ConStr)
 
 	cfg := elasticsearch.Config{
 		Addresses: []string{
-			conStr,
+			cfg.Elastic.ConStr,
 		},
 	}
 

@@ -3,12 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mskKote/prospero_backend/docs"
-	"github.com/mskKote/prospero_backend/internal/adapters/db/elastic/articlesSearchRepository"
-	publishersSearchRepository "github.com/mskKote/prospero_backend/internal/adapters/db/elastic/publisherSearchRepository"
+	"github.com/mskKote/prospero_backend/internal/adapters/db/elastic/v8/articlesSearchRepository"
+	"github.com/mskKote/prospero_backend/internal/adapters/db/elastic/v8/publisherSearchRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/adminsRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/publishersRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/sourcesRepository"
@@ -75,13 +74,6 @@ func startup(cfg *config.Config) {
 		logger.Info("[ELASTIC] УСПЕШНО подключилсь к ELASTICSEARCH!")
 	}
 
-	if cfg.MigratePostgres {
-		migrationsPg(pgClient, ctx)
-	}
-	if cfg.MigrateElastic {
-		migrationsEs(esClient, ctx)
-	}
-
 	sourcesREPO := sourcesRepository.New(pgClient)
 	articlesREPO := articlesSearchRepository.New(esClient)
 	publishersREPO := publishersRepository.New(pgClient)
@@ -90,6 +82,13 @@ func startup(cfg *config.Config) {
 	publishersSERVICE := publishersService.New(publishersREPO, publishersSearchREPO)
 	articlesSERVICE := articleService.New(sourcesREPO, articlesREPO)
 	sourcesSERVICE := sourcesService.New(sourcesREPO)
+
+	if cfg.MigratePostgres {
+		migrationsPg(pgClient, ctx)
+	}
+	if cfg.MigrateElastic {
+		migrationsEs(articlesREPO, publishersSearchREPO, ctx)
+	}
 
 	// --------------------------------------- GIN
 	r := gin.New()
@@ -102,12 +101,6 @@ func startup(cfg *config.Config) {
 	corsCfg.AddExposeHeaders(tracing.ProsperoHeader)
 	corsCfg.AddAllowHeaders("Authorization")
 	r.Use(cors.New(corsCfg))
-
-	// массив из cfg?
-	//err := r.SetTrustedProxies([]string{"127.0.0.1"})
-	//if err != nil {
-	//	logger.Fatal("Не получилось установить proxy", zap.Error(err))
-	//}
 
 	// Recovery
 	r.Use(gin.Recovery())
@@ -191,10 +184,14 @@ func migrationsPg(client postgres.Client, ctx context.Context) {
 	}
 }
 
-func migrationsEs(client *elasticsearch.TypedClient, ctx context.Context) {
+func migrationsEs(
+	a articlesSearchRepository.IRepository,
+	p publishersSearchRepository.IRepository,
+	ctx context.Context) {
+
 	log.Printf("\n\n")
-	publishersSearchRepository.New(client).Setup(ctx)
-	articlesSearchRepository.New(client).Setup(ctx)
+	p.Setup(ctx)
+	a.Setup(ctx)
 }
 
 func adminkaStartup(

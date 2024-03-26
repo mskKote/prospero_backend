@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mmcdole/gofeed"
-	"github.com/mskKote/prospero_backend/internal/adapters/db/elastic/articlesSearchRepository"
+	"github.com/mskKote/prospero_backend/internal/adapters/db/elastic/v8/articlesSearchRepository"
 	"github.com/mskKote/prospero_backend/internal/adapters/db/postgres/sourcesRepository"
 	customMetrics "github.com/mskKote/prospero_backend/internal/adapters/metrics"
 	"github.com/mskKote/prospero_backend/internal/controller/http/v1/dto"

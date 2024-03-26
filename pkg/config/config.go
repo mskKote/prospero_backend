@@ -54,8 +54,7 @@ type Config struct {
 		Database string
 	}
 	Elastic struct {
-		Host string
-		Port string
+		ConStr string
 	}
 }
 
@@ -93,8 +92,7 @@ func GetConfig() *Config {
 		instance.Postgres.Port = getEnvKey("POSTGRES_PORT")
 		instance.Postgres.Database = getEnvKey("POSTGRES_DATABASE")
 
-		instance.Elastic.Host = getEnvKey("ELASTIC_HOST")
-		instance.Elastic.Port = getEnvKey("ELASTIC_PORT")
+		instance.Elastic.ConStr = getEnvKey("ELASTIC_CON_STR")
 
 		instance.Adminka.Username = getEnvKey("ADMINKA_USERNAME")
 		instance.Adminka.Password = getEnvKey("ADMINKA_PASSWORD")
